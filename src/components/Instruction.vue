@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="instruction">{{ instruction.text }}</div>
+    <div class="instruction">{{ pages[currentPage] }}</div>
   </div>
   <div>
-    <Button @btn-click="$" text="הבא" />
-    <Button @btn-click="$" text="הקודם" />
+    <Button @btn-click="onClickNext()" text="הבא" />
+    <Button @btn-click="onClickPrev()" text="הקודם" />
   </div>
 </template>
 
@@ -14,11 +14,29 @@ import Button from "./Button.vue";
 export default {
   name: "Instruction",
   props: {
-    instruction: Object,
-    next: Object,
-    prev: Object,
+    pages: Array,
+  },
+  data() {
+    return {
+      currentPage: 0,
+    }
   },
   components: { Button },
+  emits: ["next-page", "instruction-finish"],
+  methods: {
+onClickNext() {
+  if (this.currentPage < this.pages.length - 1) {
+    this.currentPage += 1;
+  } else {
+    this.$emit("instruction-finish")
+  }
+},
+onClickPrev() {
+  if (this.currentPage > 0) {
+    this.currentPage -= 1;
+  }
+  }
+  },
 };
 </script>
 

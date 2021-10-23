@@ -1,6 +1,6 @@
 <template>
-  <div :key="instruction.index" v-for="instruction in instructions">
-    <Instruction :instruction="instruction" />
+  <div>
+    <Instruction @instruction-finish="$emit('instruction-finish')" :pages="this.instructions[$route.params.index].pages" />
   </div>
 </template>
 
@@ -9,10 +9,20 @@ import Instruction from "./Instruction.vue";
 
 export default {
   name: "Instructions",
-  props: {
-    instructions: Array,
+  data() {
+    return {
+      instructions: [
+        {
+          pages: [
+            "page 1 inst.",
+            "page 2 inst.",
+          ],
+        },
+      ],
+    };
   },
   components: { Instruction },
+  emits: ["instruction-finish"],
 };
 </script>
 

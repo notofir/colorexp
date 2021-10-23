@@ -1,18 +1,22 @@
-//import { createApp } from "vue";
-//import App from "./App.vue";
-//
-//createApp(App).mount("#app");
+import { createApp } from "vue"
+import { createRouter, createWebHashHistory } from "vue-router"
+import App from "./App.vue"
+import Scatter from "./components/Scatter.vue"
+import Instructions from "./components/Instructions.vue"
 
-import Vue from "vue";
-import App from "./App";
+const routes = [
+  { path: "/", component: App },
+  //{ name: "scatter", component: Scatter },
+  //{ name: "instructions:index", component: Instructions },
+  { name: "scatter", path: "/scatter", component: Scatter },
+  { name: "instructions", path: "/instructions:index", component: Instructions },
+]
 
-import VueKonva from "vue-konva";
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes,
+})
 
-Vue.use(VueKonva);
-
-/* eslint-disable no-new */
-new Vue({
-  el: "#app",
-  components: { App },
-  template: "<App/>",
-});
+const app = createApp(App)
+app.use(router)
+app.mount("#app")
