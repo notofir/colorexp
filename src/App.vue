@@ -11,11 +11,13 @@
 
 <script>
 import Instructions from "./components/Instructions.vue";
+import Survey from "./components/Survey.vue";
 import Scatter from "./components/Scatter.vue";
+//import "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
 
 export default {
   name: "App",
-  components: { Instructions, Scatter },
+  components: { Instructions, Scatter, Survey },
   data() {
     return {
       currentComponentName: "Instructions",
@@ -31,8 +33,11 @@ export default {
         case "Instructions":
           return { index: this.trialIndex };
         case "Scatter":
-        default:
           return { index: this.trialIndex, innerCircles: 40 };
+        case "Survey":
+          return {};
+        default:
+          return {}
       }
     },
   },
@@ -42,13 +47,19 @@ export default {
     },
     survey() {
       this.trialIndex += 1;
-      this.currentComponentName = "Instructions";
+      this.currentComponentName = "Survey";
     },
   },
 };
 </script>
 
 <style>
+/* @import "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"; */
+/* @import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"; */
+.display-text {
+  direction: rtl;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

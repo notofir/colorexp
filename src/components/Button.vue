@@ -1,6 +1,6 @@
 <template>
   <button @click="onClick()" class="btn" :disabled="disabled">
-    {{ text }}
+    <div class="display-text" v-html="content"></div>
   </button>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   name: "Button",
   props: {
-    text: String,
+    content: String,
     disabled: Boolean,
     emit: String,
   },

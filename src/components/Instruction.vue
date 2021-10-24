@@ -2,14 +2,14 @@
   <div>
     <div>
       <h1>{{ pages[currentPage].title }}</h1>
-      <div class="instruction">{{ pages[currentPage].text }}</div>
+      <div class="instruction display-text">{{ pages[currentPage].text }}</div>
     </div>
     <div>
-      <Button @btn-click="onClickNext()" text="< הבא" />
+      <Button @btn-click="onClickNext()" content="הבא >" />
       <Button
         @btn-click="onClickPrev()"
         :disabled="currentPage == 0"
-        text="הקודם >"
+        content="< הקודם"
       />
     </div>
   </div>
@@ -52,6 +52,5 @@ export default {
   max-width: 95%;
   text-align: center;
   margin: auto;
-  direction: rtl;
 }
 </style>
