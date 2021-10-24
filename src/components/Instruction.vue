@@ -1,10 +1,13 @@
 <template>
+<div>
   <div>
-    <div class="instruction">{{ pages[currentPage] }}</div>
+    <h1>{{ pages[currentPage].title }}</h1>
+    <div class="instruction">{{ pages[currentPage].text }}</div>
   </div>
   <div>
-    <Button @btn-click="onClickNext()" text="הבא" />
-    <Button @btn-click="onClickPrev()" text="הקודם" />
+    <Button @btn-click="onClickNext()" text="< הבא" />
+    <Button @btn-click="onClickPrev()" :disabled="currentPage == 0" text="הקודם >" />
+  </div>
   </div>
 </template>
 
@@ -42,9 +45,9 @@ onClickPrev() {
 
 <style scoped>
 .instruction {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  max-width: 95%;
+    text-align: center;
+    margin: auto;
+    direction: rtl;
 }
 </style>

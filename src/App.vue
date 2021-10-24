@@ -1,8 +1,6 @@
 <template>
   <div class="container">
     <router-view @instruction-finish="scatter" @scatter-finish="survey"></router-view>
-    <!-- <Instructions :instructions="instructions" />
-    <Scatter @show-off="survey" /> -->
   </div>
 </template>
 
@@ -15,20 +13,19 @@ export default {
   components: { Instructions, Scatter },
   data() {
     return {
-      instructionsIndex: 0,
-      scatterIndex: 0,
+      trialIndex: 0,
     }
   },
   created() {
-    this.$router.push({ name: "instructions", params: {index: this.instructionsIndex}} )
+    this.$router.replace({ name: "instructions", params: {index: this.trialIndex}} )
   },
   methods: {
     scatter() {
-      this.$router.push({ "name": "scatter", params: {index: this.scatterIndex, innerCircles: 40}} )
+      this.$router.replace({ name: "scatter", params: {index: this.trialIndex, innerCircles: 40}} )
     },
     survey() {
-      this.instructionsIndex += 1;
-      this.$router.push( {name: "instructions", params: {index: this.instructionsIndex}} )
+      this.trialIndex += 1;
+      this.$router.replace( {name: "instructions", params: {index: this.trialIndex}} )
     },
   }
 };

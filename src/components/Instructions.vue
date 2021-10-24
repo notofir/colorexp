@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Instruction @instruction-finish="$emit('instruction-finish')" :pages="this.instructions[$route.params.index].pages" />
+  <div class="instructions-container">
+    <Instruction @instruction-finish="$emit('instruction-finish')" :pages="instructions[index]" />
   </div>
 </template>
 
@@ -9,15 +9,22 @@ import Instruction from "./Instruction.vue";
 
 export default {
   name: "Instructions",
+  props: {
+    index: Number,
+  },
   data() {
     return {
       instructions: [
-        {
-          pages: [
-            "page 1 inst.",
-            "page 2 inst.",
-          ],
-        },
+        [
+          {
+            title: "First Page",
+            text: "page 1 inst.",
+          },
+          {
+            title: "Second page",
+            text: "page 2 inst.",
+          }
+        ],
       ],
     };
   },

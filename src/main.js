@@ -8,8 +8,13 @@ const routes = [
   { path: "/", component: App },
   //{ name: "scatter", component: Scatter },
   //{ name: "instructions:index", component: Instructions },
-  { name: "scatter", path: "/scatter", component: Scatter },
-  { name: "instructions", path: "/instructions:index", component: Instructions },
+  { name: "scatter", path: "/scatter", component: Scatter, props: true },
+  {
+      name: "instructions",
+      path: "/instructions/:index",
+      component: Instructions,
+      props: route => ({ index: parseInt(route.params.index) }),
+    },
 ]
 
 const router = createRouter({
