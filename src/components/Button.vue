@@ -28,7 +28,7 @@ export default {
   margin: 0px;
   font-size: 14px;
   font-weight: 400;
-  font-family: 'Open Sans', 'Arial', sans-serif;
+  font-family: "Open Sans", "Arial", sans-serif;
   cursor: pointer;
   line-height: 1.4;
   text-align: center;
@@ -42,13 +42,13 @@ export default {
   border-color: #ccc;
 }
 .btn:hover {
-      background-color: #ddd;
-    border-color: #aaa;
+  background-color: #ddd;
+  border-color: #aaa;
 }
 .btn:disabled {
   background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-    cursor: not-allowed;
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

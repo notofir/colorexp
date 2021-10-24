@@ -1,13 +1,10 @@
 <template>
-<div>
   <div>
-    <h1>{{ pages[currentPage].title }}</h1>
-    <div class="instruction">{{ pages[currentPage].text }}</div>
-  </div>
-  <div>
-    <Button @btn-click="onClickNext()" text="< הבא" />
-    <Button @btn-click="onClickPrev()" :disabled="currentPage == 0" text="הקודם >" />
-  </div>
+    <div class="survey">באיזה צד היו יותר עיגולים?</div>
+    <div>
+      <Button @btn-click="$emit('click-right')" text="ימין" />
+      <Button @btn-click="$emit('click-left')" text="שמאל" />
+    </div>
   </div>
 </template>
 
@@ -22,32 +19,32 @@ export default {
   data() {
     return {
       currentPage: 0,
-    }
+    };
   },
   components: { Button },
-  emits: ["next-page", "instruction-finish"],
+  emits: ["click-right", "click-left"],
   methods: {
-onClickNext() {
-  if (this.currentPage < this.pages.length - 1) {
-    this.currentPage += 1;
-  } else {
-    this.$emit("instruction-finish")
-  }
-},
-onClickPrev() {
-  if (this.currentPage > 0) {
-    this.currentPage -= 1;
-  }
-  }
+    onClickRight() {
+      if (this.currentPage < this.pages.length - 1) {
+        this.currentPage += 1;
+      } else {
+        this.$emit("instruction-finish");
+      }
+    },
+    onClickLeft() {
+      if (this.currentPage > 0) {
+        this.currentPage -= 1;
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.instruction {
+.survey {
   max-width: 95%;
-    text-align: center;
-    margin: auto;
-    direction: rtl;
+  text-align: center;
+  margin: auto;
+  direction: rtl;
 }
 </style>

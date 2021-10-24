@@ -1,6 +1,11 @@
 <template>
   <div>
-    <svg v-show="elementVisible" class="hideElement" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      v-show="elementVisible"
+      class="hideElement"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="25" cy="25" r="25" fill="black" />
       <circle cx="75" cy="25" r="25" fill="black" />
     </svg>
@@ -28,13 +33,10 @@ export default {
     };
   },
   created() {
-    setTimeout(
-      () => {
-        this.elementVisible = false
-        this.$emit("scatter-finish", this.leftSize, this.rightSize)
-      },
-      700,
-    )
+    setTimeout(() => {
+      this.elementVisible = false;
+      this.$emit("scatter-finish", this.leftSize, this.rightSize);
+    }, 700);
   },
   emits: ["scatter-finish"],
 };
