@@ -22,7 +22,6 @@ export default {
 </script>
 
 <style>
-/* TODO: Change background color to gray onHover */
 .btn {
   display: inline-block;
   padding: 6px 12px;
@@ -41,6 +40,10 @@ export default {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
+}
+.btn:hover {
+      background-color: #ddd;
+    border-color: #aaa;
 }
 .btn:disabled {
   background-color: #eee;

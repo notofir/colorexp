@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-view @instruction-finish="scatter" @scatter-finish="survey"></router-view>
+    <component @instruction-finish="scatter" @scatter-finish="survey" :is="currentComponent" v-bind="currentProps" />
   </div>
 </template>
 
@@ -13,19 +13,30 @@ export default {
   components: { Instructions, Scatter },
   data() {
     return {
+      currentComponentName: "Instructions",
       trialIndex: 0,
     }
   },
-  created() {
-    this.$router.replace({ name: "instructions", params: {index: this.trialIndex}} )
+  computed: {
+    currentComponent() {
+      return this.currentComponentName;
+    },
+    currentProps() {
+      switch (this.currentComponentName) {
+        case "Instructions":
+          return { index: this.trialIndex }
+        case "Scatter":
+          return { index: this.trialIndex, innerCircles: 40 }
+      }
+    },
   },
   methods: {
     scatter() {
-      this.$router.replace({ name: "scatter", params: {index: this.trialIndex, innerCircles: 40}} )
+      this.currentComponentName = "Scatter"
     },
     survey() {
       this.trialIndex += 1;
-      this.$router.replace( {name: "instructions", params: {index: this.trialIndex}} )
+      this.currentComponentName = "Instructions"
     },
   }
 };

@@ -23,16 +23,18 @@ export default {
         width: width,
         height: height,
       },
+      leftSize: 50,
+      rightSize: 50,
     };
   },
   created() {
     setTimeout(
       () => {
         this.elementVisible = false
-        this.$emit("scatter-finish")
+        this.$emit("scatter-finish", this.leftSize, this.rightSize)
       },
       700,
-      )
+    )
   },
   emits: ["scatter-finish"],
 };

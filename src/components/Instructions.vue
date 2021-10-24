@@ -1,11 +1,12 @@
 <template>
   <div class="instructions-container">
-    <Instruction @instruction-finish="$emit('instruction-finish')" :pages="instructions[index]" />
+    <Instruction @instruction-finish="$emit('instruction-finish')" :pages="page" />
   </div>
 </template>
 
 <script>
 import Instruction from "./Instruction.vue";
+import trials from "../circletrials"
 
 export default {
   name: "Instructions",
@@ -14,19 +15,8 @@ export default {
   },
   data() {
     return {
-      instructions: [
-        [
-          {
-            title: "First Page",
-            text: "page 1 inst.",
-          },
-          {
-            title: "Second page",
-            text: "page 2 inst.",
-          }
-        ],
-      ],
-    };
+      page: trials[this.index],
+    }
   },
   components: { Instruction },
   emits: ["instruction-finish"],
