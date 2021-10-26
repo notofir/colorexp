@@ -1,5 +1,5 @@
 <template>
-  <div class="instructions-container">
+  <div>
     <Instruction
       @instruction-finish="$emit('instruction-finish')"
       :pages="page"

@@ -1,10 +1,10 @@
 <template>
   <div>
     <div>
-      <h1>{{ pages[currentPage].title }}</h1>
+      <h1 class="instruction display-text">{{ pages[currentPage].title }}</h1>
       <div class="instruction display-text">{{ pages[currentPage].text }}</div>
     </div>
-    <div>
+    <div class="btn-group" role="group">
       <Button @btn-click="onClickNext()" content="הבא >" />
       <Button
         @btn-click="onClickPrev()"

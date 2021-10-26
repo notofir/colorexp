@@ -1,11 +1,24 @@
 <template>
-  <div class="container">
-    <component
-      @instruction-finish="scatter"
-      @scatter-finish="survey"
-      :is="currentComponent"
-      v-bind="currentProps"
-    />
+  <div class="container-fluid text-center">
+    <div class="row">
+      <div class="col"></div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col"></div>
+      <div class="col-5">
+        <component
+          @instruction-finish="instructionFinish"
+          @scatter-finish="scatterFinish"
+          @survey-finish="surveyFinish"
+          :is="currentComponent"
+          v-bind="currentProps"
+        />
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+    </div>
   </div>
 </template>
 
@@ -13,7 +26,6 @@
 import Instructions from "./components/Instructions.vue";
 import Survey from "./components/Survey.vue";
 import Scatter from "./components/Scatter.vue";
-//import "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
 
 export default {
   name: "App",
@@ -42,24 +54,33 @@ export default {
     },
   },
   methods: {
-    scatter() {
+    instructionFinish() {
       this.currentComponentName = "Scatter";
     },
-    survey() {
+    scatterFinish() {
       this.trialIndex += 1;
       this.currentComponentName = "Survey";
+    },
+    surveyFinish() {
+      this.currentComponentName = "Scatter";
     },
   },
 };
 </script>
 
 <style>
-/* @import "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"; */
-/* @import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"; */
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
+@import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css";
+
 .display-text {
   direction: rtl;
 }
 
+#app {
+  margin-top: 100px;
+}
+
+/*
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -68,4 +89,6 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+*/
+.top-buffer { margin-top:20px; }
 </style>
