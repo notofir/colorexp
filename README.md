@@ -10,6 +10,11 @@ yarn install
 yarn serve
 ```
 
+### Lint
+```
+yarn lint
+```
+
 ### Compiles and minifies for production
 ```
 yarn build
@@ -21,8 +26,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 # Setup
 ```bash
 docker build . -t colorexp
-docker run --rm --name ce -e CHOKIDAR_USEPOLLING=true -p 8080:8080 -v $PWD:/app colorexp bash
-docker run --rm --name ce -e CHOKIDAR_USEPOLLING=true -p 8080:8080 -v %cd%:/app colorexp bash
+docker run -it --rm --name ce -p 8080:8080 -v $PWD:/app colorexp bash
+docker run -it --rm --name ce -p 8080:8080 -v %cd%:/app colorexp bash
 ```
 
 First run from docker:

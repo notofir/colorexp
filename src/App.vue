@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col"></div>
     </div>
-    <div class="row align-items-center">
+    <div class="row align-items-center full-page">
       <div class="col"></div>
       <div class="col-5">
         <component
@@ -49,7 +49,7 @@ export default {
         case "Survey":
           return {};
         default:
-          return {}
+          return {};
       }
     },
   },
@@ -76,19 +76,13 @@ export default {
   direction: rtl;
 }
 
-#app {
-  margin-top: 100px;
-}
-
 /*
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.top-buffer {
+  margin-top: 20px;
 }
 */
-.top-buffer { margin-top:20px; }
+
+.full-page {
+  height: 100vh;
+}
 </style>

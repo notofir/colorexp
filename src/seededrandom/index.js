@@ -1,6 +1,13 @@
+//import { seedrandom } from "seedrandom";
+const seedrandom = require("seedrandom");
+
 // from 0 (inc.) to max (exc.).
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
+function getRandomInt(rng, max) {
+  return Math.floor(rng() * max);
 }
 
-export default getRandomInt;
+function getRNG(seed) {
+  return seedrandom(seed)
+}
+
+export { getRNG, getRandomInt };

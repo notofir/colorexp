@@ -33,9 +33,9 @@ export default {
   name: "Survey",
   components: { Hint, Button, DisplayedHint },
   data() {
-      return {
-        hint: {"side": ""},
-      };
+    return {
+      hint: { side: "" },
+    };
   },
   emits: ["survey-finish"],
   methods: {
@@ -43,8 +43,8 @@ export default {
       this.hint = hint;
     },
     onChoose(hint) {
-      console.log(hint)
-      this.$emit('survey-finish', hint)
+      console.log(hint);
+      this.$emit("survey-finish", hint);
     },
   },
 };

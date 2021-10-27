@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <Button @btn-click="onClick" :content="hintContent" :disabled="isClicked" />
-    </div>
+  <div>
+    <Button @btn-click="onClick" :content="hintContent" :disabled="isClicked" />
+  </div>
 </template>
 
 <script>
@@ -11,32 +11,35 @@ export default {
   name: "Hint",
   components: { Button },
   props: {
-      hintSize: Number,
+    hintSize: Number,
   },
   data() {
-      return {
-          isClicked: false,
-          hintContent: `
+    return {
+      isClicked: false,
+      hintContent:
+        `
           <h5>
               לחצו לקבלת רמז <i class='bi bi-lightbulb-fill'></i>
             </h5>
           <h5>
             <i class='h4 bi bi-people-fill'></i>
             <br />
-          ` + this.hintSize + `</h5>`
-      };
+          ` +
+        this.hintSize +
+        `</h5>`,
+    };
   },
   emits: ["hint-click"],
   methods: {
     onClick() {
-        this.isClicked = true;
-        let side;
-        if (Math.random() > 0.5) {
-            side = "right";
-        } else {
-            side = "left";
-        }
-        this.$emit("hint-click", {"side": side, "size": this.hintSize});
+      this.isClicked = true;
+      let side;
+      if (Math.random() > 0.5) {
+        side = "right";
+      } else {
+        side = "left";
+      }
+      this.$emit("hint-click", { side: side, size: this.hintSize });
     },
   },
 };
