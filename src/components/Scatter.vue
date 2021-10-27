@@ -3,26 +3,23 @@
     <svg
       v-show="elementVisible"
       class="hideElement"
-      viewBox="0 0 100 100"
+      :viewBox="'0 0 ' + ((containerR + containerStrokeWidth) * 4).toString() + ' ' + ((containerR + containerStrokeWidth) * 2).toString()"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <!-- Left circle -->
-      <circle cx="25" cy="25" r="25" fill="black" />
+      <circle v-for="(diff, index) in [0, gap]" :key="index" :cx="diff + containerR + ((1 + (index * 2)) * containerStrokeWidth)" :cy="containerR + containerStrokeWidth" :r="containerR + containerStrokeWidth" :stroke-width="containerStrokeWidth" stroke="white" fill="black" />
       <circle
-        v-for="(circle, index) in getCircles(25, 2, 50)"
+        v-for="(circle, index) in getCircles(leftSize)"
         :key="index"
-        :cx="25 + circle.x"
-        :cy="25 + circle.y"
+        :cx="containerStrokeWidth + containerR + circle.x"
+        :cy="containerStrokeWidth + containerR + circle.y"
         :r="circle.r"
         fill="blue"
       />
-      <!-- Right circle -->
-      <circle cx="75" cy="25" r="25" fill="black" />
       <circle
-        v-for="(circle, index) in getCircles(25, 2, 50)"
+        v-for="(circle, index) in getCircles(rightSize)"
         :key="index"
-        :cx="75 + circle.x"
-        :cy="25 + circle.y"
+        :cx="(3 * containerStrokeWidth) + gap + containerR + circle.x"
+        :cy="containerStrokeWidth + containerR + circle.y"
         :r="circle.r"
         fill="blue"
       />
@@ -31,7 +28,7 @@
 </template>
 
 <script>
-import { getRNG, getRandomInt } from "../seededrandom";
+import getRNG from "../seededrandom";
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -43,8 +40,8 @@ function getDistance(circle1, circle2) {
 }
 
 function randomizeCircle(rng, containerR, innerR) {
-  const distanceFromCenter = getRandomInt(rng, containerR + 1 - innerR);
-  const angle = getRandomInt(rng, 360); // Getting 360 is similar to 0.
+  const distanceFromCenter = rng.getInt(containerR + 1 - innerR);
+  const angle = rng.getInt(360); // Getting 360 is similar to 0.
   return {
     x: distanceFromCenter * Math.cos(angle),
     y: distanceFromCenter * Math.sin(angle),
@@ -55,18 +52,38 @@ function randomizeCircle(rng, containerR, innerR) {
 export default {
   name: "Scatter",
   props: {
-    innerCircles: Number,
+    seed: Number,
   },
   data() {
+    let containerR = 25;
+    let rng = getRNG("scatter-" + this.seed.toString());
+    let leftSize = 50;
+    let rightSize = 50;
+    let diff = 1 + rng.getInt(25) // Min size is 25, max size is 75.
+    if (rng.getBool()) {
+      diff *= -1;
+    }
+
+    if (rng.getBool()) {
+      leftSize += diff;
+    } else {
+      rightSize += diff;
+    }
+
+    console.log(leftSize, rightSize, diff)
     return {
-      rng: getRNG(42),
+      rng: rng,
+      containerStrokeWidth: 1,
+      containerR: containerR,
+      innerR: 2,
+      gap: containerR * 2,
       elementVisible: true,
       stageSize: {
         width: width,
         height: height,
       },
-      leftSize: 50,
-      rightSize: 50,
+      leftSize: leftSize,
+      rightSize: rightSize,
     };
   },
   created() {
@@ -77,16 +94,16 @@ export default {
   },
   emits: ["scatter-finish"],
   methods: {
-    getCircles(containerR, innerR, n) {
-      // Pick locations by https://www.youtube.com/watch?v=XATr_jdh-44
+    getCircles(n) {
+      // Picking locations with help from https://www.youtube.com/watch?v=XATr_jdh-44
       var circles = [];
       while (circles.length < n) {
         let isOverlapping = false;
-        let circle = randomizeCircle(this.rng, containerR, innerR);
+        let circle = randomizeCircle(this.rng, this.containerR, this.innerR);
 
         for (var i = 0; i < circles.length; i++) {
           var distance = getDistance(circle, circles[i]);
-          if (distance < 2 * innerR) {
+          if (distance < 2 * this.innerR) {
             isOverlapping = true;
             break;
           }

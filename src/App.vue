@@ -26,6 +26,7 @@
 import Instructions from "./components/Instructions.vue";
 import Survey from "./components/Survey.vue";
 import Scatter from "./components/Scatter.vue";
+import phases from "./circletrials";
 
 export default {
   name: "App",
@@ -33,6 +34,7 @@ export default {
   data() {
     return {
       currentComponentName: "Instructions",
+      phaseIndex: 0,
       trialIndex: 0,
     };
   },
@@ -43,9 +45,9 @@ export default {
     currentProps() {
       switch (this.currentComponentName) {
         case "Instructions":
-          return { index: this.trialIndex };
+          return { index: this.phaseIndex };
         case "Scatter":
-          return { index: this.trialIndex, innerCircles: 40 };
+          return { seed: this.trialIndex };
         case "Survey":
           return {};
         default:
@@ -62,7 +64,12 @@ export default {
       this.currentComponentName = "Survey";
     },
     surveyFinish() {
+      if (this.trialIndex == phases[this.phaseIndex].numberOfTrials) {
+        this.phaseIndex += 1;
+        this.currentComponentName = "Instructions";
+      } else {
       this.currentComponentName = "Scatter";
+      }
     },
   },
 };
