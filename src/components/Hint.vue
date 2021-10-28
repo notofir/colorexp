@@ -5,17 +5,22 @@
 </template>
 
 <script>
+import getRNG from '../seededrandom';
 import Button from "./Button.vue";
 
 export default {
   name: "Hint",
   components: { Button },
   props: {
-    hintSize: Number,
+    phaseIndex: Number,
+    trialIndex: Number,
   },
   data() {
+    let rng = getRNG("hint", this.phaseIndex, this.trialIndex);
+let hintGroupSize = rng.getEntry([5, 107]).toString();
     return {
       isClicked: false,
+      hintGroupSize: hintGroupSize,
       hintContent:
         `
           <h5>
@@ -25,7 +30,7 @@ export default {
             <i class='h4 bi bi-people-fill'></i>
             <br />
           ` +
-        this.hintSize +
+        hintGroupSize +
         `</h5>`,
     };
   },
@@ -39,42 +44,10 @@ export default {
       } else {
         side = "left";
       }
-      this.$emit("hint-click", { side: side, size: this.hintSize });
+      this.$emit("hint-click", { side: side, size: this.hintGroupSize });
     },
   },
 };
 </script>
 
-<style>
-/*
-@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css";
-
-.survey {
-  max-width: 95%;
-  text-align: center;
-  margin: auto;
-}
-
-.hint-text-top {
-   margin-top: 3px;
-}
-
-.hint-text-bottom {
-   margin-bottom: 2px;
-}
-
-i.fa-arrow-left {
-    position: absolute;
-    top: 125px;
-    left: 650px;
-    font-size: 40pt;
-}
-
-i.fa-arrow-right {
-    position: absolute;
-    top: 125px;
-    right: 650px;
-    font-size: 40pt;
-}
-*/
-</style>
+<style></style>

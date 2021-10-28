@@ -8,18 +8,10 @@
     >
       <circle v-for="(diff, index) in [0, gap]" :key="index" :cx="diff + containerR + ((1 + (index * 2)) * containerStrokeWidth)" :cy="containerR + containerStrokeWidth" :r="containerR + containerStrokeWidth" :stroke-width="containerStrokeWidth" stroke="white" fill="black" />
       <circle
-        v-for="(circle, index) in getCircles(leftSize)"
+        v-for="(circle, index) in getCircles()"
         :key="index"
-        :cx="containerStrokeWidth + containerR + circle.x"
-        :cy="containerStrokeWidth + containerR + circle.y"
-        :r="circle.r"
-        fill="blue"
-      />
-      <circle
-        v-for="(circle, index) in getCircles(rightSize)"
-        :key="index"
-        :cx="(3 * containerStrokeWidth) + gap + containerR + circle.x"
-        :cy="containerStrokeWidth + containerR + circle.y"
+        :cx="circle.x"
+        :cy="circle.y"
         :r="circle.r"
         fill="blue"
       />
@@ -52,11 +44,12 @@ function randomizeCircle(rng, containerR, innerR) {
 export default {
   name: "Scatter",
   props: {
-    seed: Number,
+    phaseIndex: Number,
+    trialIndex: Number,
   },
   data() {
     let containerR = 25;
-    let rng = getRNG("scatter-" + this.seed.toString());
+    let rng = getRNG("scatter", this.phaseIndex, this.trialIndex);
     let leftSize = 50;
     let rightSize = 50;
     let diff = 1 + rng.getInt(25) // Min size is 25, max size is 75.
@@ -94,7 +87,7 @@ export default {
   },
   emits: ["scatter-finish"],
   methods: {
-    getCircles(n) {
+    getCirclesWithRelativeCoordinates(n) {
       // Picking locations with help from https://www.youtube.com/watch?v=XATr_jdh-44
       var circles = [];
       while (circles.length < n) {
@@ -116,6 +109,19 @@ export default {
 
       return circles;
     },
+    getCircles() {
+      let leftCircles = this.getCirclesWithRelativeCoordinates(this.leftSize);
+      let rightCircles = this.getCirclesWithRelativeCoordinates(this.rightSize);
+      let all = [leftCircles, rightCircles]
+      for (let i = 0; i < all.length; i++) {
+        for (let j = 0; j < all[i].length; j++) {
+          all[i][j].x += (1 + (2 * i) * this.containerStrokeWidth) + (i * this.gap) + this.containerR
+          all[i][j].y += this.containerStrokeWidth + this.containerR
+        }
+      }
+
+      return leftCircles.concat(rightCircles);
+    }
   },
 };
 </script>

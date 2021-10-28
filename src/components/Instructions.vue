@@ -22,13 +22,13 @@ import phases from "../circletrials"
 export default {
   name: "Instruction",
   props: {
-    index: Number,
+    phaseIndex: Number,
   },
   data() {
     return {
       currentPage: 0,
-      pages: phases[this.index].instructions,
-      isDone: this.index < phases.length - 1,
+      pages: phases[this.phaseIndex].instructions,
+      isDone: this.phaseIndex < phases.length - 1,
     };
   },
   components: { Button },

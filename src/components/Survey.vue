@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col"></div>
       <div class="col">
-        <Hint @hint-click="onHint" :hintSize="5" />
+        <Hint @hint-click="onHint" :phaseIndex="phaseIndex" :trialIndex="trialIndex" />
       </div>
       <div class="col"></div>
     </div>
@@ -32,9 +32,13 @@ import DisplayedHint from "./DisplayedHint.vue";
 export default {
   name: "Survey",
   components: { Hint, Button, DisplayedHint },
+  props: {
+    phaseIndex: Number,
+    trialIndex: Number,
+  },
   data() {
     return {
-      hint: { side: "" },
+      hint: { side: "", size: 0 },
     };
   },
   emits: ["survey-finish"],
@@ -42,9 +46,9 @@ export default {
     onHint(hint) {
       this.hint = hint;
     },
-    onChoose(hint) {
-      console.log(hint);
-      this.$emit("survey-finish", hint);
+    onChoose(pickedSide) {
+      console.log(pickedSide, this.hint);
+      this.$emit("survey-finish", pickedSide, this.hint);
     },
   },
 };

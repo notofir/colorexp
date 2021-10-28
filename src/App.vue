@@ -32,10 +32,19 @@ export default {
   name: "App",
   components: { Instructions, Scatter, Survey },
   data() {
+    let records = new Array(phases.length);
+    for (let i = 0; i < records.length; i++) {
+      records[i] = new Array(phases[i].numberOfTrials);
+      for (let j = 0; j < records[i].length; j++) {
+        records[i][j] = new Object();
+      }
+    }
+
     return {
       currentComponentName: "Instructions",
       phaseIndex: 0,
       trialIndex: 0,
+      records: records,
     };
   },
   computed: {
@@ -45,11 +54,11 @@ export default {
     currentProps() {
       switch (this.currentComponentName) {
         case "Instructions":
-          return { index: this.phaseIndex };
+          return { phaseIndex: this.phaseIndex };
         case "Scatter":
-          return { seed: this.trialIndex };
+          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case "Survey":
-          return {};
+          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         default:
           return {};
       }
@@ -59,16 +68,21 @@ export default {
     instructionFinish() {
       this.currentComponentName = "Scatter";
     },
-    scatterFinish() {
-      this.trialIndex += 1;
+    scatterFinish(leftSize, rightSize) {
+      this.records[this.phaseIndex][this.trialIndex].leftSize = leftSize
+      this.records[this.phaseIndex][this.trialIndex].rightSize = rightSize
       this.currentComponentName = "Survey";
     },
-    surveyFinish() {
+    surveyFinish(pickedSide, hint) {
+      this.records[this.phaseIndex][this.trialIndex].pickedSide = pickedSide;
+      this.records[this.phaseIndex][this.trialIndex].didFollowHint = hint.side === pickedSide;
+      this.records[this.phaseIndex][this.trialIndex].hintGroupSize = hint.size;
+      this.trialIndex += 1;
       if (this.trialIndex == phases[this.phaseIndex].numberOfTrials) {
         this.phaseIndex += 1;
         this.currentComponentName = "Instructions";
       } else {
-      this.currentComponentName = "Scatter";
+        this.currentComponentName = "Scatter";
       }
     },
   },
@@ -82,12 +96,6 @@ export default {
 .display-text {
   direction: rtl;
 }
-
-/*
-.top-buffer {
-  margin-top: 20px;
-}
-*/
 
 .full-page {
   height: 100vh;
