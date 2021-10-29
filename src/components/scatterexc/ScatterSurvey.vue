@@ -3,11 +3,15 @@
     <div class="row">
       <div class="col"></div>
       <div class="col">
-        <Hint @hint-click="onHint" :phaseIndex="phaseIndex" :trialIndex="trialIndex" />
+        <Hint
+          @hint-click="onHint"
+          :phaseIndex="phaseIndex"
+          :trialIndex="trialIndex"
+        />
       </div>
       <div class="col"></div>
     </div>
-    <div class="row top-buffer">
+    <div class="row">
       <div class="col">
         <DisplayedHint v-if="hint.side === 'left'" :hint="hint" />
       </div>
@@ -25,12 +29,12 @@
 </template>
 
 <script>
-import Button from "./Button.vue";
-import Hint from "./Hint.vue";
-import DisplayedHint from "./DisplayedHint.vue";
+import Button from "../Button.vue";
+import Hint from "../Hint.vue";
+import DisplayedHint from "../DisplayedHint.vue";
 
 export default {
-  name: "Survey",
+  name: "ScatterSurvey",
   components: { Hint, Button, DisplayedHint },
   props: {
     phaseIndex: Number,
@@ -47,17 +51,16 @@ export default {
       this.hint = hint;
     },
     onChoose(pickedSide) {
-      console.log(pickedSide, this.hint);
-      this.$emit("survey-finish", pickedSide, this.hint);
+      this.$emit(
+        "survey-finish",
+        this.hint.side === "",
+        pickedSide,
+        this.hint.side === pickedSide,
+        this.hint.size
+      );
     },
   },
 };
 </script>
 
-<style scoped>
-.survey {
-  max-width: 95%;
-  text-align: center;
-  margin: auto;
-}
-</style>
+<style scoped></style>

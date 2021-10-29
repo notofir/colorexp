@@ -1,26 +1,39 @@
 <template>
-  <div>
-    <div>
-      <h1 class="instruction display-text">{{ pages[currentPage].title }}</h1>
-      <div class="instruction display-text">{{ pages[currentPage].text }}</div>
+  <div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col">
+          <h1 class="h1 mb-2 instruction display-text">
+            {{ pages[currentPage].title }}
+          </h1>
+          <p class="instruction display-text">
+            {{ pages[currentPage].text }}
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div v-if="isDone" class="btn-group" role="group">
+            <Button
+              @btn-click="onClickNext()"
+              :content="currentPage == this.pages.length - 1 ? 'התחל' : 'הבא >'"
+            />
+            <Button
+              @btn-click="onClickPrev()"
+              :disabled="currentPage == 0"
+              content="< הקודם"
+            />
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-if="isDone" class="btn-group" role="group">
-      <Button @btn-click="onClickNext()" :content="currentPage == this.pages.length - 1? 'התחל': 'הבא >'" />
-      <Button
-        @btn-click="onClickPrev()"
-        :disabled="currentPage == 0"
-        content="< הקודם"
-      />
-    </div>
-  </div>
 </template>
 
 <script>
 import Button from "./Button.vue";
-import phases from "../circletrials"
+import phases from "../circletrials";
 
 export default {
-  name: "Instruction",
+  name: "Instructions",
   props: {
     phaseIndex: Number,
   },
@@ -32,13 +45,13 @@ export default {
     };
   },
   components: { Button },
-  emits: ["instruction-finish"],
+  emits: ["instructions-finish"],
   methods: {
     onClickNext() {
       if (this.currentPage < this.pages.length - 1) {
         this.currentPage += 1;
       } else {
-        this.$emit("instruction-finish");
+        this.$emit("instructions-finish");
       }
     },
     onClickPrev() {

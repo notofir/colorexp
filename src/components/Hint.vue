@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <Button @btn-click="onClick" :content="hintContent" :disabled="isClicked" />
+  <div class="row">
+    <div class="col align-items-center justify-content-center">
+      <Button
+        @btn-click="onClick"
+        :content="hintContent"
+        :disabled="isClicked"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import getRNG from '../seededrandom';
+import getRNG from "../seededrandom";
 import Button from "./Button.vue";
 
 export default {
@@ -14,11 +20,13 @@ export default {
   props: {
     phaseIndex: Number,
     trialIndex: Number,
+    canBeCenter: Boolean,
   },
   data() {
-    let rng = getRNG("hint", this.phaseIndex, this.trialIndex);
-let hintGroupSize = rng.getEntry([5, 107]).toString();
+    const rng = getRNG("hint", this.phaseIndex, this.trialIndex);
+    const hintGroupSize = rng.getEntry([5, 107]).toString();
     return {
+      rng: rng,
       isClicked: false,
       hintGroupSize: hintGroupSize,
       hintContent:
@@ -38,13 +46,7 @@ let hintGroupSize = rng.getEntry([5, 107]).toString();
   methods: {
     onClick() {
       this.isClicked = true;
-      let side;
-      if (Math.random() > 0.5) {
-        side = "right";
-      } else {
-        side = "left";
-      }
-      this.$emit("hint-click", { side: side, size: this.hintGroupSize });
+      this.$emit("hint-click", { side: this.rng.getEntry(["right", "left"]), size: this.hintGroupSize });
     },
   },
 };

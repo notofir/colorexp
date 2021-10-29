@@ -1,26 +1,42 @@
 <template>
-  <div>
-    <svg
-      v-show="elementVisible"
-      class="hideElement"
-      :viewBox="'0 0 ' + ((containerR + containerStrokeWidth) * 4).toString() + ' ' + ((containerR + containerStrokeWidth) * 2).toString()"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle v-for="(diff, index) in [0, gap]" :key="index" :cx="diff + containerR + ((1 + (index * 2)) * containerStrokeWidth)" :cy="containerR + containerStrokeWidth" :r="containerR + containerStrokeWidth" :stroke-width="containerStrokeWidth" stroke="white" fill="black" />
-      <circle
-        v-for="(circle, index) in getCircles()"
-        :key="index"
-        :cx="circle.x"
-        :cy="circle.y"
-        :r="circle.r"
-        fill="blue"
-      />
-    </svg>
+  <div class="row">
+    <div class="col">
+      <svg
+        v-show="elementVisible"
+        class="hideElement"
+        :viewBox="
+          '0 0 ' +
+          ((containerR + containerStrokeWidth) * 4).toString() +
+          ' ' +
+          ((containerR + containerStrokeWidth) * 2).toString()
+        "
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          v-for="(diff, index) in [0, gap]"
+          :key="index"
+          :cx="diff + containerR + (1 + index * 2) * containerStrokeWidth"
+          :cy="containerR + containerStrokeWidth"
+          :r="containerR + containerStrokeWidth"
+          :stroke-width="containerStrokeWidth"
+          stroke="white"
+          fill="black"
+        />
+        <circle
+          v-for="(circle, index) in getCircles()"
+          :key="index"
+          :cx="circle.x"
+          :cy="circle.y"
+          :r="circle.r"
+          fill="blue"
+        />
+      </svg>
+    </div>
   </div>
 </template>
 
 <script>
-import getRNG from "../seededrandom";
+import getRNG from "../../seededrandom";
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -42,17 +58,17 @@ function randomizeCircle(rng, containerR, innerR) {
 }
 
 export default {
-  name: "Scatter",
+  name: "ScatterTrial",
   props: {
     phaseIndex: Number,
     trialIndex: Number,
   },
   data() {
-    let containerR = 25;
-    let rng = getRNG("scatter", this.phaseIndex, this.trialIndex);
+    const containerR = 25;
+    const rng = getRNG("scatter", this.phaseIndex, this.trialIndex);
     let leftSize = 50;
     let rightSize = 50;
-    let diff = 1 + rng.getInt(25) // Min size is 25, max size is 75.
+    let diff = 1 + rng.getInt(25); // Diff != 0, min size is 25, max size is 75.
     if (rng.getBool()) {
       diff *= -1;
     }
@@ -63,7 +79,6 @@ export default {
       rightSize += diff;
     }
 
-    console.log(leftSize, rightSize, diff)
     return {
       rng: rng,
       containerStrokeWidth: 1,
@@ -112,16 +127,20 @@ export default {
     getCircles() {
       let leftCircles = this.getCirclesWithRelativeCoordinates(this.leftSize);
       let rightCircles = this.getCirclesWithRelativeCoordinates(this.rightSize);
-      let all = [leftCircles, rightCircles]
+      let all = [leftCircles, rightCircles];
       for (let i = 0; i < all.length; i++) {
         for (let j = 0; j < all[i].length; j++) {
-          all[i][j].x += (1 + (2 * i) * this.containerStrokeWidth) + (i * this.gap) + this.containerR
-          all[i][j].y += this.containerStrokeWidth + this.containerR
+          all[i][j].x +=
+            1 +
+            2 * i * this.containerStrokeWidth +
+            i * this.gap +
+            this.containerR;
+          all[i][j].y += this.containerStrokeWidth + this.containerR;
         }
       }
 
       return leftCircles.concat(rightCircles);
-    }
+    },
   },
 };
 </script>
