@@ -11,7 +11,7 @@ function getRNG(name, phase, trial) {
       return array[this.getInt(array.length)];
     },
     getBool: function (trueProb = 0.5) {
-      return rng() > trueProb;
+      return rng() >= trueProb;
     },
   };
 }

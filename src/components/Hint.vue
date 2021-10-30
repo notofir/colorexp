@@ -11,24 +11,17 @@
 </template>
 
 <script>
-import getRNG from "../seededrandom";
 import Button from "./Button.vue";
 
 export default {
   name: "Hint",
   components: { Button },
   props: {
-    phaseIndex: Number,
-    trialIndex: Number,
-    canBeCenter: Boolean,
+    hintGroupSize: Number,
   },
   data() {
-    const rng = getRNG("hint", this.phaseIndex, this.trialIndex);
-    const hintGroupSize = rng.getEntry([5, 107]).toString();
     return {
-      rng: rng,
       isClicked: false,
-      hintGroupSize: hintGroupSize,
       hintContent:
         `
           <h5>
@@ -38,7 +31,7 @@ export default {
             <i class='h4 bi bi-people-fill'></i>
             <br />
           ` +
-        hintGroupSize +
+        this.hintGroupSize +
         `</h5>`,
     };
   },
@@ -46,10 +39,7 @@ export default {
   methods: {
     onClick() {
       this.isClicked = true;
-      this.$emit("hint-click", {
-        side: this.rng.getEntry(["right", "left"]),
-        size: this.hintGroupSize,
-      });
+      this.$emit("hint-click");
     },
   },
 };

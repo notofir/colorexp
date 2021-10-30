@@ -1,23 +1,30 @@
 <template>
   <div class="container-fluid">
     <div class="row">
+      <div class="col">
+        <Hint
+          @hint-click="onHint"
+          v-show="isHintAvailable"
+          :hintGroupSize="hint.size"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p id="hint-timer" class="my-5">&nbsp;</p>
+      </div>
+    </div>
+    <div class="row">
       <div class="col d-flex align-items-center">
         <DisplayedHint v-if="displayedHintSide === 'left'" :hint="hint" />
       </div>
       <div class="col-6">
         <div class="row mb-5">
-          <div class="col">
-            <Hint
-              @hint-click="onHint"
-              v-show="isHintAvailable"
-              :phaseIndex="phaseIndex"
-              :trialIndex="trialIndex"
-            />
-          </div>
+          <div class="col"></div>
         </div>
         <div class="row mb-5">
           <div class="col">
-            <Square alignment="s" :color="leftColor" />
+            <Square alignment="s" :color="displayedLeftColor" />
           </div>
           <div class="col">
             <DisplayedHint
@@ -26,7 +33,7 @@
             />
           </div>
           <div class="col">
-            <Square alignment="e" :color="rightColor" />
+            <Square alignment="e" :color="displayeRightColor" />
           </div>
         </div>
         <div class="row mb-4">
@@ -167,8 +174,7 @@ import Square from "./Square.vue";
 import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
 import Button from "../Button.vue";
-// TODO: solve this.
-//import bootstrap from "bootstrap";
+import phases from "../../circletrials";
 const bootstrap = require("bootstrap");
 
 const maxLight = 70;
@@ -215,14 +221,22 @@ export default {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
     const midLight = minMid + midLightDiff;
+    const currentTrial = phases[this.phaseIndex];
+    const hintGroupSize = this.isHintAvailable
+      ? rng.getEntry(currentTrial.hintGroupSizes)
+      : 0;
+    const displayedLeftColor = calcColor(color, maxLight); // Bright.
+    const displayeRightColor = calcColor(color, minLight); // Dark.
     return {
       rng: rng,
+      hintCountDown: 10,
       currentTutorialPopover: null,
       isTutorial: isTutorial,
+      currentTrial: currentTrial,
       pressedKey: "",
       minMid: minMid,
       maxMid: maxMid,
-      hint: { side: "", size: 0 },
+      hint: { side: "", size: hintGroupSize },
       didGiveHint: false,
       tutorialPresses: tutorialPresses,
       tutorialPressesLeft: tutorialPresses,
@@ -235,8 +249,11 @@ export default {
       color: color,
       tutorialIDs: ["right", "left", "choose"],
       midLight: midLight,
-      leftColor: calcColor(color, maxLight), // Bright.
-      rightColor: calcColor(color, minLight), // Dark.
+      displayedLeftColor: displayedLeftColor,
+      displayeRightColor: displayeRightColor,
+      displayedMidColor: null,
+      leftColor: displayedLeftColor,
+      rightColor: displayeRightColor,
     };
   },
   emits: ["colors-finish"],
@@ -244,13 +261,39 @@ export default {
     getRelativePos() {
       return (this.midLight - minLight) / (maxLight - minLight);
     },
-    onHint(hint) {
-      this.didGiveHint = true;
-      if (this.getRelativePos() == 0.5) {
+    onHint() {
+      if (this.currentTrial.shouldDelayHint && this.hintCountDown > 0) {
+        this.displayedLeftColor = "black";
+        this.displayeRightColor = "black";
+        this.displayedMidColor = "black";
+        this.hintCountDownTimer();
+        return;
+      }
+      this.displayedLeftColor = this.leftColor;
+      this.displayeRightColor = this.rightColor;
+      this.displayedMidColor = null;
+      const relativePos = this.getRelativePos();
+      if (relativePos == 0.5) {
         this.hint.side = "correct";
       } else {
-        this.hint = hint;
+        let actualDirection, misdirection;
+        let isHintTrue;
+        if (this.hint.size > 100) {
+          isHintTrue = true;
+        } else {
+          isHintTrue = this.rng.getBool(1 - this.currentTrial.hintCertainty);
+        }
+        if (relativePos > 0.5) {
+          actualDirection = "left";
+          misdirection = "right";
+        } else {
+          actualDirection = "right";
+          misdirection = "left";
+        }
+        this.hint.side = isHintTrue ? actualDirection : misdirection;
       }
+
+      this.didGiveHint = true;
       this.displayedHintSide = this.hint.side;
     },
     toggleNextTutorial() {
@@ -313,9 +356,25 @@ export default {
       );
       scoreModal.show();
     },
+    hintCountDownTimer() {
+      if (this.hintCountDown > 0) {
+        document.getElementById("hint-timer").innerHTML =
+          this.hintCountDown.toString() + "s";
+        setTimeout(() => {
+          this.hintCountDown -= 1;
+          this.hintCountDownTimer();
+        }, 1000);
+      } else {
+        ///document.getElementById("hint-timer").innerHTML = "";
+        this.onHint();
+      }
+    },
   },
   computed: {
     midColor() {
+      if (this.displayedMidColor != null) {
+        return this.displayedMidColor;
+      }
       return calcColor(this.color, this.midLight);
     },
   },

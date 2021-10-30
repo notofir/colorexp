@@ -1,32 +1,29 @@
 <template>
   <div class="container">
     <div class="row">
-      <div v-if="hint.side == 'correct'" class="col">
-        <h1>
-          <i class="bi bi-check-circle"></i>
-          <div v-if="hint.size > 0">
-            <br />
-            {{ hint.size }}
-          </div>
-        </h1>
+      <div v-if="hint.side === 'correct'" class="col">
+        <i class="fs-1bi bi-check-circle"></i>
+        <br />
+        <h2>{{ hint.size }}</h2>
       </div>
       <div v-else class="d-flex align-items-center">
         <div
           :class="
-            'col my-auto order-' + (hint.side === 'left' ? 'last' : 'first')
+            'col my-auto order-' +
+            (hint.side === 'left' ? 'last' : 'first me-2')
           "
         >
-          <h1>
-            <i class="bi bi-people-fill"></i>
-            <br />
+          <i class="fs-1 bi bi-people-fill"></i>
+          <br />
+          <h2>
             {{ hint.size }}
-          </h1>
+          </h2>
         </div>
         <div class="col">
-          <i :class="'h1 bi bi-arrow-' + hint.side"></i>
+          <i :class="'fs-2 bi bi-arrow-' + hint.side"></i>
         </div>
         <div
-          :class="'col order-' + (hint.side === 'left' ? 'first' : 'last')"
+          :class="'col order-' + (hint.side === 'left' ? 'first me-2' : 'last')"
         ></div>
       </div>
     </div>

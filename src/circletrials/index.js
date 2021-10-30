@@ -1,9 +1,10 @@
 const phases = [
+  // Phase 1
   {
     taskName: "ColorsTrial",
     instructions: [
       {
-        title: "Phase 1 First Page",
+        title: "First Page",
         text: "page 1 inst.",
       },
       {
@@ -12,14 +13,13 @@ const phases = [
       },
     ],
     numberOfTrials: 3,
-    isHintAvailable: false,
-    shouldDisplayModal: false,
   },
+  // Phase 2
   {
     taskName: "ColorsTrial",
     instructions: [
       {
-        title: "Phase 2 First Page",
+        title: "First Page",
         text: "page 1 inst.",
       },
       {
@@ -28,14 +28,14 @@ const phases = [
       },
     ],
     numberOfTrials: 3,
-    isHintAvailable: false,
     shouldDisplayModal: true,
   },
+  // Phase 3
   {
     taskName: "ColorsTrial",
     instructions: [
       {
-        title: "Phase 3 First Page",
+        title: "First Page",
         text: "page 1 inst.",
       },
       {
@@ -45,8 +45,65 @@ const phases = [
     ],
     numberOfTrials: 3,
     isHintAvailable: true,
-    shouldDisplayModal: false,
+    hintGroupSizes: [5],
+    hintCertainty: 0.8,
   },
+  // Phase 4
+  {
+    taskName: "ColorsTrial",
+    instructions: [
+      {
+        title: "First Page",
+        text: "page 1 inst.",
+      },
+      {
+        title: "Second page",
+        text: "page 2 inst.",
+      },
+    ],
+    numberOfTrials: 3,
+    isHintAvailable: true,
+    hintGroupSizes: [107],
+    hintCertainty: 0.8,
+  },
+  // Phase 5
+  {
+    taskName: "ColorsTrial",
+    instructions: [
+      {
+        title: "First Page",
+        text: "page 1 inst.",
+      },
+      {
+        title: "Second page",
+        text: "page 2 inst.",
+      },
+    ],
+    numberOfTrials: 3,
+    isHintAvailable: true,
+    hintGroupSizes: [5, 107],
+    hintCertainty: 0.8,
+  },
+  // Phase 6
+  {
+    taskName: "ColorsTrial",
+    instructions: [
+      {
+        title: "First Page",
+        text: "page 1 inst.",
+      },
+      {
+        title: "Second page",
+        text: "page 2 inst.",
+      },
+    ],
+    numberOfTrials: 3,
+    isHintAvailable: true,
+    shouldDelayHint: true,
+    hintGroupSizes: [5, 107],
+    hintCertainty: 1,
+  },
+  // Phase Bye Bye
   {
     instructions: [
       {
