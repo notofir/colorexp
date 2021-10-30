@@ -2,9 +2,7 @@
   <div class="container">
     <div class="row">
       <div v-if="hint.side === 'correct'" class="col">
-        <i class="fs-1bi bi-check-circle"></i>
-        <br />
-        <h2>{{ hint.size }}</h2>
+        <i class="fs-1 bi bi-check-circle"></i>
       </div>
       <div v-else class="d-flex align-items-center">
         <div

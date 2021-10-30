@@ -1,5 +1,14 @@
 function postResults(records) {
-  records; // Needs to be "used" in order to compile.
+  const xhr = new XMLHttpRequest();
+  xhr.open(
+    "POST",
+    "https://us-central1-ofirarias-com.cloudfunctions.net/colortask",
+    true
+  );
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(
+    JSON.stringify({ records: records, phaseIndex: -1, trialIndex: -1 })
+  );
   console.log("finished task");
 }
 

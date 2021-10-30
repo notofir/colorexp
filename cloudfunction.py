@@ -1,5 +1,5 @@
 from google.cloud import storage
-import io
+from flask import request, jsonify, make_response
 
 BUCKET_NAME = "colortask"
 
@@ -20,6 +20,25 @@ def index(request):
         Response object using
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
-    path = "abc"
-    _upload_file(str(request.form), path)
-    return f"successfully uploaded records to ${path}"
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method == "POST": # The actual request following the preflight
+        path = "abc"
+        _upload_file(str(request.form), path)
+        result = {"status": f"successfully uploaded records to ${path}"}
+        return _corsify_actual_response(jsonify(result))
+    else:
+        raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
+
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
+
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response

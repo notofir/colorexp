@@ -57,7 +57,6 @@ export default {
           return {
             phaseIndex: this.phaseIndex,
             trialIndex: this.trialIndex,
-            isHintAvailable: phases[this.phaseIndex].isHintAvailable,
             shouldDisplayModal: phases[this.phaseIndex].shouldDisplayModal,
           };
         case ScatterTrial.name:
@@ -68,6 +67,9 @@ export default {
           return {};
       }
     },
+  },
+  mounted() {
+    // TODO: add timer. this.
   },
   methods: {
     instructionsFinish() {
@@ -88,6 +90,20 @@ export default {
       this.advance(ScatterTrial);
     },
     advance(nextTrialComponent) {
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "POST",
+        "https://us-central1-ofirarias-com.cloudfunctions.net/colortask",
+        true
+      );
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(
+        JSON.stringify({
+          phaseIndex: this.phaseIndex,
+          trialIndex: this.trialIndex,
+          record: this.records[this.phaseIndex][this.trialIndex],
+        })
+      );
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;

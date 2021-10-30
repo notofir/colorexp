@@ -1,4 +1,4 @@
-function createRecord(
+function createRecord({
   isTutorial,
   leftValue,
   rightValue,
@@ -6,8 +6,8 @@ function createRecord(
   didDisplayHint,
   hintSide,
   didFollowHint,
-  hintGroupSize
-) {
+  hintGroupSize,
+}) {
   if (typeof hintGroupSize === undefined) throw "missing parameter";
   return {
     isTutorial: isTutorial,

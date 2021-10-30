@@ -4,7 +4,7 @@
       <div class="col">
         <Hint
           @hint-click="onHint"
-          v-show="isHintAvailable"
+          v-show="currentTrial.isHintAvailable"
           :hintGroupSize="hint.size"
         />
       </div>
@@ -62,7 +62,11 @@
                     'fs-1 bi bi-arrow-left-square' +
                     (pressedKey == 'left' ? '-fill' : '')
                   "
-                  :style="this.midLight == this.maxMid ? 'color: grey' : ''"
+                  :style="
+                    midLight == maxMid || displayedMidColor != null
+                      ? 'color: grey'
+                      : ''
+                  "
                 ></i>
               </span>
             </div>
@@ -86,7 +90,11 @@
                     'fs-1 bi bi-arrow-right-square' +
                     (pressedKey == 'right' ? '-fill' : '')
                   "
-                  :style="this.midLight == this.minMid ? 'color: grey' : ''"
+                  :style="
+                    midLight == minMid || displayedMidColor != null
+                      ? 'color: grey'
+                      : ''
+                  "
                 ></i>
               </span>
             </div>
@@ -101,7 +109,11 @@
               data-bs-placement="bottom"
               data-bs-content="Press the choose button when you believe you're done"
             >
-              <Button @btn-click="onSubmit" content="submit" />
+              <Button
+                @btn-click="onSubmit"
+                content="submit"
+                :disabled="displayedMidColor != null"
+              />
             </span>
           </div>
         </div>
@@ -196,7 +208,6 @@ export default {
   props: {
     phaseIndex: Number,
     trialIndex: Number,
-    isHintAvailable: Boolean,
     shouldDisplayModal: Boolean,
   },
   data() {
@@ -222,7 +233,7 @@ export default {
     }
     const midLight = minMid + midLightDiff;
     const currentTrial = phases[this.phaseIndex];
-    const hintGroupSize = this.isHintAvailable
+    const hintGroupSize = currentTrial.isHintAvailable
       ? rng.getEntry(currentTrial.hintGroupSizes)
       : 0;
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
@@ -280,16 +291,22 @@ export default {
         let isHintTrue;
         if (this.hint.size > 100) {
           isHintTrue = true;
+        } else if (
+          this.midLight == this.maxMid ||
+          this.midLight == this.minMid
+        ) {
+          isHintTrue = true;
         } else {
           isHintTrue = this.rng.getBool(1 - this.currentTrial.hintCertainty);
         }
         if (relativePos > 0.5) {
-          actualDirection = "left";
-          misdirection = "right";
-        } else {
-          actualDirection = "right";
           misdirection = "left";
+          actualDirection = "right";
+        } else {
+          misdirection = "right";
+          actualDirection = "left";
         }
+        console.log(isHintTrue, actualDirection, misdirection);
         this.hint.side = isHintTrue ? actualDirection : misdirection;
       }
 
@@ -365,22 +382,13 @@ export default {
           this.hintCountDownTimer();
         }, 1000);
       } else {
-        ///document.getElementById("hint-timer").innerHTML = "";
+        document.getElementById("hint-timer").innerHTML = "&nbsp;";
         this.onHint();
       }
     },
-  },
-  computed: {
-    midColor() {
-      if (this.displayedMidColor != null) {
-        return this.displayedMidColor;
-      }
-      return calcColor(this.color, this.midLight);
-    },
-  },
-  created() {
-    window.addEventListener("keydown", (e) => {
+    keyboardListener(e) {
       if (e.repeat) return;
+      if (this.displayedMidColor != null) return; // Delay timer is on.
       if (this.isTutorial) {
         if (e.key === "ArrowLeft") {
           if (this.currentTutorialID === "right") {
@@ -404,7 +412,6 @@ export default {
           if (this.tutorialPressesLeft == 0) {
             this.toggleNextTutorial();
           } else {
-            //this.currentTutorialPopover.data('bs.popover').options.content = "blabla";
             document.getElementsByClassName("popover-body")[0].innerHTML =
               "Press " +
               this.currentTutorialID.substr(
@@ -448,7 +455,21 @@ export default {
       setTimeout(() => {
         this.pressedKey = "";
       }, 100);
-    });
+    },
+  },
+  computed: {
+    midColor() {
+      if (this.displayedMidColor != null) {
+        return this.displayedMidColor;
+      }
+      return calcColor(this.color, this.midLight);
+    },
+  },
+  created() {
+    window.addEventListener("keydown", this.keyboardListener);
+  },
+  unmounted() {
+    window.removeEventListener("keydown", this.keyboardListener);
   },
   mounted() {
     this.toggleNextTutorial();
