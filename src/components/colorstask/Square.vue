@@ -1,5 +1,8 @@
 <template>
-  <div :class="'m' + alignment + '-auto square'" :style="'background-color: ' + color"></div>
+  <div
+    :class="'m' + alignment + '-auto square'"
+    :style="'background-color: ' + color"
+  ></div>
 </template>
 
 <script>

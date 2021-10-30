@@ -37,49 +37,51 @@
         <div class="row mb-4">
           <div class="col">
             <div class="text-start">
-            <span
-              id="tutorial-left"
-              :class="'d-inline-block ' + (this.isTutorial ? 'invisible' : '')"
-              data-bs-trigger="manual"
-              data-bs-placement="left"
-              :data-bs-content="
-                'Press left key on your keyboard ' +
-                this.tutorialPresses.toString() +
-                ' times'
-              "
-            >
-              <i
+              <span
+                id="tutorial-left"
                 :class="
-                  'fs-1 bi bi-arrow-left-square' +
-                  (pressedKey == 'left' ? '-fill' : '')
+                  'd-inline-block ' + (this.isTutorial ? 'invisible' : '')
                 "
-                :style="this.midLight == this.maxMid ? 'color: grey' : ''"
-              ></i>
-            </span>
+                data-bs-trigger="manual"
+                data-bs-placement="left"
+                :data-bs-content="
+                  'Press left key on your keyboard ' +
+                  this.tutorialPresses.toString() +
+                  ' times'
+                "
+              >
+                <i
+                  :class="
+                    'fs-1 bi bi-arrow-left-square' +
+                    (pressedKey == 'left' ? '-fill' : '')
+                  "
+                  :style="this.midLight == this.maxMid ? 'color: grey' : ''"
+                ></i>
+              </span>
             </div>
           </div>
           <div class="col"></div>
           <div class="col">
             <div class="text-end">
-            <span
-              id="tutorial-right"
-              class="d-inline-block"
-              data-bs-trigger="manual"
-              data-bs-placement="right"
-              :data-bs-content="
-                'Press right key on your keyboard ' +
-                this.tutorialPresses.toString() +
-                ' times'
-              "
-            >
-              <i
-                :class="
-                  'fs-1 bi bi-arrow-right-square' +
-                  (pressedKey == 'right' ? '-fill' : '')
+              <span
+                id="tutorial-right"
+                class="d-inline-block"
+                data-bs-trigger="manual"
+                data-bs-placement="right"
+                :data-bs-content="
+                  'Press right key on your keyboard ' +
+                  this.tutorialPresses.toString() +
+                  ' times'
                 "
-                :style="this.midLight == this.minMid ? 'color: grey' : ''"
-              ></i>
-            </span>
+              >
+                <i
+                  :class="
+                    'fs-1 bi bi-arrow-right-square' +
+                    (pressedKey == 'right' ? '-fill' : '')
+                  "
+                  :style="this.midLight == this.minMid ? 'color: grey' : ''"
+                ></i>
+              </span>
             </div>
           </div>
         </div>
@@ -308,7 +310,9 @@ export default {
       document.getElementById("score-modal-label").innerHTML =
         "Score: " + score.toString() + "%";
 
-      const scoreModal = new bootstrap.Modal(document.getElementById("score-modal"));
+      const scoreModal = new bootstrap.Modal(
+        document.getElementById("score-modal")
+      );
       scoreModal.show();
     },
   },

@@ -1,7 +1,7 @@
 from google.cloud import storage
 import io
 
-BUCKET_NAME = "my_bucket_name"
+BUCKET_NAME = "colortask"
 
 
 def _upload_file(content, path):
@@ -20,4 +20,6 @@ def index(request):
         Response object using
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
-    _upload_file(request.form)
+    path = "abc"
+    _upload_file(str(request.form), path)
+    return f"successfully uploaded records to ${path}"
