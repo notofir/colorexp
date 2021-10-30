@@ -208,7 +208,6 @@ export default {
     if ((maxMid - minMid) % 2 != 0) {
       minMid -= 1;
     }
-    console.log(minMid, maxMid);
     if (isTutorial) {
       midLightDiff =
         tutorialPresses + rng.getInt(maxMid - minMid - tutorialPresses);
