@@ -198,8 +198,7 @@ export default {
     const color = getRandomColor(rng);
     const minGap = 5;
     const maxGap = 15;
-    ///const isTutorial = this.phaseIndex == 0 && this.trialIndex == 0;
-    const isTutorial = false;
+    const isTutorial = this.phaseIndex == 0 && this.trialIndex == 0;
     let midLightDiff;
     const tutorialPresses = 10;
     // Not allowing to get too close to the ends, nor calculating the middle.
