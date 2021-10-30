@@ -1,22 +1,23 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col">
+      <div class="col d-flex align-items-center">
         <DisplayedHint v-if="displayedHintSide === 'left'" :hint="hint" />
       </div>
-      <div class="col-8">
+      <div class="col-6">
         <div class="row mb-5">
           <div class="col">
             <Hint
               @hint-click="onHint"
+              v-show="isHintAvailable"
               :phaseIndex="phaseIndex"
               :trialIndex="trialIndex"
             />
           </div>
         </div>
-        <div class="row mb-4">
+        <div class="row mb-5">
           <div class="col">
-            <Square :color="leftColor" />
+            <Square alignment="s" :color="leftColor" />
           </div>
           <div class="col">
             <DisplayedHint
@@ -25,23 +26,26 @@
             />
           </div>
           <div class="col">
-            <Square :color="rightColor" />
+            <Square alignment="e" :color="rightColor" />
           </div>
         </div>
         <div class="row mb-4">
           <div class="col">
-            <Square :color="midColor" />
+            <Square alignment="x" :color="midColor" />
           </div>
         </div>
         <div class="row mb-4">
           <div class="col">
+            <div class="text-start">
             <span
               id="tutorial-left"
-              :class="'d-inline-block ' + (this.isTutorial? 'invisible': '')"
+              :class="'d-inline-block ' + (this.isTutorial ? 'invisible' : '')"
               data-bs-trigger="manual"
               data-bs-placement="left"
               :data-bs-content="
-                'Press left key on your keyboard ' + this.tutorialPresses.toString() + ' times'
+                'Press left key on your keyboard ' +
+                this.tutorialPresses.toString() +
+                ' times'
               "
             >
               <i
@@ -49,28 +53,23 @@
                   'fs-1 bi bi-arrow-left-square' +
                   (pressedKey == 'left' ? '-fill' : '')
                 "
+                :style="this.midLight == this.maxMid ? 'color: grey' : ''"
               ></i>
             </span>
+            </div>
           </div>
+          <div class="col"></div>
           <div class="col">
-            <span
-              id="tutorial-choose"
-              :class="'d-inline-block ' + (this.isTutorial? 'invisible': '')"
-              data-bs-trigger="manual"
-              data-bs-placement="bottom"
-              data-bs-content="Press the choose button when you believe you're done"
-            >
-              <Button @btn-click="onChoose" content="בחר" />
-            </span>
-          </div>
-          <div class="col">
+            <div class="text-end">
             <span
               id="tutorial-right"
               class="d-inline-block"
               data-bs-trigger="manual"
               data-bs-placement="right"
               :data-bs-content="
-                'Press right key on your keyboard ' + this.tutorialPresses.toString() + ' times'
+                'Press right key on your keyboard ' +
+                this.tutorialPresses.toString() +
+                ' times'
               "
             >
               <i
@@ -78,13 +77,81 @@
                   'fs-1 bi bi-arrow-right-square' +
                   (pressedKey == 'right' ? '-fill' : '')
                 "
+                :style="this.midLight == this.minMid ? 'color: grey' : ''"
               ></i>
+            </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col my-auto">
+            <span
+              id="tutorial-choose"
+              :class="'d-inline-block ' + (this.isTutorial ? 'invisible' : '')"
+              data-bs-trigger="manual"
+              data-bs-placement="bottom"
+              data-bs-content="Press the choose button when you believe you're done"
+            >
+              <Button @btn-click="onSubmit" content="submit" />
             </span>
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col d-flex align-items-center">
         <DisplayedHint v-if="displayedHintSide === 'right'" :hint="hint" />
+      </div>
+    </div>
+    <!-- Score modal -->
+    <div
+      id="score-modal"
+      class="modal fade"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="score-modal-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="score-modal-label"></h5>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row align-items-end">
+                <div class="col p-0">
+                  <p class="text-start mb-0">0</p>
+                </div>
+                <div class="col p-0">
+                  <p class="text-center mb-0">50</p>
+                </div>
+                <div class="col p-0">
+                  <p class="text-end mb-0">100</p>
+                </div>
+              </div>
+              <div class="row">
+                <input
+                  id="score-range"
+                  type="range"
+                  class="form-range"
+                  min="0"
+                  max="100"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="onSubmit"
+              data-bs-dismiss="modal"
+            >
+              ok <i class="bi bi-check"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -102,9 +169,8 @@ import Button from "../Button.vue";
 //import bootstrap from "bootstrap";
 const bootstrap = require("bootstrap");
 
-// TODO: this isn't 50 gap....
 const maxLight = 70;
-const minLight = 30;
+const minLight = 20;
 
 function getRandomColor(rng) {
   const letters = "0123456789ABCDEF";
@@ -122,24 +188,40 @@ export default {
   props: {
     phaseIndex: Number,
     trialIndex: Number,
+    isHintAvailable: Boolean,
+    shouldDisplayModal: Boolean,
   },
   data() {
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
-    const isTutorial = this.phaseIndex == 0 && this.trialIndex == 0;
+    const minGap = 5;
+    const maxGap = 15;
+    ///const isTutorial = this.phaseIndex == 0 && this.trialIndex == 0;
+    const isTutorial = false;
     let midLightDiff;
     const tutorialPresses = 10;
-    if (isTutorial) {
-      midLightDiff = tutorialPresses + rng.getInt(maxLight - minLight - tutorialPresses);
-    } else {
-      midLightDiff = 1 + rng.getInt(maxLight - minLight - 1); // 1 <= diff <= 39.
+    // Not allowing to get too close to the ends, nor calculating the middle.
+    const maxMid = maxLight - (minGap + rng.getInt(maxGap - minGap));
+    let minMid = minLight + (minGap + rng.getInt(maxGap - minGap));
+    // We need to enforce absolute middle.
+    if ((maxMid - minMid) % 2 != 0) {
+      minMid -= 1;
     }
-    const midLight = minLight + midLightDiff;
+    console.log(minMid, maxMid);
+    if (isTutorial) {
+      midLightDiff =
+        tutorialPresses + rng.getInt(maxMid - minMid - tutorialPresses);
+    } else {
+      midLightDiff = rng.getInt(maxMid - minMid);
+    }
+    const midLight = minMid + midLightDiff;
     return {
       rng: rng,
       currentTutorialPopover: null,
       isTutorial: isTutorial,
       pressedKey: "",
+      minMid: minMid,
+      maxMid: maxMid,
       hint: { side: "", size: 0 },
       didGiveHint: false,
       tutorialPresses: tutorialPresses,
@@ -149,6 +231,7 @@ export default {
       currentTutorialElement: null,
       didFollowHint: false,
       displayedHintSide: "",
+      didDisplayModal: !this.shouldDisplayModal,
       color: color,
       tutorialIDs: ["right", "left", "choose"],
       midLight: midLight,
@@ -178,7 +261,9 @@ export default {
         this.currentTutorialPopover.dispose();
         if (this.currentTutorialIndex == this.tutorialIDs.length - 1) {
           for (let i = 0; i < this.currentTutorialIndex; i++) {
-            document.querySelector("#tutorial-" + this.tutorialIDs[i]).classList.remove("invisible");
+            document
+              .querySelector("#tutorial-" + this.tutorialIDs[i])
+              .classList.remove("invisible");
           }
         } else {
           this.currentTutorialElement.classList.add("invisible");
@@ -186,12 +271,21 @@ export default {
       }
       if (this.currentTutorialIndex >= this.tutorialIDs.length) return;
       this.currentTutorialID = this.tutorialIDs[this.currentTutorialIndex];
-      this.currentTutorialElement = document.querySelector("#tutorial-" + this.currentTutorialID);
+      this.currentTutorialElement = document.querySelector(
+        "#tutorial-" + this.currentTutorialID
+      );
       this.currentTutorialElement.classList.remove("invisible");
-      this.currentTutorialPopover = new bootstrap.Popover(this.currentTutorialElement);
+      this.currentTutorialPopover = new bootstrap.Popover(
+        this.currentTutorialElement
+      );
       this.currentTutorialPopover.show();
     },
-    onChoose() {
+    onSubmit() {
+      if (!this.didDisplayModal) {
+        this.showModal();
+        return;
+      }
+
       this.toggleNextTutorial();
       this.$emit(
         "colors-finish",
@@ -204,8 +298,18 @@ export default {
           hintSide: this.hint.side,
           didFollowHint: this.didFollowHint,
           hintGroupSize: this.hint.size,
-    }),
+        })
       );
+    },
+    showModal() {
+      this.didDisplayModal = true;
+      const score = this.getRelativePos().toFixed(2) * 100;
+      document.getElementById("score-range").value = score;
+      document.getElementById("score-modal-label").innerHTML =
+        "Score: " + score.toString() + "%";
+
+      const scoreModal = new bootstrap.Modal(document.getElementById("score-modal"));
+      scoreModal.show();
     },
   },
   computed: {
@@ -221,16 +325,16 @@ export default {
           if (this.currentTutorialID === "right") {
             return;
           }
-          this.pressedKey = "left";
-          if (this.midLight < maxLight) {
+          if (this.midLight < this.maxMid) {
+            this.pressedKey = "left";
             this.midLight += 1;
           }
         } else if (e.key === "ArrowRight") {
           if (this.currentTutorialID === "left") {
             return;
           }
-          this.pressedKey = "right";
-          if (this.midLight > minLight) {
+          if (this.midLight > this.minMid) {
+            this.pressedKey = "right";
             this.midLight -= 1;
           }
         } else return;
@@ -240,7 +344,15 @@ export default {
             this.toggleNextTutorial();
           } else {
             //this.currentTutorialPopover.data('bs.popover').options.content = "blabla";
-            document.getElementsByClassName("popover-body")[0].innerHTML = "Press " + this.currentTutorialID.substr(0, this.currentTutorialID.indexOf("-")) + " arrow key " + this.tutorialPressesLeft.toString() + " more times";
+            document.getElementsByClassName("popover-body")[0].innerHTML =
+              "Press " +
+              this.currentTutorialID.substr(
+                0,
+                this.currentTutorialID.indexOf("-")
+              ) +
+              " arrow key " +
+              this.tutorialPressesLeft.toString() +
+              " more times";
           }
         }
       } else {
@@ -248,16 +360,16 @@ export default {
           if (this.displayedHintSide === "left") {
             this.didFollowHint = true;
           }
-          this.pressedKey = "left";
-          if (this.midLight < maxLight) {
+          if (this.midLight < this.maxMid) {
+            this.pressedKey = "left";
             this.midLight += 1;
           }
         } else if (e.key === "ArrowRight") {
           if (this.displayedHintSide === "right") {
             this.didFollowHint = true;
           }
-          this.pressedKey = "right";
-          if (this.midLight > minLight) {
+          if (this.midLight > this.minMid) {
+            this.pressedKey = "right";
             this.midLight -= 1;
           }
         } else return;
@@ -266,6 +378,12 @@ export default {
         this.didFollowHint = false;
       }
       this.displayedHintSide = "";
+      console.log(
+        this.midLight,
+        this.minMid,
+        this.maxMid,
+        this.getRelativePos()
+      );
       setTimeout(() => {
         this.pressedKey = "";
       }, 100);

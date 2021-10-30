@@ -12,15 +12,15 @@
     </div>
     <div class="row">
       <div class="col">
-        <div v-if="isDone" class="btn-group" role="group">
-          <Button
-            @btn-click="onClickNext()"
-            :content="currentPage == this.pages.length - 1 ? 'התחל' : 'הבא >'"
-          />
+        <div v-if="!isDone" class="btn-group" role="group">
           <Button
             @btn-click="onClickPrev()"
             :disabled="currentPage == 0"
-            content="< הקודם"
+            content="< prev"
+          />
+          <Button
+            @btn-click="onClickNext()"
+            :content="currentPage == this.pages.length - 1 ? 'start' : 'next >'"
           />
         </div>
       </div>
@@ -36,12 +36,12 @@ export default {
   name: "Instructions",
   props: {
     phaseIndex: Number,
+    isDone: Boolean,
   },
   data() {
     return {
       currentPage: 0,
       pages: phases[this.phaseIndex].instructions,
-      isDone: this.phaseIndex < phases.length - 1,
     };
   },
   components: { Button },

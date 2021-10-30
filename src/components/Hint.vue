@@ -32,7 +32,7 @@ export default {
       hintContent:
         `
           <h5>
-              לחצו לקבלת רמז <i class='bi bi-lightbulb-fill'></i>
+              Press for hint <i class='bi bi-lightbulb-fill'></i>
             </h5>
           <h5>
             <i class='h4 bi bi-people-fill'></i>

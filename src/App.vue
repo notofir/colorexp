@@ -20,9 +20,9 @@
 
 <script>
 import Instructions from "./components/Instructions.vue";
-import ScatterSurvey from "./components/scatterexc/ScatterSurvey.vue";
-import ScatterTrial from "./components/scatterexc/ScatterTrial.vue";
-import ColorsTrial from "./components/colorsexc/ColorsTrial.vue";
+import ScatterSurvey from "./components/scattertask/ScatterSurvey.vue";
+import ScatterTrial from "./components/scattertask/ScatterTrial.vue";
+import ColorsTrial from "./components/colorstask/ColorsTrial.vue";
 import phases from "./circletrials";
 import postResults from "./qualtrics";
 
@@ -50,15 +50,15 @@ export default {
       return this.currentComponentName;
     },
     currentProps() {
-      postResults; // TODO: remove
       switch (this.currentComponentName) {
         case Instructions.name:
-          return { phaseIndex: this.phaseIndex };
+          return { phaseIndex: this.phaseIndex, isDone: this.isDone() };
         case ColorsTrial.name:
           return {
             phaseIndex: this.phaseIndex,
             trialIndex: this.trialIndex,
-            isTutorial: true,
+            isHintAvailable: phases[this.phaseIndex].isHintAvailable,
+            shouldDisplayModal: phases[this.phaseIndex].shouldDisplayModal,
           };
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     instructionsFinish() {
-      this.currentComponentName = phases[this.phaseIndex].excName;
+      this.currentComponentName = phases[this.phaseIndex].taskName;
     },
     colorsFinish(record) {
       this.records[this.phaseIndex][this.trialIndex] = record;
@@ -91,11 +91,17 @@ export default {
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
+        if (this.isDone()) {
+          postResults(this.records);
+        }
         this.currentComponentName = Instructions.name;
       } else {
         this.trialIndex += 1;
         this.currentComponentName = nextTrialComponent.name;
       }
+    },
+    isDone() {
+      return this.phaseIndex == phases.length - 1;
     },
   },
 };
@@ -106,7 +112,7 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css";
 
 .display-text {
-  direction: rtl;
+  direction: ltr;
 }
 
 .full-page {

@@ -1,15 +1,15 @@
 function createRecord(
-    isTutorial,
-    leftValue,
-    rightValue,
-    pickedValue,
-    didDisplayHint,
-    hintSide,
-    didFollowHint,
-    hintGroupSize,
+  isTutorial,
+  leftValue,
+  rightValue,
+  pickedValue,
+  didDisplayHint,
+  hintSide,
+  didFollowHint,
+  hintGroupSize
 ) {
-    if (typeof hintGroupSize === undefined) throw "missing parameter";
-    return {
+  if (typeof hintGroupSize === undefined) throw "missing parameter";
+  return {
     isTutorial: isTutorial,
     leftValue: leftValue,
     rightValue: rightValue,
@@ -18,7 +18,7 @@ function createRecord(
     hintSide: hintSide,
     didFollowHint: didFollowHint,
     hintGroupSize: hintGroupSize,
-    };
+  };
 }
 
 export default createRecord;

@@ -1,6 +1,6 @@
 <template>
-  <div class="container my-auto">
-    <div class="row my-auto">
+  <div class="container">
+    <div class="row">
       <div v-if="hint.side == 'correct'" class="col">
         <h1>
           <i class="bi bi-check-circle"></i>
@@ -10,7 +10,7 @@
           </div>
         </h1>
       </div>
-      <div v-else>
+      <div v-else class="d-flex align-items-center">
         <div
           :class="
             'col my-auto order-' + (hint.side === 'left' ? 'last' : 'first')
