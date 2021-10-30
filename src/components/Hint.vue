@@ -46,7 +46,10 @@ export default {
   methods: {
     onClick() {
       this.isClicked = true;
-      this.$emit("hint-click", { side: this.rng.getEntry(["right", "left"]), size: this.hintGroupSize });
+      this.$emit("hint-click", {
+        side: this.rng.getEntry(["right", "left"]),
+        size: this.hintGroupSize,
+      });
     },
   },
 };

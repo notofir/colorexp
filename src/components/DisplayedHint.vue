@@ -11,7 +11,11 @@
         </h1>
       </div>
       <div v-else>
-        <div :class="'col my-auto order-' + (hint.side === 'left' ? 'last' : 'first')">
+        <div
+          :class="
+            'col my-auto order-' + (hint.side === 'left' ? 'last' : 'first')
+          "
+        >
           <h1>
             <i class="bi bi-people-fill"></i>
             <br />

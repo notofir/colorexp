@@ -89,11 +89,7 @@ function calcColor(color, light) {
   // Choose on one continum the lightest (70%), darkest (30%) and a random mid.
   hslColor["l"] = light;
   // Transform back to hex, to feet the html string.
-  return HSLToHex(
-    hslColor["h"],
-    hslColor["s"],
-    hslColor["l"]
-  );
+  return HSLToHex(hslColor["h"], hslColor["s"], hslColor["l"]);
 }
 
 export default calcColor;

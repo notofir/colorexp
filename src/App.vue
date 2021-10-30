@@ -1,13 +1,6 @@
 <template>
   <div class="container-fluid text-center">
-    <div
-      class="
-        row
-        align-items-center
-        justify-content-center
-        full-page
-      "
-    >
+    <div class="row align-items-center justify-content-center full-page">
       <div class="col"></div>
       <div class="col-6">
         <component
@@ -18,7 +11,7 @@
           :is="currentComponent"
           :key="this.trialIndex"
           v-bind="currentProps"
-          />
+        />
       </div>
       <div class="col"></div>
     </div>
@@ -62,7 +55,11 @@ export default {
         case Instructions.name:
           return { phaseIndex: this.phaseIndex };
         case ColorsTrial.name:
-          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
+          return {
+            phaseIndex: this.phaseIndex,
+            trialIndex: this.trialIndex,
+            isTutorial: true,
+          };
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterSurvey.name:
@@ -76,30 +73,9 @@ export default {
     instructionsFinish() {
       this.currentComponentName = phases[this.phaseIndex].excName;
     },
-    colorsFinish(
-      leftValue,
-      rightValue,
-      midColorPos,
-      didGiveHint,
-      hintSide,
-      didFollowHint,
-      hintGroupSize,
-    ) {
-      const record = this.records[this.phaseIndex][this.trialIndex];
-      record.leftValue = leftValue;
-      record.rightValue = rightValue;
-      record.value = midColorPos;
-      record.didGiveHint = didGiveHint;
-      record.hintSide = hintSide;
-      record.didFollowHint = didFollowHint;
-      record.hintGroupSize = hintGroupSize;
-      if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
-        this.trialIndex = 0;
-        this.phaseIndex += 1;
-        this.currentComponentName = Instructions.name;
-      } else {
-        this.trialIndex += 1;
-      }
+    colorsFinish(record) {
+      this.records[this.phaseIndex][this.trialIndex] = record;
+      this.advance(ColorsTrial);
     },
     scatterFinish(leftSize, rightSize) {
       const record = this.records[this.phaseIndex][this.trialIndex];
@@ -107,19 +83,18 @@ export default {
       record.rightValue = rightSize;
       this.currentComponentName = ScatterSurvey.name;
     },
-    surveyFinish(didGiveHint, pickedSide, didFollowHint, hintGroupSize) {
-      const record = this.records[this.phaseIndex][this.trialIndex];
-      record.value = pickedSide;
-      record.didGiveHint = didGiveHint;
-      record.didFollowHint = didFollowHint;
-      record.hintGroupSize = hintGroupSize;
+    surveyFinish(record) {
+      this.records[this.phaseIndex][this.trialIndex] = record;
+      this.advance(ScatterTrial);
+    },
+    advance(nextTrialComponent) {
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
         this.currentComponentName = Instructions.name;
       } else {
         this.trialIndex += 1;
-        this.currentComponentName = ScatterTrial.name;
+        this.currentComponentName = nextTrialComponent.name;
       }
     },
   },
