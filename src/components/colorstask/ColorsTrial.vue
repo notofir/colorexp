@@ -43,11 +43,11 @@
         </div>
         <div class="row mb-4">
           <div class="col">
-            <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses.toString()" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || displayedMidColor != null" />
+            <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || displayedMidColor != null" />
           </div>
           <div class="col"></div>
           <div class="col">
-            <ArrowKey side="right" :isInvisible="false" :initPresses="tutorialPresses.toString()" :isPressed="pressedKey == 'right'" :isDisabled="midLight == minMid || displayedMidColor != null" />
+            <ArrowKey side="right" :isInvisible="false" :initPresses="tutorialPresses" :isPressed="pressedKey == 'right'" :isDisabled="midLight == minMid || displayedMidColor != null" />
           </div>
         </div>
         <div class="row">
@@ -153,6 +153,29 @@ function getRandomColor(rng) {
   return color;
 }
 
+function getDisplayedHint(pickedValueRel, pickedValueAbs, maxLeft, maxRight, isHintTrueDefault) {
+  if (pickedValueRel == 0.5) {
+    return "correct";
+  }
+  let actualDirection, misdirection;
+  let isHintTrue = isHintTrueDefault;
+  if (
+    pickedValueAbs == maxLeft ||
+    pickedValueAbs == maxRight
+  ) {
+    isHintTrue = true;
+  }
+  if (pickedValueRel > 0.5) {
+    misdirection = "left";
+    actualDirection = "right";
+  } else {
+    misdirection = "right";
+    actualDirection = "left";
+  }
+  console.log(isHintTrue, actualDirection, misdirection);
+  return isHintTrue ? actualDirection : misdirection;
+}
+
 export default {
   components: { Button, Hint, DisplayedHint, Square, ArrowKey },
   name: "ColorsTrial",
@@ -234,32 +257,13 @@ export default {
       this.displayedLeftColor = this.leftColor;
       this.displayeRightColor = this.rightColor;
       this.displayedMidColor = null;
-      const relativePos = this.getRelativePos();
-      if (relativePos == 0.5) {
-        this.hint.side = "correct";
-      } else {
-        let actualDirection, misdirection;
-        let isHintTrue;
-        if (this.hint.size > 100) {
-          isHintTrue = true;
-        } else if (
-          this.midLight == this.maxMid ||
-          this.midLight == this.minMid
-        ) {
-          isHintTrue = true;
-        } else {
-          isHintTrue = this.rng.getBool(1 - this.currentTrial.hintCertainty);
-        }
-        if (relativePos > 0.5) {
-          misdirection = "left";
-          actualDirection = "right";
-        } else {
-          misdirection = "right";
-          actualDirection = "left";
-        }
-        console.log(isHintTrue, actualDirection, misdirection);
-        this.hint.side = isHintTrue ? actualDirection : misdirection;
-      }
+      this.hint.side = getDisplayedHint(
+        this.getRelativePos(),
+        this.midLight,
+        this.maxMid,
+        this.minMid,
+        this.hint.size > 100? true: this.rng.getBool(this.currentTrial.hintCertainty),
+      );
 
       this.didGiveHint = true;
       this.displayedHintSide = this.hint.side;
