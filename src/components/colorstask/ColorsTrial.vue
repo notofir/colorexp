@@ -43,61 +43,11 @@
         </div>
         <div class="row mb-4">
           <div class="col">
-            <div class="text-start">
-              <span
-                id="tutorial-left"
-                :class="
-                  'd-inline-block ' + (this.isTutorial ? 'invisible' : '')
-                "
-                data-bs-trigger="manual"
-                data-bs-placement="left"
-                :data-bs-content="
-                  'Press left key on your keyboard ' +
-                  this.tutorialPresses.toString() +
-                  ' times'
-                "
-              >
-                <i
-                  :class="
-                    'fs-1 bi bi-arrow-left-square' +
-                    (pressedKey == 'left' ? '-fill' : '')
-                  "
-                  :style="
-                    midLight == maxMid || displayedMidColor != null
-                      ? 'color: grey'
-                      : ''
-                  "
-                ></i>
-              </span>
-            </div>
+            <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses.toString()" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || displayedMidColor != null" />
           </div>
           <div class="col"></div>
           <div class="col">
-            <div class="text-end">
-              <span
-                id="tutorial-right"
-                class="d-inline-block"
-                data-bs-trigger="manual"
-                data-bs-placement="right"
-                :data-bs-content="
-                  'Press right key on your keyboard ' +
-                  this.tutorialPresses.toString() +
-                  ' times'
-                "
-              >
-                <i
-                  :class="
-                    'fs-1 bi bi-arrow-right-square' +
-                    (pressedKey == 'right' ? '-fill' : '')
-                  "
-                  :style="
-                    midLight == minMid || displayedMidColor != null
-                      ? 'color: grey'
-                      : ''
-                  "
-                ></i>
-              </span>
-            </div>
+            <ArrowKey side="right" :isInvisible="false" :initPresses="tutorialPresses.toString()" :isPressed="pressedKey == 'right'" :isDisabled="midLight == minMid || displayedMidColor != null" />
           </div>
         </div>
         <div class="row">
@@ -187,6 +137,7 @@ import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
 import Button from "../Button.vue";
 import phases from "../../circletrials";
+import ArrowKey from './ArrowKey.vue';
 const bootstrap = require("bootstrap");
 
 const maxLight = 70;
@@ -203,7 +154,7 @@ function getRandomColor(rng) {
 }
 
 export default {
-  components: { Button, Hint, DisplayedHint, Square },
+  components: { Button, Hint, DisplayedHint, Square, ArrowKey },
   name: "ColorsTrial",
   props: {
     phaseIndex: Number,
