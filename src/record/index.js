@@ -8,7 +8,6 @@ function createRecord({
   didFollowHint,
   hintGroupSize,
 }) {
-  if (typeof hintGroupSize === undefined) throw "missing parameter";
   return {
     isTutorial: isTutorial,
     leftValue: leftValue,

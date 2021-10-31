@@ -7,7 +7,7 @@ function getRNG(name, phase, trial) {
     getInt: function (max) {
       return Math.floor(rng() * max);
     },
-    getEntry: function (array) {
+    getElement: function (array) {
       return array[this.getInt(array.length)];
     },
     getBool: function (trueProb = 0.5) {

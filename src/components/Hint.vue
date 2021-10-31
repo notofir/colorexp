@@ -4,7 +4,7 @@
       <Button
         @btn-click="onClick"
         :content="hintContent"
-        :disabled="isClicked"
+        :disabled="isClicked || isDisabled"
       />
     </div>
   </div>
@@ -18,6 +18,10 @@ export default {
   components: { Button },
   props: {
     hintGroupSize: Number,
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

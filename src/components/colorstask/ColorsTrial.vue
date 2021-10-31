@@ -4,8 +4,9 @@
       <div class="col">
         <Hint
           @hint-click="onHint"
-          v-show="currentTrial.isHintAvailable"
-          :hintGroupSize="hint.size"
+          v-show="hintGroup.size != 0"
+          :hintGroupSize="hintGroup.size"
+          :isDisabled="hintSide != ''"
         />
       </div>
     </div>
@@ -16,7 +17,7 @@
     </div>
     <div class="row">
       <div class="col d-flex align-items-center">
-        <DisplayedHint v-if="displayedHintSide === 'left'" :hint="hint" />
+        <DisplayedHint v-if="displayedHintSide === 'left'" :side="hintSide" :size="hintGroup.size" />
       </div>
       <div class="col-7">
         <div class="row mb-5">
@@ -29,11 +30,12 @@
           <div class="col">
             <DisplayedHint
               v-if="displayedHintSide === 'correct'"
-              :hint="hint"
+              :side="hintSide"
+              :size="hintGroup.size"
             />
           </div>
           <div class="col">
-            <Square alignment="e" :color="displayeRightColor" />
+            <Square alignment="e" :color="displayeRightColor" :size="hintGroup.size" />
           </div>
         </div>
         <div class="row mb-5">
@@ -43,18 +45,18 @@
         </div>
         <div class="row mb-4 pt-4">
           <div class="col">
-            <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || displayedMidColor != null" />
+            <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || this.isDelayTimerOn()" />
           </div>
           <div class="col"></div>
           <div class="col">
-            <ArrowKey side="right" :isInvisible="false" :initPresses="tutorialPresses" :isPressed="pressedKey == 'right'" :isDisabled="midLight == minMid || displayedMidColor != null" />
+            <ArrowKey side="right" :isInvisible="false" :initPresses="tutorialPresses" :isPressed="pressedKey == 'right'" :isDisabled="midLight == minMid || this.isDelayTimerOn()" />
           </div>
         </div>
         <div class="row">
           <div class="col my-auto">
             <span
               id="tutorial-choose"
-              :class="'d-inline-block ' + (this.isTutorial ? 'invisible' : '')"
+              :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
               data-bs-trigger="manual"
               data-bs-placement="bottom"
               data-bs-content="Press the choose button when you believe you're done"
@@ -69,7 +71,7 @@
         </div>
       </div>
       <div class="col d-flex align-items-center">
-        <DisplayedHint v-if="displayedHintSide === 'right'" :hint="hint" />
+        <DisplayedHint v-if="displayedHintSide === 'right'" :side="hintSide" :size="hintGroup.size" />
       </div>
     </div>
     <!-- Score modal -->
@@ -132,6 +134,7 @@
 import getRNG from "../../seededrandom";
 import calcColor from "../../colors";
 import createRecord from "../../record";
+import createHint from "../../hint";
 import Square from "./Square.vue";
 import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
@@ -147,7 +150,7 @@ function getRandomColor(rng) {
   const letters = "0123456789ABCDEF";
   let color = "#";
   for (let i = 0; i < 6; i++) {
-    color += rng.getEntry(letters);
+    color += rng.getElement(letters);
   }
 
   return color;
@@ -182,14 +185,14 @@ export default {
   props: {
     phaseIndex: Number,
     trialIndex: Number,
-    shouldDisplayModal: Boolean,
   },
   data() {
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
     const minGap = 5;
     const maxGap = 15;
-    const isTutorial = this.phaseIndex == 0 && this.trialIndex == 0;
+    const currentTrial = phases[this.phaseIndex];
+    const isTutorial = currentTrial.isTutorial && this.trialIndex == 0;
     let midLightDiff;
     const tutorialPresses = 10;
     // Not allowing to get too close to the ends, nor calculating the middle.
@@ -206,22 +209,22 @@ export default {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
     const midLight = minMid + midLightDiff;
-    const currentTrial = phases[this.phaseIndex];
-    const hintGroupSize = currentTrial.isHintAvailable
-      ? rng.getEntry(currentTrial.hintGroupSizes)
-      : 0;
+    const trialHint = createHint(typeof currentTrial.hint === "object"? currentTrial.hint: {});
+    const hintGroup = rng.getElement(trialHint.groups)
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
     return {
       rng: rng,
-      hintCountDown: 10,
+      hintCountDown: trialHint.delay,
       currentTutorialPopover: null,
       isTutorial: isTutorial,
       currentTrial: currentTrial,
       pressedKey: "",
       minMid: minMid,
       maxMid: maxMid,
-      hint: { side: "", size: hintGroupSize },
+      hintSide: "",
+      hintGroup: hintGroup,
+      trialHint: trialHint,
       didGiveHint: false,
       tutorialPresses: tutorialPresses,
       tutorialPressesLeft: tutorialPresses,
@@ -230,13 +233,14 @@ export default {
       currentTutorialElement: null,
       didFollowHint: false,
       displayedHintSide: "",
-      didDisplayModal: !this.shouldDisplayModal,
+      didDisplayModal: !currentTrial.shouldDisplayFeedback,
       color: color,
       tutorialIDs: ["right", "left", "choose"],
       midLight: midLight,
       displayedLeftColor: displayedLeftColor,
       displayeRightColor: displayeRightColor,
       displayedMidColor: null,
+      trialStartTime: null,
       leftColor: displayedLeftColor,
       rightColor: displayeRightColor,
     };
@@ -247,7 +251,7 @@ export default {
       return (this.midLight - minLight) / (maxLight - minLight);
     },
     onHint() {
-      if (this.currentTrial.shouldDelayHint && this.hintCountDown > 0) {
+      if (this.hintCountDown > 0) {
         this.displayedLeftColor = "black";
         this.displayeRightColor = "black";
         this.displayedMidColor = "black";
@@ -257,16 +261,16 @@ export default {
       this.displayedLeftColor = this.leftColor;
       this.displayeRightColor = this.rightColor;
       this.displayedMidColor = null;
-      this.hint.side = getDisplayedHint(
+      this.hintSide = getDisplayedHint(
         this.getRelativePos(),
         this.midLight,
         this.maxMid,
         this.minMid,
-        this.hint.size > 100? true: this.rng.getBool(this.currentTrial.hintCertainty),
+        this.rng.getBool(this.hintGroup.certainty),
       );
 
       this.didGiveHint = true;
-      this.displayedHintSide = this.hint.side;
+      this.displayedHintSide = this.hintSide;
     },
     toggleNextTutorial() {
       if (!this.isTutorial) return;
@@ -310,9 +314,10 @@ export default {
           rightValue: 1,
           pickedValue: this.getRelativePos(),
           didGiveHint: this.didGiveHint,
-          hintSide: this.hint.side,
+          hintSide: this.hintSide,
           didFollowHint: this.didFollowHint,
-          hintGroupSize: this.hint.size,
+          hintGroupSize: this.hintGroup.size,
+          trialTime: new Date() - this.trialStartTime - (1000 * this.trialHint.delay),
         })
       );
     },
@@ -341,66 +346,40 @@ export default {
         this.onHint();
       }
     },
+    isDelayTimerOn() {
+      return this.displayedMidColor != null;
+    },
     keyboardListener(e) {
       if (e.repeat) return;
-      if (this.displayedMidColor != null) return; // Delay timer is on.
-      if (this.isTutorial) {
-        if (e.key === "ArrowLeft") {
-          if (this.currentTutorialID === "right") {
-            return;
-          }
-          if (this.midLight < this.maxMid) {
-            this.pressedKey = "left";
-            this.midLight += 1;
-          }
-        } else if (e.key === "ArrowRight") {
-          if (this.currentTutorialID === "left") {
-            return;
-          }
-          if (this.midLight > this.minMid) {
-            this.pressedKey = "right";
-            this.midLight -= 1;
-          }
-        } else return;
-        if (this.currentTutorialID != "choose") {
-          this.tutorialPressesLeft -= 1;
-          if (this.tutorialPressesLeft == 0) {
-            this.toggleNextTutorial();
-          } else {
-            document.getElementsByClassName("popover-body")[0].innerHTML =
-              "Press " +
-              this.currentTutorialID.substr(
-                0,
-                this.currentTutorialID.indexOf("-")
-              ) +
-              " arrow key " +
-              this.tutorialPressesLeft.toString() +
-              " more times";
-          }
+      if (this.isDelayTimerOn()) return;
+      if (e.key === "ArrowLeft") {
+        if (!this.keyPress("left", this.midLight < this.maxMid, +1)) return;
+      } else if (e.key === "ArrowRight") {
+        if (!this.keyPress("right", this.midLight > this.minMid, -1)) return;
+      } else return;
+      if (this.isTutorial && this.currentTutorialID != "choose") {
+        this.tutorialPressesLeft -= 1;
+        if (this.tutorialPressesLeft == 0) {
+          this.toggleNextTutorial();
+        } else {
+          document.getElementsByClassName("popover-body")[0].innerHTML =
+            "Press " +
+            this.currentTutorialID.substr(
+              0,
+              this.currentTutorialID.indexOf("-")
+            ) +
+            " arrow key " +
+            this.tutorialPressesLeft.toString() +
+            " more times";
         }
-      } else {
-        if (e.key === "ArrowLeft") {
-          if (this.displayedHintSide === "left") {
-            this.didFollowHint = true;
-          }
-          if (this.midLight < this.maxMid) {
-            this.pressedKey = "left";
-            this.midLight += 1;
-          }
-        } else if (e.key === "ArrowRight") {
-          if (this.displayedHintSide === "right") {
-            this.didFollowHint = true;
-          }
-          if (this.midLight > this.minMid) {
-            this.pressedKey = "right";
-            this.midLight -= 1;
-          }
-        } else return;
       }
       if (this.displayedHintSide === "correct") {
         this.didFollowHint = false;
       }
       this.displayedHintSide = "";
+      if (this.trialHint.autoHintClicks == 0) {
+        this.onHint()
+      }
       console.log(
         this.midLight,
         this.minMid,
@@ -410,6 +389,20 @@ export default {
       setTimeout(() => {
         this.pressedKey = "";
       }, 100);
+    },
+    // Returns false if key shouldn't be processed.
+    keyPress(side, isEnabled, diff) {
+      if (this.isTutorial && this.currentTutorialID != "choose" && this.currentTutorialID != side) return false;
+      if (this.displayedHintSide === side) {
+        this.didFollowHint = true;
+      }
+      if (isEnabled) {
+        this.pressedKey = side;
+        this.midLight += diff;
+        this.trialHint.autoHintClicks -= 1;
+        return true;
+      }
+      return false;
     },
   },
   computed: {
@@ -427,6 +420,7 @@ export default {
     window.removeEventListener("keydown", this.keyboardListener);
   },
   mounted() {
+    this.trialStartTime = new Date();
     this.toggleNextTutorial();
   },
 };

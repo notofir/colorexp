@@ -54,11 +54,7 @@ export default {
         case Instructions.name:
           return { phaseIndex: this.phaseIndex, isDone: this.isDone() };
         case ColorsTrial.name:
-          return {
-            phaseIndex: this.phaseIndex,
-            trialIndex: this.trialIndex,
-            shouldDisplayModal: phases[this.phaseIndex].shouldDisplayModal,
-          };
+          return {phaseIndex: this.phaseIndex,trialIndex: this.trialIndex};
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterSurvey.name:

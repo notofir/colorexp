@@ -1,27 +1,27 @@
 <template>
   <div class="m-0">
     <div class="row">
-      <div v-if="hint.side === 'correct'" class="col">
+      <div v-if="side === 'correct'" class="col">
         <i class="fs-1 bi bi-check-circle"></i>
       </div>
       <div v-else class="d-flex align-items-center">
         <div
           :class="
             'col my-auto order-' +
-            (hint.side === 'left' ? 'last' : 'first me-2')
+            (side === 'left' ? 'last' : 'first me-2')
           "
         >
           <i class="fs-1 bi bi-people-fill"></i>
           <br />
           <h2>
-            {{ hint.size }}
+            {{ size }}
           </h2>
         </div>
         <div class="col">
-          <i :class="'fs-2 bi bi-arrow-' + hint.side"></i>
+          <i :class="'fs-2 bi bi-arrow-' + side"></i>
         </div>
         <div
-          :class="'col order-' + (hint.side === 'left' ? 'first me-2' : 'last')"
+          :class="'col order-' + (side === 'left' ? 'first me-2' : 'last')"
         ></div>
       </div>
     </div>
@@ -32,7 +32,8 @@
 export default {
   name: "DisplayedHint",
   props: {
-    hint: Object,
+    side: String,
+    size: Number,
   },
 };
 </script>
