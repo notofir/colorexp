@@ -18,7 +18,7 @@
       <div class="col d-flex align-items-center">
         <DisplayedHint v-if="displayedHintSide === 'left'" :hint="hint" />
       </div>
-      <div class="col-6">
+      <div class="col-7">
         <div class="row mb-5">
           <div class="col"></div>
         </div>
@@ -36,12 +36,12 @@
             <Square alignment="e" :color="displayeRightColor" />
           </div>
         </div>
-        <div class="row mb-4">
+        <div class="row mb-5">
           <div class="col">
             <Square alignment="x" :color="midColor" />
           </div>
         </div>
-        <div class="row mb-4">
+        <div class="row mb-4 pt-4">
           <div class="col">
             <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || displayedMidColor != null" />
           </div>

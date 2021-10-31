@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="m-0">
     <div class="row">
       <div v-if="hint.side === 'correct'" class="col">
         <i class="fs-1 bi bi-check-circle"></i>
