@@ -16,7 +16,7 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    ///isTutorial: true,
+    isTutorial: true,
     numberOfTrials: 3,
   },
   // Phase 2

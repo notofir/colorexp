@@ -4,9 +4,7 @@
       <div class="col">
         <Hint
           @hint-click="onHint"
-          v-show="
-            currentTrial.hint.autoHintClicks.min <= 0 && hintGroup.size != 0
-          "
+          v-show="trialHint.autoHintClicks.min <= 0 && hintGroup.size != 0"
           :hintGroupSize="hintGroup.size"
           :isDisabled="hintSide != ''"
         />

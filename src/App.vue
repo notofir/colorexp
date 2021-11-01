@@ -1,8 +1,7 @@
 <template>
-  <div class="container-fluid text-center">
+  <div class="container-fluid text-center app-width">
     <div class="row align-items-center justify-content-center full-page">
-      <div class="col"></div>
-      <div class="col-6">
+      <div class="col-8">
         <component
           @instructions-finish="instructionsFinish"
           @scatter-finish="scatterFinish"
@@ -13,7 +12,6 @@
           v-bind="currentProps"
         />
       </div>
-      <div class="col"></div>
     </div>
   </div>
 </template>
@@ -126,5 +124,9 @@ export default {
 
 .full-page {
   height: 100vh;
+}
+
+.app-width {
+  width: 70vh;
 }
 </style>
