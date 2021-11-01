@@ -54,7 +54,7 @@ export default {
         case Instructions.name:
           return { phaseIndex: this.phaseIndex, isDone: this.isDone() };
         case ColorsTrial.name:
-          return {phaseIndex: this.phaseIndex,trialIndex: this.trialIndex};
+          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterSurvey.name:
@@ -63,9 +63,6 @@ export default {
           return {};
       }
     },
-  },
-  mounted() {
-    // TODO: add timer. this.
   },
   methods: {
     instructionsFinish() {

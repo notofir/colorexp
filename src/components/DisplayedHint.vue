@@ -7,8 +7,7 @@
       <div v-else class="d-flex align-items-center">
         <div
           :class="
-            'col my-auto order-' +
-            (side === 'left' ? 'last' : 'first me-2')
+            'col my-auto order-' + (side === 'left' ? 'last' : 'first me-2')
           "
         >
           <i class="fs-1 bi bi-people-fill"></i>

@@ -1,22 +1,32 @@
 function createRecord({
+  phaseIndex,
+  trialIndex,
   isTutorial,
   leftValue,
   rightValue,
   pickedValue,
   didDisplayHint,
-  hintSide,
+  displayedHintSide,
+  isDisplayedHintTrue,
   didFollowHint,
   hintGroupSize,
+  trialTimeMs,
+  keyPresses,
 }) {
   return {
+    phaseIndex: phaseIndex,
+    trialIndex: trialIndex,
     isTutorial: isTutorial,
     leftValue: leftValue,
     rightValue: rightValue,
     pickedValue: pickedValue,
     didDisplayHint: didDisplayHint,
-    hintSide: hintSide,
+    displayedHintSide: displayedHintSide,
+    isDisplayedHintTrue: isDisplayedHintTrue,
     didFollowHint: didFollowHint,
     hintGroupSize: hintGroupSize,
+    trialTimeMs: trialTimeMs,
+    keyPresses: keyPresses,
   };
 }
 

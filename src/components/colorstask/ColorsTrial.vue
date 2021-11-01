@@ -4,7 +4,9 @@
       <div class="col">
         <Hint
           @hint-click="onHint"
-          v-show="hintGroup.size != 0"
+          v-show="
+            currentTrial.hint.autoHintClicks.min <= 0 && hintGroup.size != 0
+          "
           :hintGroupSize="hintGroup.size"
           :isDisabled="hintSide != ''"
         />
@@ -17,7 +19,11 @@
     </div>
     <div class="row">
       <div class="col d-flex align-items-center">
-        <DisplayedHint v-if="displayedHintSide === 'left'" :side="hintSide" :size="hintGroup.size" />
+        <DisplayedHint
+          v-if="displayedHintSide === 'left'"
+          :side="hintSide"
+          :size="hintGroup.size"
+        />
       </div>
       <div class="col-7">
         <div class="row mb-5">
@@ -35,7 +41,11 @@
             />
           </div>
           <div class="col">
-            <Square alignment="e" :color="displayeRightColor" :size="hintGroup.size" />
+            <Square
+              alignment="e"
+              :color="displayeRightColor"
+              :size="hintGroup.size"
+            />
           </div>
         </div>
         <div class="row mb-5">
@@ -45,25 +55,37 @@
         </div>
         <div class="row mb-4 pt-4">
           <div class="col">
-            <ArrowKey side="left" :isInvisible="isTutorial" :initPresses="tutorialPresses" :isPressed="pressedKey == 'left'" :isDisabled="midLight == maxMid || this.isDelayTimerOn()" />
+            <ArrowKey
+              side="left"
+              :isInvisible="isTutorial"
+              :initPresses="tutorialPresses"
+              :isPressed="pressedKey == 'left'"
+              :isDisabled="midLight == maxMid || this.isDelayTimerOn()"
+            />
           </div>
           <div class="col"></div>
           <div class="col">
-            <ArrowKey side="right" :isInvisible="false" :initPresses="tutorialPresses" :isPressed="pressedKey == 'right'" :isDisabled="midLight == minMid || this.isDelayTimerOn()" />
+            <ArrowKey
+              side="right"
+              :isInvisible="false"
+              :initPresses="tutorialPresses"
+              :isPressed="pressedKey == 'right'"
+              :isDisabled="midLight == minMid || this.isDelayTimerOn()"
+            />
           </div>
         </div>
         <div class="row">
           <div class="col my-auto">
             <span
-              id="tutorial-choose"
+              :id="'tutorial-' + submitID"
               :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
               data-bs-trigger="manual"
               data-bs-placement="bottom"
-              data-bs-content="Press the choose button when you believe you're done"
+              data-bs-content="Press the submit button when you believe you're done"
             >
               <Button
                 @btn-click="onSubmit"
-                content="submit"
+                :content="submitID"
                 :disabled="displayedMidColor != null"
               />
             </span>
@@ -71,7 +93,11 @@
         </div>
       </div>
       <div class="col d-flex align-items-center">
-        <DisplayedHint v-if="displayedHintSide === 'right'" :side="hintSide" :size="hintGroup.size" />
+        <DisplayedHint
+          v-if="displayedHintSide === 'right'"
+          :side="hintSide"
+          :size="hintGroup.size"
+        />
       </div>
     </div>
     <!-- Score modal -->
@@ -140,11 +166,12 @@ import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
 import Button from "../Button.vue";
 import phases from "../../circletrials";
-import ArrowKey from './ArrowKey.vue';
+import ArrowKey from "./ArrowKey.vue";
 const bootstrap = require("bootstrap");
 
 const maxLight = 70;
 const minLight = 20;
+const maxLightGap = 15;
 
 function getRandomColor(rng) {
   const letters = "0123456789ABCDEF";
@@ -156,18 +183,17 @@ function getRandomColor(rng) {
   return color;
 }
 
-function getDisplayedHint(pickedValueRel, pickedValueAbs, maxLeft, maxRight, isHintTrueDefault) {
+function getDisplayedHint(
+  pickedValueRel,
+  pickedValueAbs,
+  minAbs,
+  maxAbs,
+  isDefaultTrue
+) {
   if (pickedValueRel == 0.5) {
-    return "correct";
+    return ["correct", true];
   }
   let actualDirection, misdirection;
-  let isHintTrue = isHintTrueDefault;
-  if (
-    pickedValueAbs == maxLeft ||
-    pickedValueAbs == maxRight
-  ) {
-    isHintTrue = true;
-  }
   if (pickedValueRel > 0.5) {
     misdirection = "left";
     actualDirection = "right";
@@ -175,8 +201,11 @@ function getDisplayedHint(pickedValueRel, pickedValueAbs, maxLeft, maxRight, isH
     misdirection = "right";
     actualDirection = "left";
   }
-  console.log(isHintTrue, actualDirection, misdirection);
-  return isHintTrue ? actualDirection : misdirection;
+  if (pickedValueAbs <= minAbs || pickedValueAbs >= maxAbs) {
+    return [actualDirection, true];
+  }
+  console.log(isDefaultTrue, actualDirection, misdirection);
+  return [isDefaultTrue ? actualDirection : misdirection, isDefaultTrue];
 }
 
 export default {
@@ -190,14 +219,14 @@ export default {
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
     const minGap = 5;
-    const maxGap = 15;
     const currentTrial = phases[this.phaseIndex];
     const isTutorial = currentTrial.isTutorial && this.trialIndex == 0;
+    const submitID = "submit";
     let midLightDiff;
     const tutorialPresses = 10;
     // Not allowing to get too close to the ends, nor calculating the middle.
-    const maxMid = maxLight - (minGap + rng.getInt(maxGap - minGap));
-    let minMid = minLight + (minGap + rng.getInt(maxGap - minGap));
+    const maxMid = maxLight - (minGap + rng.getInt(maxLightGap - minGap));
+    let minMid = minLight + (minGap + rng.getInt(maxLightGap - minGap));
     // We need to enforce absolute middle.
     if ((maxMid - minMid) % 2 != 0) {
       minMid -= 1;
@@ -209,12 +238,15 @@ export default {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
     const midLight = minMid + midLightDiff;
-    const trialHint = createHint(typeof currentTrial.hint === "object"? currentTrial.hint: {});
-    const hintGroup = rng.getElement(trialHint.groups)
+    const trialHint = createHint(
+      typeof currentTrial.hint === "object" ? currentTrial.hint : {}
+    );
+    const hintGroup = rng.getElement(trialHint.groups);
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
     return {
       rng: rng,
+      isDisplayedHintTrue: false,
       hintCountDown: trialHint.delay,
       currentTutorialPopover: null,
       isTutorial: isTutorial,
@@ -225,6 +257,11 @@ export default {
       hintSide: "",
       hintGroup: hintGroup,
       trialHint: trialHint,
+      autoHintCounter:
+        trialHint.autoHintClicks.min +
+        rng.getInt(
+          trialHint.autoHintClicks.max + 1 - trialHint.autoHintClicks.min
+        ),
       didGiveHint: false,
       tutorialPresses: tutorialPresses,
       tutorialPressesLeft: tutorialPresses,
@@ -232,10 +269,12 @@ export default {
       currentTutorialIndex: 0,
       currentTutorialElement: null,
       didFollowHint: false,
+      keyPresses: 0,
       displayedHintSide: "",
       didDisplayModal: !currentTrial.shouldDisplayFeedback,
       color: color,
-      tutorialIDs: ["right", "left", "choose"],
+      submitID: submitID,
+      tutorialIDs: ["right", "left", submitID],
       midLight: midLight,
       displayedLeftColor: displayedLeftColor,
       displayeRightColor: displayeRightColor,
@@ -261,16 +300,16 @@ export default {
       this.displayedLeftColor = this.leftColor;
       this.displayeRightColor = this.rightColor;
       this.displayedMidColor = null;
-      this.hintSide = getDisplayedHint(
+      [this.hintSide, this.isDisplayedHintTrue] = getDisplayedHint(
         this.getRelativePos(),
         this.midLight,
-        this.maxMid,
-        this.minMid,
-        this.rng.getBool(this.hintGroup.certainty),
+        this.minLight + maxLightGap,
+        this.maxLight - maxLightGap,
+        this.rng.getBool(this.hintGroup.certainty)
       );
 
-      this.didGiveHint = true;
       this.displayedHintSide = this.hintSide;
+      this.didGiveHint = true;
     },
     toggleNextTutorial() {
       if (!this.isTutorial) return;
@@ -309,15 +348,20 @@ export default {
       this.$emit(
         "colors-finish",
         createRecord({
+          phaseIndex: this.phaseIndex,
+          trialIndex: this.trialIndex,
           isTutorial: this.isTutorial,
           leftValue: 0,
           rightValue: 1,
           pickedValue: this.getRelativePos(),
           didGiveHint: this.didGiveHint,
-          hintSide: this.hintSide,
+          displayedHintSide: this.hintSide,
+          isDisplayedHintTrue: this.isDisplayedHintTrue,
           didFollowHint: this.didFollowHint,
           hintGroupSize: this.hintGroup.size,
-          trialTime: new Date() - this.trialStartTime - (1000 * this.trialHint.delay),
+          trialTimeMs:
+            new Date() - this.trialStartTime - 1000 * this.trialHint.delay,
+          keyPresses: this.keyPresses,
         })
       );
     },
@@ -353,11 +397,13 @@ export default {
       if (e.repeat) return;
       if (this.isDelayTimerOn()) return;
       if (e.key === "ArrowLeft") {
-        if (!this.keyPress("left", this.midLight < this.maxMid, +1)) return;
+        if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1))
+          return;
       } else if (e.key === "ArrowRight") {
-        if (!this.keyPress("right", this.midLight > this.minMid, -1)) return;
+        if (!this.handlePressedKey("right", this.midLight > this.minMid, -1))
+          return;
       } else return;
-      if (this.isTutorial && this.currentTutorialID != "choose") {
+      if (this.isTutorial && this.currentTutorialID != this.submitID) {
         this.tutorialPressesLeft -= 1;
         if (this.tutorialPressesLeft == 0) {
           this.toggleNextTutorial();
@@ -377,8 +423,8 @@ export default {
         this.didFollowHint = false;
       }
       this.displayedHintSide = "";
-      if (this.trialHint.autoHintClicks == 0) {
-        this.onHint()
+      if (this.autoHintCounter == 0) {
+        this.onHint();
       }
       console.log(
         this.midLight,
@@ -391,15 +437,21 @@ export default {
       }, 100);
     },
     // Returns false if key shouldn't be processed.
-    keyPress(side, isEnabled, diff) {
-      if (this.isTutorial && this.currentTutorialID != "choose" && this.currentTutorialID != side) return false;
+    handlePressedKey(side, isEnabled, diff) {
+      if (
+        this.isTutorial &&
+        this.currentTutorialID != this.submitID &&
+        this.currentTutorialID != side
+      )
+        return false;
       if (this.displayedHintSide === side) {
         this.didFollowHint = true;
       }
       if (isEnabled) {
         this.pressedKey = side;
         this.midLight += diff;
-        this.trialHint.autoHintClicks -= 1;
+        this.keyPresses += 1;
+        this.autoHintCounter -= 1;
         return true;
       }
       return false;
