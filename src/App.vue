@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid text-center app-width">
     <div class="row align-items-center justify-content-center full-page">
-      <div class="col-8">
+      <div class="col p-0">
         <component
           @instructions-finish="instructionsFinish"
           @scatter-finish="scatterFinish"
@@ -127,6 +127,6 @@ export default {
 }
 
 .app-width {
-  width: 70vh;
+  width: 700px;
 }
 </style>

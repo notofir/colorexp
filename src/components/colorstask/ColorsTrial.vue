@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container p-0">
     <div class="row">
       <div class="col">
         <Hint
@@ -12,11 +12,11 @@
     </div>
     <div class="row">
       <div class="col">
-        <p id="hint-timer" class="my-5">&nbsp;</p>
+        <h2 id="hint-timer" class="my-5">&nbsp;</h2>
       </div>
     </div>
     <div class="row">
-      <div class="col d-flex align-items-center">
+      <div class="col my-auto">
         <DisplayedHint
           v-if="displayedHintSide === 'left'"
           :side="hintSide"
@@ -28,17 +28,17 @@
           <div class="col"></div>
         </div>
         <div class="row mb-5">
-          <div class="col">
+          <div class="col p-0 pt-1">
             <Square alignment="s" :color="displayedLeftColor" />
           </div>
-          <div class="col">
+          <div class="col p-0">
             <DisplayedHint
               v-if="displayedHintSide === 'correct'"
               :side="hintSide"
               :size="hintGroup.size"
             />
           </div>
-          <div class="col">
+          <div class="col p-0 pt-1">
             <Square
               alignment="e"
               :color="displayeRightColor"
@@ -58,7 +58,7 @@
               :isInvisible="isTutorial"
               :initPresses="tutorialPresses"
               :isPressed="pressedKey == 'left'"
-              :isDisabled="midLight == maxMid || this.isDelayTimerOn()"
+              :isDisabled="isArrowKeyDisabled(maxMid)"
             />
           </div>
           <div class="col"></div>
@@ -68,7 +68,7 @@
               :isInvisible="false"
               :initPresses="tutorialPresses"
               :isPressed="pressedKey == 'right'"
-              :isDisabled="midLight == minMid || this.isDelayTimerOn()"
+              :isDisabled="isArrowKeyDisabled(minMid)"
             />
           </div>
         </div>
@@ -84,18 +84,45 @@
               <Button
                 @btn-click="onSubmit"
                 :content="submitID"
-                :disabled="displayedMidColor != null"
+                :disabled="shouldWitholdInput"
               />
             </span>
           </div>
         </div>
       </div>
-      <div class="col d-flex align-items-center">
+      <div class="col my-auto">
         <DisplayedHint
           v-if="displayedHintSide === 'right'"
           :side="hintSide"
           :size="hintGroup.size"
         />
+      </div>
+    </div>
+    <!-- Hint ack modal -->
+    <div
+      id="hint-ack-modal"
+      class="modal fade"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3>Please confirm that you've seen the displayed hint.</h3>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="this.shouldWitholdInput = false"
+              data-bs-dismiss="modal"
+            >
+              ok <i class="bi bi-check"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Score modal -->
@@ -265,18 +292,19 @@ export default {
       tutorialPressesLeft: tutorialPresses,
       currentTutorialID: "",
       currentTutorialIndex: 0,
+      shouldWitholdInput: false,
       currentTutorialElement: null,
       didFollowHint: false,
       keyPresses: 0,
       displayedHintSide: "",
-      didDisplayModal: !currentTrial.shouldDisplayFeedback,
+      didDisplayFeedback: !currentTrial.shouldDisplayFeedback,
       color: color,
       submitID: submitID,
       tutorialIDs: ["right", "left", submitID],
       midLight: midLight,
       displayedLeftColor: displayedLeftColor,
       displayeRightColor: displayeRightColor,
-      displayedMidColor: null,
+      overrideMidColor: null,
       trialStartTime: null,
       leftColor: displayedLeftColor,
       rightColor: displayeRightColor,
@@ -291,13 +319,16 @@ export default {
       if (this.hintCountDown > 0) {
         this.displayedLeftColor = "black";
         this.displayeRightColor = "black";
-        this.displayedMidColor = "black";
+        this.overrideMidColor = "black";
+        this.shouldWitholdInput = true;
         this.hintCountDownTimer();
         return;
+      } else if (this.trialHint.delay > 0) {
+        this.displayedLeftColor = this.leftColor;
+        this.displayeRightColor = this.rightColor;
+        this.overrideMidColor = null;
+        this.shouldWitholdInput = false;
       }
-      this.displayedLeftColor = this.leftColor;
-      this.displayeRightColor = this.rightColor;
-      this.displayedMidColor = null;
       [this.hintSide, this.isDisplayedHintTrue] = getDisplayedHint(
         this.getRelativePos(),
         this.midLight,
@@ -337,8 +368,8 @@ export default {
       this.currentTutorialPopover.show();
     },
     onSubmit() {
-      if (!this.didDisplayModal) {
-        this.showModal();
+      if (!this.didDisplayFeedback) {
+        this.showFeedbackModal();
         return;
       }
 
@@ -363,17 +394,17 @@ export default {
         })
       );
     },
-    showModal() {
-      this.didDisplayModal = true;
+    showHintAckModal() {
+      new bootstrap.Modal(document.getElementById("hint-ack-modal")).show();
+    },
+    showFeedbackModal() {
+      this.didDisplayFeedback = true;
       const score = this.getRelativePos().toFixed(2) * 100;
       document.getElementById("score-range").value = score;
       document.getElementById("score-modal-label").innerHTML =
         "Score: " + score.toString() + "%";
 
-      const scoreModal = new bootstrap.Modal(
-        document.getElementById("score-modal")
-      );
-      scoreModal.show();
+      new bootstrap.Modal(document.getElementById("score-modal")).show();
     },
     hintCountDownTimer() {
       if (this.hintCountDown > 0) {
@@ -388,12 +419,9 @@ export default {
         this.onHint();
       }
     },
-    isDelayTimerOn() {
-      return this.displayedMidColor != null;
-    },
     keyboardListener(e) {
       if (e.repeat) return;
-      if (this.isDelayTimerOn()) return;
+      if (this.shouldWitholdInput) return;
       if (e.key === "ArrowLeft") {
         if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1))
           return;
@@ -421,9 +449,6 @@ export default {
         this.didFollowHint = false;
       }
       this.displayedHintSide = "";
-      if (this.autoHintCounter == 0) {
-        this.onHint();
-      }
       console.log(
         this.midLight,
         this.minMid,
@@ -433,6 +458,11 @@ export default {
       setTimeout(() => {
         this.pressedKey = "";
       }, 100);
+      if (this.autoHintCounter == 0) {
+        this.shouldWitholdInput = true;
+        this.onHint();
+        this.showHintAckModal();
+      }
     },
     // Returns false if key shouldn't be processed.
     handlePressedKey(side, isEnabled, diff) {
@@ -454,11 +484,14 @@ export default {
       }
       return false;
     },
+    isArrowKeyDisabled(edge) {
+      return this.midLight == edge || this.shouldWitholdInput;
+    },
   },
   computed: {
     midColor() {
-      if (this.displayedMidColor != null) {
-        return this.displayedMidColor;
+      if (this.overrideMidColor != null) {
+        return this.overrideMidColor;
       }
       return calcColor(this.color, this.midLight);
     },
