@@ -239,6 +239,7 @@ export default {
   props: {
     phaseIndex: Number,
     trialIndex: Number,
+    isConditionA: Boolean,
   },
   data() {
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
@@ -264,7 +265,9 @@ export default {
     }
     const midLight = minMid + midLightDiff;
     const trialHint = createHint(
-      typeof currentTrial.hint === "object" ? currentTrial.hint : {}
+      typeof currentTrial.hint === "function"
+        ? currentTrial.hint(this.isConditionA)
+        : {}
     );
     const hintGroup = rng.getElement(trialHint.groups);
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
@@ -435,7 +438,7 @@ export default {
           this.toggleNextTutorial();
         } else {
           document.getElementsByClassName("popover-body")[0].innerHTML =
-            "Press " +
+            "Press the " +
             this.currentTutorialID.substr(
               0,
               this.currentTutorialID.indexOf("-")

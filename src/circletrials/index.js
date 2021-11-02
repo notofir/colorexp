@@ -1,7 +1,5 @@
 import createHint from "../hint";
 
-const isConditionA = true;
-
 const phases = [
   // Phase 1
   {
@@ -49,9 +47,11 @@ const phases = [
       },
     ],
     numberOfTrials: 3,
-    hint: createHint({
-      groups: [{ size: 5, certainty: 0.8 }],
-    }),
+    hint: function () {
+      return createHint({
+        groups: [{ size: 5, certainty: 0.8 }],
+      });
+    },
   },
   // Phase 4
   {
@@ -67,9 +67,11 @@ const phases = [
       },
     ],
     numberOfTrials: 3,
-    hint: createHint({
-      groups: [{ size: 107, certainty: 1 }],
-    }),
+    hint: function () {
+      return createHint({
+        groups: [{ size: 107, certainty: 1 }],
+      });
+    },
   },
   // Phase 5
   {
@@ -85,13 +87,15 @@ const phases = [
       },
     ],
     numberOfTrials: 3,
-    hint: createHint({
-      autoHintClicks: isConditionA ? { min: 3, max: 7 } : undefined,
-      groups: [
-        { size: 5, certainty: 0.8 },
-        { size: 107, certainty: 1 },
-      ],
-    }),
+    hint: function (isConditionA) {
+      return createHint({
+        autoHintClicks: isConditionA ? { min: 3, max: 7 } : undefined,
+        groups: [
+          { size: 5, certainty: 0.8 },
+          { size: 107, certainty: 1 },
+        ],
+      });
+    },
   },
   // Phase 6
   {
@@ -107,13 +111,15 @@ const phases = [
       },
     ],
     numberOfTrials: 3,
-    hint: createHint({
-      delay: 10,
-      groups: [
-        { size: 5, certainty: 1 },
-        { size: 107, certainty: 1 },
-      ],
-    }),
+    hint: function () {
+      return createHint({
+        delay: 10,
+        groups: [
+          { size: 5, certainty: 1 },
+          { size: 107, certainty: 1 },
+        ],
+      });
+    },
   },
   // Phase Bye Bye
   {

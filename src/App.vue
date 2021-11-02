@@ -1,5 +1,17 @@
 <template>
   <div class="container-fluid text-center app-width">
+    <div class="form-check form-switch position-absolute top-0 start-0">
+      <input
+        @click="isConditionA = !isConditionA"
+        class="form-check-input"
+        type="checkbox"
+        id="flexSwitchCheckDefault"
+      />
+      <label class="form-check-label" for="flexSwitchCheckDefault"
+        >Condition {{ isConditionA? "A" : "B" }}</label
+      >
+    </div>
+
     <div class="row align-items-center justify-content-center full-page">
       <div class="col p-0">
         <component
@@ -38,6 +50,7 @@ export default {
 
     return {
       currentComponentName: Instructions.name,
+      isConditionA: false,
       phaseIndex: 0,
       trialIndex: 0,
       records: records,
@@ -52,7 +65,11 @@ export default {
         case Instructions.name:
           return { phaseIndex: this.phaseIndex, isDone: this.isDone() };
         case ColorsTrial.name:
-          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
+          return {
+            phaseIndex: this.phaseIndex,
+            trialIndex: this.trialIndex,
+            isConditionA: this.isConditionA,
+          };
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterSurvey.name:
