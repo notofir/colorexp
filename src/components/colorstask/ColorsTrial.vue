@@ -354,7 +354,7 @@ export default {
         );
         this.currentPopover.show();
         document.getElementsByClassName("popover-body")[0].innerHTML =
-          "ALERTNESS TEST: Choose the darkest color";
+          "ALERTNESS TEST: for this trial, select the darkest shade";
       }
     },
     toggleTutorial() {
