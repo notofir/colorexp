@@ -77,5 +77,6 @@ export default {
   max-width: 95%;
   text-align: center;
   margin: auto;
+  color: black;
 }
 </style>

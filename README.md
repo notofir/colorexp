@@ -36,18 +36,22 @@ vue create colorexp
 
 # Qualtrics
 
-Doesn't accept `...` code.
+Doesn't accept `...` code (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) nor `require`. Validator that seems to catch these errors: https://esprima.org/demo/validate.html
+JS Formatter: https://beautifytools.com/javascript-validator.php
 
 Execute:
 
 ```bash
 yarn build
 ./node_modules/.bin/babel --plugins @babel/plugin-proposal-object-rest-spread dist/js/app.*.js -o app.js
+sed -i "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/" app.js
 ```
 
-Look for `PLACEHOLDER FOR QUALTRICS` in app.js and appending found string the following line:
+Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
+Qualtrics API https://api.qualtrics.com/instructions/ZG9jOjIwMTY2NzUy-javascript-question-api
 
-// Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
+Fixes:
+- https://babeljs.io/docs/en/babel-plugin-proposal-object-rest-spread
 
 ```js
 Qualtrics.SurveyEngine.addOnload(function()
@@ -59,14 +63,11 @@ Qualtrics.SurveyEngine.addOnload(function()
 Qualtrics.SurveyEngine.addOnReady(function()
 {
 	/*Place your JavaScript here to run when the page is fully displayed*/
-	this.questionContainer.innerHTML = "<div id=\"app\"></div>";
     var qthis = this;
+	qthis.questionContainer.innerHTML = "<div id=\"app\"></div>";
     // Hide qualtrics next button.
     qthis.hideNextButton();
-
-    // Copy app.js here.
-    // `; qthis.showNextButton();`
-    // OR `; qthis.clickNextButton();`
+    // Put app.js here.
 });
 
 Qualtrics.SurveyEngine.addOnUnload(function()
