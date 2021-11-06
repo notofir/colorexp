@@ -38,6 +38,15 @@ vue create colorexp
 
 Doesn't accept `...` code.
 
+Execute:
+
+```bash
+yarn build
+./node_modules/.bin/babel --plugins @babel/plugin-proposal-object-rest-spread dist/js/app.*.js -o app.js
+```
+
+Look for `PLACEHOLDER FOR QUALTRICS` in app.js and appending found string the following line:
+
 // Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
 
 ```js
@@ -55,7 +64,7 @@ Qualtrics.SurveyEngine.addOnReady(function()
     // Hide qualtrics next button.
     qthis.hideNextButton();
 
-    // Open http://localhost:8080/js/app.js and copy contents here (copying the source code directly in qualtrics may fail on formatting errors). Then, look for `PLACEHOLDER FOR QUALTRICS` and appending found string the following line:
+    // Copy app.js here.
     // `; qthis.showNextButton();`
     // OR `; qthis.clickNextButton();`
 });

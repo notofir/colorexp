@@ -196,7 +196,7 @@ import Hint from "../Hint.vue";
 import Button from "../Button.vue";
 import phases from "../../phases";
 import ArrowKey from "./ArrowKey.vue";
-const bootstrap = require("bootstrap");
+import * as bootstrap from "bootstrap";
 
 const maxLight = 70;
 const minLight = 20;

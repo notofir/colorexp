@@ -59,6 +59,12 @@ export default {
       records: records,
     };
   },
+  mounted() {
+    ///this.addScript(
+    ///  "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js",
+    ///  "sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM",
+    ///);
+  },
   computed: {
     currentComponent() {
       return this.currentComponentName;
@@ -83,6 +89,13 @@ export default {
     },
   },
   methods: {
+    addScript(url, integrity) {
+      let s = document.createElement("script");
+      s.setAttribute("src", url);
+      s.setAttribute("integrity", integrity);
+      s.setAttribute("crossorigin", "anonymous");
+      document.head.appendChild(s);
+    },
     instructionsFinish() {
       this.currentComponentName = phases[this.phaseIndex].taskName;
     },
