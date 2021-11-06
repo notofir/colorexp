@@ -1,7 +1,7 @@
 <template>
-  <div class="container p-0">
-    <div class="row">
-      <div class="col">
+  <div class="container p-0" style="height: 100%">
+    <div class="row" style="height: 20%">
+      <div class="col mt-auto">
         <Hint
           @hint-click="onHint"
           v-show="trialHint.autoHintClicks.min <= 0 && hintGroup.size != 0"
@@ -10,12 +10,12 @@
         />
       </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <h2 id="hint-timer" class="my-5">&nbsp;</h2>
+    <div class="row" style="height: 10%">
+      <div class="col my-auto">
+        <h2 id="hint-timer" class="m-0">&nbsp;</h2>
       </div>
     </div>
-    <div class="row">
+    <div class="row" style="height: 70%">
       <div class="col my-auto">
         <DisplayedHint
           v-if="displayedHintSide === 'left'"
@@ -24,69 +24,68 @@
         />
       </div>
       <div class="col-7">
-        <div class="row mb-5">
-          <div class="col"></div>
-        </div>
-        <div class="row mb-5">
-          <div class="col p-0 pt-1">
-            <Square alignment="s" :color="displayedLeftColor" />
-          </div>
-          <div class="col p-0">
-            <DisplayedHint
-              v-if="displayedHintSide === 'correct'"
-              :side="hintSide"
-              :size="hintGroup.size"
-            />
-          </div>
-          <div class="col p-0 pt-1">
-            <Square
-              alignment="e"
-              :color="displayeRightColor"
-              :size="hintGroup.size"
-            />
-          </div>
-        </div>
-        <div class="row mb-5">
-          <div class="col">
-            <Square alignment="x" :color="midColor" />
-          </div>
-        </div>
-        <div class="row mb-4 pt-4">
-          <div class="col">
-            <ArrowKey
-              side="left"
-              :isInvisible="isTutorial"
-              :initPresses="tutorialPresses"
-              :isPressed="pressedKey == 'left'"
-              :isDisabled="isArrowKeyDisabled(maxMid)"
-            />
-          </div>
-          <div class="col"></div>
-          <div class="col">
-            <ArrowKey
-              side="right"
-              :isInvisible="false"
-              :initPresses="tutorialPresses"
-              :isPressed="pressedKey == 'right'"
-              :isDisabled="isArrowKeyDisabled(minMid)"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col my-auto">
-            <span
-              :id="'tutorial-' + submitID"
-              :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
-              data-bs-trigger="manual"
-              data-bs-placement="bottom"
-              data-bs-content="Press the submit button when you believe you're done"
-            >
-              <Button
-                @btn-click="onSubmit"
-                :content="submitID"
-                :disabled="shouldWitholdInput"
+        <div class="container">
+          <div class="row mb-5" style="height: 30%">
+            <div class="col p-0 pt-1">
+              <Square alignment="s" :color="displayedLeftColor" />
+            </div>
+            <div class="col p-0">
+              <DisplayedHint
+                v-if="displayedHintSide === 'correct'"
+                :side="hintSide"
+                :size="hintGroup.size"
               />
-            </span>
+            </div>
+            <div class="col p-0 pt-1">
+              <Square
+                alignment="e"
+                :color="displayeRightColor"
+                :size="hintGroup.size"
+              />
+            </div>
+          </div>
+          <div class="row mb-4" style="height: 30%">
+            <div class="col">
+              <Square alignment="x" :color="midColor" />
+            </div>
+          </div>
+          <div class="row mb-3 pt-3" style="height: 30%">
+            <div class="col">
+              <ArrowKey
+                side="left"
+                :isInvisible="isTutorial"
+                :initPresses="tutorialPresses"
+                :isPressed="pressedKey == 'left'"
+                :isDisabled="isArrowKeyDisabled(maxMid)"
+              />
+            </div>
+            <div class="col"></div>
+            <div class="col">
+              <ArrowKey
+                side="right"
+                :isInvisible="false"
+                :initPresses="tutorialPresses"
+                :isPressed="pressedKey == 'right'"
+                :isDisabled="isArrowKeyDisabled(minMid)"
+              />
+            </div>
+          </div>
+          <div class="row" style="height: 10%">
+            <div class="col my-auto">
+              <span
+                :id="'tutorial-' + submitID"
+                :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
+                data-bs-trigger="manual"
+                data-bs-placement="bottom"
+                data-bs-content="Press the submit button when you believe you're done"
+              >
+                <Button
+                  @btn-click="onSubmit"
+                  :content="submitID"
+                  :disabled="shouldWitholdInput"
+                />
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -190,7 +189,7 @@ import Square from "./Square.vue";
 import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
 import Button from "../Button.vue";
-import phases from "../../circletrials";
+import phases from "../../phases";
 import ArrowKey from "./ArrowKey.vue";
 const bootstrap = require("bootstrap");
 

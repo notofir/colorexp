@@ -1,13 +1,9 @@
 <template>
-  <div class="row">
-    <div class="col align-items-center justify-content-center">
-      <Button
-        @btn-click="onClick"
-        :content="hintContent"
-        :disabled="isClicked || isDisabled"
-      />
-    </div>
-  </div>
+  <Button
+    @btn-click="onClick"
+    :content="hintContent"
+    :disabled="isClicked || isDisabled"
+  />
 </template>
 
 <script>
@@ -26,17 +22,15 @@ export default {
   data() {
     return {
       isClicked: false,
-      hintContent:
-        `
-          <h5>
+      hintContent: `
+          <p class="h5">
               Press for hint <i class='bi bi-lightbulb-fill'></i>
-            </h5>
-          <h5>
+          </p>
+          <p class="h5 m-0">
             <i class='h4 bi bi-people-fill'></i>
             <br />
-          ` +
-        this.hintGroupSize +
-        `</h5>`,
+            ${this.hintGroupSize}
+        </p>`,
     };
   },
   emits: ["hint-click"],

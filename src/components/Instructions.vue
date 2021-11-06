@@ -1,16 +1,20 @@
 <template>
-  <div class="container-fluid">
-    <div class="row mb-4">
-      <div class="col">
-        <h1 class="h1 mb-2 instruction display-text">
+  <div class="container" style="height: 100%">
+    <div class="row" style="height: 10%">
+      <div class="col mt-auto">
+        <p class="h1 instruction display-text">
           {{ pages[currentPage].title }}
-        </h1>
+        </p>
+      </div>
+    </div>
+    <div class="row" style="height: 80%">
+      <div class="col pt-2">
         <p class="instruction display-text">
           {{ pages[currentPage].text }}
         </p>
       </div>
     </div>
-    <div class="row">
+    <div class="row" style="height: 10%">
       <div class="col">
         <div v-if="!isDone" class="btn-group" role="group">
           <Button
@@ -30,7 +34,7 @@
 
 <script>
 import Button from "./Button.vue";
-import phases from "../circletrials";
+import phases from "../phases";
 
 export default {
   name: "Instructions",

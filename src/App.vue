@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid text-center app-width">
+  <div class="container text-center main-container">
     <div class="form-check form-switch position-absolute top-0 start-0">
       <input
         @click="isConditionA = !isConditionA"
@@ -8,12 +8,15 @@
         id="flexSwitchCheckDefault"
       />
       <label class="form-check-label" for="flexSwitchCheckDefault"
-        >Condition {{ isConditionA? "A" : "B" }}</label
+        >Condition {{ isConditionA ? "A" : "B" }}</label
       >
     </div>
 
-    <div class="row align-items-center justify-content-center full-page">
-      <div class="col p-0">
+    <div
+      class="row align-items-center justify-content-center"
+      style="height: 100%"
+    >
+      <div class="col p-0" style="height: 100%">
         <component
           @instructions-finish="instructionsFinish"
           @scatter-finish="scatterFinish"
@@ -33,7 +36,7 @@ import Instructions from "./components/Instructions.vue";
 import ScatterSurvey from "./components/scattertask/ScatterSurvey.vue";
 import ScatterTrial from "./components/scattertask/ScatterTrial.vue";
 import ColorsTrial from "./components/colorstask/ColorsTrial.vue";
-import phases from "./circletrials";
+import phases from "./phases";
 import postResults from "./qualtrics";
 
 export default {
@@ -135,15 +138,24 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css";
 
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+}
+
 .display-text {
   direction: ltr;
 }
 
-.full-page {
-  height: 100vh;
+.main-container {
+  width: 700px;
+  height: 100%;
 }
 
-.app-width {
-  width: 700px;
+#app {
+  height: 100%;
 }
 </style>
