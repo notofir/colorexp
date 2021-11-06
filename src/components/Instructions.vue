@@ -66,8 +66,7 @@ export default {
   },
   mounted() {
     if (this.isDone) {
-      const pl = "IS DONE PLACEHOLDER FOR QUALTRICS";
-      pl; // Fixes unused lint error.
+      console.log("IS DONE PLACEHOLDER FOR QUALTRICS");
     }
   },
 };
