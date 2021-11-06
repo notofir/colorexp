@@ -1,4 +1,17 @@
-function postResults(records) {
+function toCSV(records) {
+  const replacer = (key, value) => (value === null ? "" : value); // specify how you want to handle null values here
+  const header = Object.keys(records[0]);
+  return [
+    header.join(","), // header row first
+    ...records.map((row) =>
+      header
+        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+        .join(",")
+    ),
+  ].join("\r\n");
+}
+
+function postResults(participantId, records) {
   const xhr = new XMLHttpRequest();
   xhr.open(
     "POST",
@@ -6,9 +19,10 @@ function postResults(records) {
     true
   );
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(
-    JSON.stringify({ records: records, phaseIndex: -1, trialIndex: -1 })
-  );
+  xhr.send(JSON.stringify({ participantId: participantId, records: records }));
+
+  const csv = toCSV(records);
+  console.log(csv);
   console.log("finished task");
 }
 

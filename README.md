@@ -34,4 +34,16 @@ First run from docker:
 vue create colorexp
 ```
 
-# TODO
+# Qualtrics
+
+// Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
+
+```js
+var qthis = this;
+// Hide qualtrics next button.
+qthis.hideNextButton();
+
+// Copy //dist/js/app.<stamp>.js here. Then, look for `PLACEHOLDER FOR QUALTRICS` and appending found string the following line:
+// `; qthis.showNextButton();`
+// OR `; qthis.clickNextButton();`
+```

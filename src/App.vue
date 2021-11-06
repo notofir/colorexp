@@ -101,25 +101,14 @@ export default {
       this.advance(ScatterTrial);
     },
     advance(nextTrialComponent) {
-      const xhr = new XMLHttpRequest();
-      xhr.open(
-        "POST",
-        "https://us-central1-ofirarias-com.cloudfunctions.net/colortask",
-        true
-      );
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.send(
-        JSON.stringify({
-          phaseIndex: this.phaseIndex,
-          trialIndex: this.trialIndex,
-          record: this.records[this.phaseIndex][this.trialIndex],
-        })
-      );
+      postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", [
+        this.records[this.phaseIndex][this.trialIndex],
+      ]);
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
         if (this.isDone()) {
-          postResults(this.records);
+          postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", this.records);
         }
         this.currentComponentName = Instructions.name;
       } else {

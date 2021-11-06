@@ -11,26 +11,6 @@ def _upload_file(content, path):
     my_file.upload_from_string(content, content_type="text/plain")
 
 
-def index(request):
-    """Responds to any HTTP request.
-    Args:
-        request (flask.Request): HTTP request object.
-    Returns:
-        The response text or any set of values that can be turned into a
-        Response object using
-        `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
-    """
-    if request.method == "OPTIONS": # CORS preflight
-        return _build_cors_preflight_response()
-    elif request.method == "POST": # The actual request following the preflight
-        path = "abc"
-        _upload_file(str(request.form), path)
-        result = {"status": f"successfully uploaded records to ${path}"}
-        return _corsify_actual_response(jsonify(result))
-    else:
-        raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
-
-
 def _build_cors_preflight_response():
     response = make_response()
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -41,4 +21,27 @@ def _build_cors_preflight_response():
 
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
+    print(response)
     return response
+
+
+def _verifyNumber(number):
+    if number < 0 or number > 100:
+        raise ValueError("received bad number {}".format(number))
+
+def index(request):
+    if request.method == "OPTIONS": # CORS preflight
+        print("options")
+        return _build_cors_preflight_response()
+    elif request.method == "POST": # The actual request following the preflight
+        data = request.json
+        phaseIndex = int(data["phaseIndex"])
+        _verifyNumber(phaseIndex)
+        trialIndex = int(data["trialIndex"])
+        _verifyNumber(trialIndex)
+        path = "{}.{}".format(phaseIndex, trialIndex)
+        _upload_file(str(data["record"]), path)
+        result = {"status": f"successfully uploaded records to {path}"}
+        return _corsify_actual_response(make_response(jsonify(result)))
+    else:
+        raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
