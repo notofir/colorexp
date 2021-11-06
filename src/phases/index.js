@@ -1,9 +1,32 @@
 import createHint from "../hint";
 
+function createPhase({
+  taskName = "ColorsTrial",
+  instructions,
+  numberOfTrials,
+  hintCreator = function () {
+    return createHint({});
+  },
+  isPractice = false,
+  isTutorial = false,
+  shouldDisplayFeedback = false,
+  alertnessTestIndex = -1,
+}) {
+  return {
+    taskName: taskName,
+    instructions: instructions,
+    isPractice: isPractice,
+    isTutorial: isTutorial,
+    numberOfTrials: numberOfTrials,
+    shouldDisplayFeedback: shouldDisplayFeedback,
+    hintCreator: hintCreator,
+    alertnessTestIndex: alertnessTestIndex,
+  };
+}
+
 const phases = [
   // Phase 1
-  {
-    taskName: "ColorsTrial",
+  createPhase({
     instructions: [
       {
         title: "First Page",
@@ -14,12 +37,12 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
+    isPractice: true,
     isTutorial: true,
-    numberOfTrials: 3,
-  },
+    numberOfTrials: 5,
+  }),
   // Phase 2
-  {
-    taskName: "ColorsTrial",
+  createPhase({
     instructions: [
       {
         title: "First Page",
@@ -30,12 +53,12 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    numberOfTrials: 3,
+    isPractice: true,
+    numberOfTrials: 5,
     shouldDisplayFeedback: true,
-  },
+  }),
   // Phase 3
-  {
-    taskName: "ColorsTrial",
+  createPhase({
     instructions: [
       {
         title: "First Page",
@@ -46,16 +69,17 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    numberOfTrials: 3,
-    hint: function () {
+    isPractice: true,
+    alertnessTestIndex: 4,
+    numberOfTrials: 5,
+    hintCreator: function () {
       return createHint({
         groups: [{ size: 5, certainty: 0.8 }],
       });
     },
-  },
+  }),
   // Phase 4
-  {
-    taskName: "ColorsTrial",
+  createPhase({
     instructions: [
       {
         title: "First Page",
@@ -66,16 +90,16 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    numberOfTrials: 3,
-    hint: function () {
+    isPractice: true,
+    numberOfTrials: 5,
+    hintCreator: function () {
       return createHint({
         groups: [{ size: 107, certainty: 1 }],
       });
     },
-  },
+  }),
   // Phase 5
-  {
-    taskName: "ColorsTrial",
+  createPhase({
     instructions: [
       {
         title: "First Page",
@@ -86,20 +110,22 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    numberOfTrials: 3,
-    hint: function (isConditionA) {
+    numberOfTrials: 50,
+    hintCreator: function (isConditionA) {
+      if (!isConditionA) {
+        return createHint({});
+      }
       return createHint({
-        autoHintClicks: isConditionA ? { min: 3, max: 7 } : undefined,
+        autoHintClicks: { min: 3, max: 7 },
         groups: [
           { size: 5, certainty: 0.8 },
           { size: 107, certainty: 1 },
         ],
       });
     },
-  },
+  }),
   // Phase 6
-  {
-    taskName: "ColorsTrial",
+  createPhase({
     instructions: [
       {
         title: "First Page",
@@ -110,8 +136,9 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    numberOfTrials: 3,
-    hint: function () {
+    alertnessTestIndex: 37,
+    numberOfTrials: 50,
+    hintCreator: function () {
       return createHint({
         delay: 10,
         groups: [
@@ -120,16 +147,16 @@ const phases = [
         ],
       });
     },
-  },
+  }),
   // Phase Bye Bye
-  {
+  createPhase({
     instructions: [
       {
         title: "Task has ended",
         text: "Thank you for participating. Bye.",
       },
     ],
-  },
+  }),
 ];
 
 export default phases;

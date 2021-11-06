@@ -15,7 +15,7 @@
         <h2 id="hint-timer" class="m-0">&nbsp;</h2>
       </div>
     </div>
-    <div class="row" style="height: 70%">
+    <div class="row" style="height: 40%">
       <div class="col my-auto">
         <DisplayedHint
           v-if="displayedHintSide === 'left'"
@@ -23,9 +23,9 @@
           :size="hintGroup.size"
         />
       </div>
-      <div class="col-7">
+      <div class="col-7 my-auto">
         <div class="container">
-          <div class="row mb-5" style="height: 30%">
+          <div class="row mb-5" style="height: 50%">
             <div class="col p-0 pt-1">
               <Square alignment="s" :color="displayedLeftColor" />
             </div>
@@ -44,47 +44,9 @@
               />
             </div>
           </div>
-          <div class="row mb-4" style="height: 30%">
+          <div class="row mb-4" style="height: 50%">
             <div class="col">
               <Square alignment="x" :color="midColor" />
-            </div>
-          </div>
-          <div class="row mb-3 pt-3" style="height: 30%">
-            <div class="col">
-              <ArrowKey
-                side="left"
-                :isInvisible="isTutorial"
-                :initPresses="tutorialPresses"
-                :isPressed="pressedKey == 'left'"
-                :isDisabled="isArrowKeyDisabled(maxMid)"
-              />
-            </div>
-            <div class="col"></div>
-            <div class="col">
-              <ArrowKey
-                side="right"
-                :isInvisible="false"
-                :initPresses="tutorialPresses"
-                :isPressed="pressedKey == 'right'"
-                :isDisabled="isArrowKeyDisabled(minMid)"
-              />
-            </div>
-          </div>
-          <div class="row" style="height: 10%">
-            <div class="col my-auto">
-              <span
-                :id="'tutorial-' + submitID"
-                :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
-                data-bs-trigger="manual"
-                data-bs-placement="bottom"
-                data-bs-content="Press the submit button when you believe you're done"
-              >
-                <Button
-                  @btn-click="onSubmit"
-                  :content="submitID"
-                  :disabled="shouldWitholdInput"
-                />
-              </span>
             </div>
           </div>
         </div>
@@ -96,6 +58,50 @@
           :size="hintGroup.size"
         />
       </div>
+    </div>
+    <div class="row" style="height: 30%">
+      <div class="col"></div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col">
+            <ArrowKey
+              side="left"
+              :isInvisible="isTutorial"
+              :initPresses="tutorialPresses"
+              :isPressed="pressedKey == 'left'"
+              :isDisabled="isArrowKeyDisabled(maxMid)"
+            />
+          </div>
+          <div class="col"></div>
+          <div class="col">
+            <ArrowKey
+              side="right"
+              :isInvisible="false"
+              :initPresses="tutorialPresses"
+              :isPressed="pressedKey == 'right'"
+              :isDisabled="isArrowKeyDisabled(minMid)"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col my-auto">
+            <span
+              :id="'btn-' + submitID"
+              :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
+              data-bs-trigger="manual"
+              data-bs-placement="bottom"
+              data-bs-content="Press the submit button when you believe you're done"
+            >
+              <Button
+                @btn-click="onSubmit"
+                :content="submitID"
+                :disabled="shouldWitholdInput"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
     </div>
     <!-- Hint ack modal -->
     <div
@@ -184,7 +190,6 @@
 import getRNG from "../../seededrandom";
 import calcColor from "../../colors";
 import createRecord from "../../record";
-import createHint from "../../hint";
 import Square from "./Square.vue";
 import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
@@ -195,7 +200,7 @@ const bootstrap = require("bootstrap");
 
 const maxLight = 70;
 const minLight = 20;
-const maxLightGap = 15;
+const maxGapForUser = 15;
 
 function getRandomColor(rng) {
   const letters = "0123456789ABCDEF";
@@ -218,7 +223,7 @@ function getDisplayedHint(
     return ["correct", true];
   }
   let actualDirection, misdirection;
-  if (pickedValueRel > 0.5) {
+  if (pickedValueRel < 0.5) {
     misdirection = "left";
     actualDirection = "right";
   } else {
@@ -244,14 +249,14 @@ export default {
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
     const minGap = 5;
-    const currentTrial = phases[this.phaseIndex];
-    const isTutorial = currentTrial.isTutorial && this.trialIndex == 0;
+    const currentPhase = phases[this.phaseIndex];
+    const isTutorial = currentPhase.isTutorial && this.trialIndex == 0;
     const submitID = "submit";
     let midLightDiff;
     const tutorialPresses = 10;
     // Not allowing to get too close to the ends, nor calculating the middle.
-    const maxMid = maxLight - (minGap + rng.getInt(maxLightGap - minGap));
-    let minMid = minLight + (minGap + rng.getInt(maxLightGap - minGap));
+    const maxMid = maxLight - (minGap + rng.getInt(maxGapForUser - minGap));
+    let minMid = minLight + (minGap + rng.getInt(maxGapForUser - minGap));
     // We need to enforce absolute middle.
     if ((maxMid - minMid) % 2 != 0) {
       minMid -= 1;
@@ -263,11 +268,7 @@ export default {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
     const midLight = minMid + midLightDiff;
-    const trialHint = createHint(
-      typeof currentTrial.hint === "function"
-        ? currentTrial.hint(this.isConditionA)
-        : {}
-    );
+    const trialHint = currentPhase.hintCreator(this.isConditionA);
     const hintGroup = rng.getElement(trialHint.groups);
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
@@ -275,9 +276,9 @@ export default {
       rng: rng,
       isDisplayedHintTrue: false,
       hintCountDown: trialHint.delay,
-      currentTutorialPopover: null,
+      currentPopover: null,
       isTutorial: isTutorial,
-      currentTrial: currentTrial,
+      currentPhase: currentPhase,
       pressedKey: "",
       minMid: minMid,
       maxMid: maxMid,
@@ -291,7 +292,7 @@ export default {
         ),
       didGiveHint: false,
       tutorialPresses: tutorialPresses,
-      tutorialPressesLeft: tutorialPresses,
+      tutorialPressesCounter: tutorialPresses,
       currentTutorialID: "",
       currentTutorialIndex: 0,
       shouldWitholdInput: false,
@@ -299,7 +300,7 @@ export default {
       didFollowHint: false,
       keyPresses: 0,
       displayedHintSide: "",
-      didDisplayFeedback: !currentTrial.shouldDisplayFeedback,
+      didDisplayFeedback: !currentPhase.shouldDisplayFeedback,
       color: color,
       submitID: submitID,
       tutorialIDs: ["right", "left", submitID],
@@ -315,7 +316,9 @@ export default {
   emits: ["colors-finish"],
   methods: {
     getRelativePos() {
-      return (this.midLight - minLight) / (maxLight - minLight);
+      const score = 1 - (this.midLight - minLight) / (maxLight - minLight);
+      const rounded = Math.round(score * 100);
+      return Number("0." + rounded);
     },
     onHint() {
       if (this.hintCountDown > 0) {
@@ -334,24 +337,36 @@ export default {
       [this.hintSide, this.isDisplayedHintTrue] = getDisplayedHint(
         this.getRelativePos(),
         this.midLight,
-        this.minLight + maxLightGap,
-        this.maxLight - maxLightGap,
+        minLight + maxGapForUser,
+        maxLight - maxGapForUser,
         this.rng.getBool(this.hintGroup.certainty)
       );
 
       this.displayedHintSide = this.hintSide;
       this.didGiveHint = true;
     },
-    toggleNextTutorial() {
+    toggleAlertnessTester() {
+      if (this.currentPhase.alertnessTestIndex <= 0) return;
+      if (this.currentPhase.alertnessTestIndex != this.trialIndex) return;
+      if (this.currentPopover == null) {
+        this.currentPopover = new bootstrap.Popover(
+          document.querySelector("#btn-" + this.submitID)
+        );
+        this.currentPopover.show();
+        document.getElementsByClassName("popover-body")[0].innerHTML =
+          "ALERTNESS TEST: Choose the darkest color";
+      }
+    },
+    toggleTutorial() {
       if (!this.isTutorial) return;
-      this.tutorialPressesLeft = this.tutorialPresses;
-      if (this.currentTutorialPopover != null) {
+      this.tutorialPressesCounter = this.tutorialPresses;
+      if (this.currentPopover != null) {
         this.currentTutorialIndex += 1;
-        this.currentTutorialPopover.dispose();
+        this.currentPopover.dispose();
         if (this.currentTutorialIndex == this.tutorialIDs.length - 1) {
           for (let i = 0; i < this.currentTutorialIndex; i++) {
             document
-              .querySelector("#tutorial-" + this.tutorialIDs[i])
+              .querySelector("#btn-" + this.tutorialIDs[i])
               .classList.remove("invisible");
           }
         } else {
@@ -361,27 +376,25 @@ export default {
       if (this.currentTutorialIndex >= this.tutorialIDs.length) return;
       this.currentTutorialID = this.tutorialIDs[this.currentTutorialIndex];
       this.currentTutorialElement = document.querySelector(
-        "#tutorial-" + this.currentTutorialID
+        "#btn-" + this.currentTutorialID
       );
       this.currentTutorialElement.classList.remove("invisible");
-      this.currentTutorialPopover = new bootstrap.Popover(
-        this.currentTutorialElement
-      );
-      this.currentTutorialPopover.show();
+      this.currentPopover = new bootstrap.Popover(this.currentTutorialElement);
+      this.currentPopover.show();
     },
     onSubmit() {
       if (!this.didDisplayFeedback) {
         this.showFeedbackModal();
         return;
       }
-
-      this.toggleNextTutorial();
       this.$emit(
         "colors-finish",
         createRecord({
           phaseIndex: this.phaseIndex,
           trialIndex: this.trialIndex,
           isTutorial: this.isTutorial,
+          isPractice: this.currentPhase.isPractice,
+          isAlertTest: this.currentPhase.alertnessTestIndex == this.trialIndex,
           leftValue: 0,
           rightValue: 1,
           pickedValue: this.getRelativePos(),
@@ -401,10 +414,10 @@ export default {
     },
     showFeedbackModal() {
       this.didDisplayFeedback = true;
-      let score = (this.getRelativePos().toFixed(2) * 100).toString();
+      let score = (this.getRelativePos() * 100).toString();
       // Sometimes, it's still printed as 59.9999999...
       if (score.indexOf(".") > 0) {
-        score = score.substr(0, score.indexOf("."))
+        score = score.substr(0, score.indexOf("."));
       }
       document.getElementById("score-range").value = score;
       document.getElementById("score-modal-label").innerHTML =
@@ -436,9 +449,9 @@ export default {
           return;
       } else return;
       if (this.isTutorial && this.currentTutorialID != this.submitID) {
-        this.tutorialPressesLeft -= 1;
-        if (this.tutorialPressesLeft == 0) {
-          this.toggleNextTutorial();
+        this.tutorialPressesCounter -= 1;
+        if (this.tutorialPressesCounter == 0) {
+          this.toggleTutorial();
         } else {
           document.getElementsByClassName("popover-body")[0].innerHTML =
             "Press the " +
@@ -447,7 +460,7 @@ export default {
               this.currentTutorialID.indexOf("-")
             ) +
             " arrow key " +
-            this.tutorialPressesLeft.toString() +
+            this.tutorialPressesCounter.toString() +
             " more times";
         }
       }
@@ -507,10 +520,14 @@ export default {
   },
   unmounted() {
     window.removeEventListener("keydown", this.keyboardListener);
+    if (this.currentPopover != null) {
+      this.currentPopover.dispose();
+    }
   },
   mounted() {
     this.trialStartTime = new Date();
-    this.toggleNextTutorial();
+    this.toggleTutorial();
+    this.toggleAlertnessTester();
   },
 };
 </script>

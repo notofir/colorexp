@@ -1,7 +1,7 @@
 <template>
   <div :class="'text-' + (side === 'right' ? 'end' : 'start')">
     <span
-      :id="'tutorial-' + side"
+      :id="'btn-' + side"
       :class="'d-inline-block' + (isInvisible ? ' invisible' : '')"
       data-bs-trigger="manual"
       :data-bs-placement="side"
