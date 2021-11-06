@@ -70,7 +70,7 @@ const phases = [
       },
     ],
     isPractice: true,
-    alertnessTestIndex: 4,
+    alertnessTestIndex: 3,
     numberOfTrials: 5,
     hintCreator: function () {
       return createHint({
@@ -110,7 +110,7 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    numberOfTrials: 50,
+    numberOfTrials: 25,
     hintCreator: function (isConditionA) {
       if (!isConditionA) {
         return createHint({});
@@ -136,8 +136,57 @@ const phases = [
         text: "page 2 inst.",
       },
     ],
-    alertnessTestIndex: 37,
-    numberOfTrials: 50,
+    numberOfTrials: 25,
+    hintCreator: function (isConditionA) {
+      if (!isConditionA) {
+        return createHint({});
+      }
+      return createHint({
+        autoHintClicks: { min: 3, max: 7 },
+        groups: [
+          { size: 5, certainty: 0.8 },
+          { size: 107, certainty: 1 },
+        ],
+      });
+    },
+  }),
+  // Phase 7
+  createPhase({
+    instructions: [
+      {
+        title: "First Page",
+        text: "page 1 inst.",
+      },
+      {
+        title: "Second page",
+        text: "page 2 inst.",
+      },
+    ],
+    numberOfTrials: 25,
+    hintCreator: function () {
+      return createHint({
+        delay: 10,
+        groups: [
+          { size: 5, certainty: 1 },
+          { size: 107, certainty: 1 },
+        ],
+      });
+    },
+  }),
+  // Phase 8
+  createPhase({
+    instructions: [
+      {
+        title: "First Page",
+        text: "page 1 inst.",
+      },
+      {
+        title: "Second page",
+        text: "page 2 inst.",
+      },
+    ],
+    alertnessTestIndex: 15,
+    numberOfTrials: 25,
     hintCreator: function () {
       return createHint({
         delay: 10,
