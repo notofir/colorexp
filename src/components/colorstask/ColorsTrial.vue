@@ -401,10 +401,14 @@ export default {
     },
     showFeedbackModal() {
       this.didDisplayFeedback = true;
-      const score = this.getRelativePos().toFixed(2) * 100;
+      let score = (this.getRelativePos().toFixed(2) * 100).toString();
+      // Sometimes, it's still printed as 59.9999999...
+      if (score.indexOf(".") > 0) {
+        score = score.substr(0, score.indexOf("."))
+      }
       document.getElementById("score-range").value = score;
       document.getElementById("score-modal-label").innerHTML =
-        "Score: " + score.toString() + "%";
+        "Score: " + score + "%";
 
       new bootstrap.Modal(document.getElementById("score-modal")).show();
     },
