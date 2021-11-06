@@ -36,14 +36,33 @@ vue create colorexp
 
 # Qualtrics
 
+Doesn't accept `...` code.
+
 // Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
 
 ```js
-var qthis = this;
-// Hide qualtrics next button.
-qthis.hideNextButton();
+Qualtrics.SurveyEngine.addOnload(function()
+{
+	/*Place your JavaScript here to run when the page loads*/
 
-// Copy //dist/js/app.<stamp>.js here. Then, look for `PLACEHOLDER FOR QUALTRICS` and appending found string the following line:
-// `; qthis.showNextButton();`
-// OR `; qthis.clickNextButton();`
+});
+
+Qualtrics.SurveyEngine.addOnReady(function()
+{
+	/*Place your JavaScript here to run when the page is fully displayed*/
+	this.questionContainer.innerHTML = "<div id=\"app\"></div>";
+    var qthis = this;
+    // Hide qualtrics next button.
+    qthis.hideNextButton();
+
+    // Open http://localhost:8080/js/app.js and copy contents here (copying the source code directly in qualtrics may fail on formatting errors). Then, look for `PLACEHOLDER FOR QUALTRICS` and appending found string the following line:
+    // `; qthis.showNextButton();`
+    // OR `; qthis.clickNextButton();`
+});
+
+Qualtrics.SurveyEngine.addOnUnload(function()
+{
+	/*Place your JavaScript here to run when the page is unloaded*/
+
+});
 ```

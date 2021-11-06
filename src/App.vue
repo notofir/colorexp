@@ -107,7 +107,7 @@ export default {
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
-        if (this.isDone()) {
+        if (this.isDone) {
           postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", this.records);
         }
         this.currentComponentName = Instructions.name;
