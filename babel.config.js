@@ -1,14 +1,3 @@
 module.exports = {
-  //presets: ["@vue/cli-plugin-babel/preset"],
-      presets: [
-    [
-      "@babel/env",
-      {
-        "targets": {
-          "chrome": "60"
-        }
-      }
-    ]
-  ]
-
+  presets: ["@vue/cli-plugin-babel/preset"],
 };

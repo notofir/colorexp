@@ -36,12 +36,19 @@ import Instructions from "./components/Instructions.vue";
 import ScatterSurvey from "./components/scattertask/ScatterSurvey.vue";
 import ScatterTrial from "./components/scattertask/ScatterTrial.vue";
 import ColorsTrial from "./components/colorstask/ColorsTrial.vue";
+import Popper from "./components/Popper.vue";
 import phases from "./phases";
 import postResults from "./qualtrics";
 
 export default {
   name: "App",
-  components: { Instructions, ScatterTrial, ColorsTrial, ScatterSurvey },
+  components: {
+    Popper,
+    Instructions,
+    ScatterTrial,
+    ColorsTrial,
+    ScatterSurvey,
+  },
   data() {
     let records = new Array(phases.length);
     for (let i = 0; i < records.length; i++) {
@@ -107,12 +114,15 @@ export default {
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
-        if (this.isDone) {
-          let postedResults = []
+        if (this.isDone()) {
+          let postedResults = [];
           for (let i = 0; i < this.records.length; i++) {
             postedResults.push(...this.records[i]);
           }
-          postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", postedResults);
+          postResults(
+            "PARTICIPANT ID PLACEHOLDER FOR QUALTRICS",
+            postedResults
+          );
         }
         this.currentComponentName = Instructions.name;
       } else {

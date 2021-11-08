@@ -64,40 +64,56 @@
       <div class="col-6">
         <div class="row">
           <div class="col">
-            <ArrowKey
-              side="left"
-              :isInvisible="isTutorial"
-              :initPresses="tutorialPresses"
-              :isPressed="pressedKey == 'left'"
-              :isDisabled="isArrowKeyDisabled(maxMid)"
-            />
+            <div
+              :class="
+                'tooltip2' +
+                (currentTutorialID === leftID? ' visible-tooltip': '')
+              "
+            >
+              <ArrowKey
+                side="left"
+                :isVisible="!(currentTutorialID === rightID)"
+                :isPressed="pressedKey == 'left'"
+                :isDisabled="isArrowKeyDisabled(maxMid)"
+              />
+              <span class="tooltiptext"> {{ tutorialContent }} </span>
+            </div>
           </div>
           <div class="col"></div>
           <div class="col">
-            <ArrowKey
-              side="right"
-              :isInvisible="false"
-              :initPresses="tutorialPresses"
-              :isPressed="pressedKey == 'right'"
-              :isDisabled="isArrowKeyDisabled(minMid)"
-            />
+            <div
+              :class="
+                'tooltip2' +
+                (currentTutorialID === rightID ? ' visible-tooltip': '')
+              "
+            >
+              <ArrowKey
+                side="right"
+                :isVisible="!(currentTutorialID === leftID)"
+                :isPressed="pressedKey == 'right'"
+                :isDisabled="isArrowKeyDisabled(minMid)"
+              />
+              <span class="tooltiptext"> {{ tutorialContent }} </span>
+            </div>
           </div>
         </div>
         <div class="row">
           <div class="col my-auto">
-            <span
-              :id="'btn-' + submitID"
-              :class="'d-inline-block ' + (isTutorial ? 'invisible' : '')"
-              data-bs-trigger="manual"
-              data-bs-placement="bottom"
-              data-bs-content="Press the submit button when you believe you're done"
+            <div
+              :class="
+                'tooltip2' +
+                (currentTutorialID === submitID || isAlertnessTestOn ? ' visible-tooltip': '')
+              "
             >
               <Button
                 @btn-click="onSubmit"
                 :content="submitID"
+                :isVisible="isTutorial? currentTutorialID === submitID : true"
                 :disabled="shouldWitholdInput"
               />
-            </span>
+              <span v-if="isTutorial" class="tooltiptext">Press the submit button when you believe you're done</span>
+              <span v-else class="tooltiptext">ALERTNESS TEST<br/>for this trial, select the darkest shade</span>
+            </div>
           </div>
         </div>
       </div>
@@ -188,7 +204,7 @@
 
 <script>
 import getRNG from "../../seededrandom";
-import calcColor from "../../colors";
+import { calcColor, getRandomColor } from "../../colors";
 import createRecord from "../../record";
 import Square from "./Square.vue";
 import DisplayedHint from "../DisplayedHint.vue";
@@ -196,21 +212,13 @@ import Hint from "../Hint.vue";
 import Button from "../Button.vue";
 import phases from "../../phases";
 import ArrowKey from "./ArrowKey.vue";
-import * as bootstrap from "bootstrap";
 
 const maxLight = 70;
 const minLight = 20;
 const maxGapForUser = 15;
-
-function getRandomColor(rng) {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += rng.getElement(letters);
-  }
-
-  return color;
-}
+const tutorialArrowPresses = 10;
+const firstArrow = "right"
+const secondArrow = "left"
 
 function getDisplayedHint(
   pickedValueRel,
@@ -246,14 +254,13 @@ export default {
     isConditionA: Boolean,
   },
   data() {
+    console.log(this.phaseIndex, this.trialIndex);
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
     const minGap = 5;
     const currentPhase = phases[this.phaseIndex];
     const isTutorial = currentPhase.isTutorial && this.trialIndex == 0;
-    const submitID = "submit";
     let midLightDiff;
-    const tutorialPresses = 10;
     // Not allowing to get too close to the ends, nor calculating the middle.
     const maxMid = maxLight - (minGap + rng.getInt(maxGapForUser - minGap));
     let minMid = minLight + (minGap + rng.getInt(maxGapForUser - minGap));
@@ -263,7 +270,7 @@ export default {
     }
     if (isTutorial) {
       midLightDiff =
-        tutorialPresses + rng.getInt(maxMid - minMid - tutorialPresses);
+        tutorialArrowPresses + rng.getInt(maxMid - minMid - tutorialArrowPresses);
     } else {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
@@ -276,7 +283,6 @@ export default {
       rng: rng,
       isDisplayedHintTrue: false,
       hintCountDown: trialHint.delay,
-      currentPopover: null,
       isTutorial: isTutorial,
       currentPhase: currentPhase,
       pressedKey: "",
@@ -290,11 +296,15 @@ export default {
         rng.getInt(
           trialHint.autoHintClicks.max + 1 - trialHint.autoHintClicks.min
         ),
+      leftID: "left",
+      rightID: "right",
+      submitID: "submit",
+      tutorialIDs: ["right", "left", "submit"],
       didGiveHint: false,
-      tutorialPresses: tutorialPresses,
-      tutorialPressesCounter: tutorialPresses,
-      currentTutorialID: "",
+      tutorialArrowPressesCounter: tutorialArrowPresses,
+      currentTutorialID: isTutorial? firstArrow: null,
       currentTutorialIndex: 0,
+      isAlertnessTestOn: currentPhase.alertnessTestIndex == this.trialIndex,
       shouldWitholdInput: false,
       currentTutorialElement: null,
       didFollowHint: false,
@@ -302,8 +312,6 @@ export default {
       displayedHintSide: "",
       didDisplayFeedback: !currentPhase.shouldDisplayFeedback,
       color: color,
-      submitID: submitID,
-      tutorialIDs: ["right", "left", submitID],
       midLight: midLight,
       displayedLeftColor: displayedLeftColor,
       displayeRightColor: displayeRightColor,
@@ -315,6 +323,9 @@ export default {
   },
   emits: ["colors-finish"],
   methods: {
+    isCurrentTutorial(btn) {
+      return this.isTutorial && this.currentTutorialID === btn;
+    },
     getRelativePos() {
       const score = 1 - (this.midLight - minLight) / (maxLight - minLight);
       const rounded = Math.round(score * 100);
@@ -345,42 +356,19 @@ export default {
       this.displayedHintSide = this.hintSide;
       this.didGiveHint = true;
     },
-    toggleAlertnessTester() {
-      if (this.currentPhase.alertnessTestIndex <= 0) return;
-      if (this.currentPhase.alertnessTestIndex != this.trialIndex) return;
-      if (this.currentPopover == null) {
-        this.currentPopover = new bootstrap.Popover(
-          document.querySelector("#btn-" + this.submitID)
-        );
-        this.currentPopover.show();
-        document.getElementsByClassName("popover-body")[0].innerHTML =
-          "ALERTNESS TEST: for this trial, select the darkest shade";
-      }
-    },
     toggleTutorial() {
       if (!this.isTutorial) return;
-      this.tutorialPressesCounter = this.tutorialPresses;
-      if (this.currentPopover != null) {
-        this.currentTutorialIndex += 1;
-        this.currentPopover.dispose();
-        if (this.currentTutorialIndex == this.tutorialIDs.length - 1) {
-          for (let i = 0; i < this.currentTutorialIndex; i++) {
-            document
-              .querySelector("#btn-" + this.tutorialIDs[i])
-              .classList.remove("invisible");
-          }
-        } else {
-          this.currentTutorialElement.classList.add("invisible");
+      if (this.currentTutorialID == this.submitID) return;
+
+      this.tutorialArrowPressesCounter -= 1;
+      if (this.tutorialArrowPressesCounter == 0) {
+        if (this.currentTutorialID === firstArrow) {
+          this.currentTutorialID = secondArrow;
+          this.tutorialArrowPressesCounter = tutorialArrowPresses;
+        } else if (this.currentTutorialID === secondArrow) {
+          this.currentTutorialID = this.submitID;
         }
       }
-      if (this.currentTutorialIndex >= this.tutorialIDs.length) return;
-      this.currentTutorialID = this.tutorialIDs[this.currentTutorialIndex];
-      this.currentTutorialElement = document.querySelector(
-        "#btn-" + this.currentTutorialID
-      );
-      this.currentTutorialElement.classList.remove("invisible");
-      this.currentPopover = new bootstrap.Popover(this.currentTutorialElement);
-      this.currentPopover.show();
     },
     onSubmit() {
       if (!this.didDisplayFeedback) {
@@ -410,7 +398,7 @@ export default {
       );
     },
     showHintAckModal() {
-      new bootstrap.Modal(document.getElementById("hint-ack-modal")).show();
+      ///new bootstrap.Modal(document.getElementById("hint-ack-modal")).show();
     },
     showFeedbackModal() {
       this.didDisplayFeedback = true;
@@ -423,7 +411,7 @@ export default {
       document.getElementById("score-modal-label").innerHTML =
         "Score: " + score + "%";
 
-      new bootstrap.Modal(document.getElementById("score-modal")).show();
+      ///new bootstrap.Modal(document.getElementById("score-modal")).show();
     },
     hintCountDownTimer() {
       if (this.hintCountDown > 0) {
@@ -441,29 +429,17 @@ export default {
     keyboardListener(e) {
       if (e.repeat) return;
       if (this.shouldWitholdInput) return;
-      if (e.key === "ArrowLeft") {
-        if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1))
+      switch (e.key) {
+        case "ArrowLeft":
+          if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1)) return;
+          break;
+        case "ArrowRight":
+          if (!this.handlePressedKey("right", this.midLight > this.minMid, -1)) return;
+          break;
+        default:
           return;
-      } else if (e.key === "ArrowRight") {
-        if (!this.handlePressedKey("right", this.midLight > this.minMid, -1))
-          return;
-      } else return;
-      if (this.isTutorial && this.currentTutorialID != this.submitID) {
-        this.tutorialPressesCounter -= 1;
-        if (this.tutorialPressesCounter == 0) {
-          this.toggleTutorial();
-        } else {
-          document.getElementsByClassName("popover-body")[0].innerHTML =
-            "Press the " +
-            this.currentTutorialID.substr(
-              0,
-              this.currentTutorialID.indexOf("-")
-            ) +
-            " arrow key " +
-            this.tutorialPressesCounter.toString() +
-            " more times";
-        }
       }
+      this.toggleTutorial();
       if (this.displayedHintSide === "correct") {
         this.didFollowHint = false;
       }
@@ -514,22 +490,66 @@ export default {
       }
       return calcColor(this.color, this.midLight);
     },
+    tutorialContent() {
+      if (!this.isTutorial) return null;
+      return "Press the " +
+      this.currentTutorialID.substr(
+        0,
+        this.currentTutorialID.indexOf("-")
+      ) +
+      " arrow key " +
+      this.tutorialArrowPressesCounter.toString() +
+      " more times";
+    }
   },
   created() {
     window.addEventListener("keydown", this.keyboardListener);
   },
   unmounted() {
     window.removeEventListener("keydown", this.keyboardListener);
-    if (this.currentPopover != null) {
-      this.currentPopover.dispose();
-    }
   },
   mounted() {
     this.trialStartTime = new Date();
-    this.toggleTutorial();
-    this.toggleAlertnessTester();
   },
 };
 </script>
 
-<style></style>
+<style>
+.tooltip2 {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip2 .tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  margin-left: -80px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip2 .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #555 transparent;
+}
+
+.visible-tooltip .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>

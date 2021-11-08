@@ -1,7 +1,6 @@
 <template>
-  <!-- align middle vertically -->
-  <button @click="onClick()" class="btn btn-primary" :disabled="disabled">
-    <div class="display-text" style="color:white" v-html="content"></div>
+  <button @click="onClick()" :class="'btn btn-primary' + (isVisible ? '': 'invisible')" :disabled="disabled">
+    <div class="display-text" style="color: white" v-html="content"></div>
   </button>
 </template>
 
@@ -10,6 +9,10 @@ export default {
   name: "Button",
   props: {
     content: String,
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
     disabled: Boolean,
     emit: String,
   },

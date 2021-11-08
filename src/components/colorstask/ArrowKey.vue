@@ -1,35 +1,25 @@
 <template>
   <div :class="'text-' + (side === 'right' ? 'end' : 'start')">
-    <span
-      :id="'btn-' + side"
-      :class="'d-inline-block' + (isInvisible ? ' invisible' : '')"
-      data-bs-trigger="manual"
-      :data-bs-placement="side"
-      :data-bs-content="
-        'Press ' +
-        side +
-        ' key on your keyboard ' +
-        initPresses.toString() +
-        ' times'
-      "
-    >
+    <div :class="'d-inline-block' + (isVisible ? '': ' invisible')">
       <i
+        :id="'btn-' + side"
         :class="
           'fs-1 bi bi-arrow-' + side + '-square' + (isPressed ? '-fill' : '')
         "
-        :style="isDisabled ? 'color: grey' : ''"
+        :style="'color: ' + (isDisabled ? 'grey' : 'black')"
       ></i>
-    </span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: "ArrowKey",
   props: {
     side: String,
     initPresses: Number,
     isDisabled: Boolean,
-    isInvisible: Boolean,
+    isVisible: Boolean,
     isPressed: Boolean,
   },
 };

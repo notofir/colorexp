@@ -92,4 +92,14 @@ function calcColor(color, light) {
   return HSLToHex(hslColor["h"], hslColor["s"], hslColor["l"]);
 }
 
-export default calcColor;
+function getRandomColor(rng) {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += rng.getElement(letters);
+  }
+
+  return color;
+}
+
+export { calcColor, getRandomColor };
