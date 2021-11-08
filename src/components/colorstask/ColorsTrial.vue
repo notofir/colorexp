@@ -119,86 +119,25 @@
       </div>
       <div class="col"></div>
     </div>
-    <!-- Hint ack modal -->
-    <div
-      id="hint-ack-modal"
-      class="modal fade"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-            <h3>Please confirm that you've seen the displayed hint.</h3>
+    <Modal id="modal-hint-ack" @modal-close="shouldWitholdInput = false" header="<h3>Please confirm that you've seen the displayed hint.</h3>" />
+    <Modal v-if="currentPhase.shouldDisplayFeedback" id="modal-score" @modal-close="shouldWitholdInput = false; didDisplayFeedback = true; onSubmit()" :header="`<h4 class='modal-title'>Score: ` + percentageScore + `%</h4>`" :body="`
+      <div class='container-fluid'>
+        <div class='row align-items-end'>
+          <div class='col p-0'>
+            <p class='text-start mb-0'><b>0</b></p>
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-primary"
-              v-on:click="this.shouldWitholdInput = false"
-              data-bs-dismiss="modal"
-            >
-              ok <i class="bi bi-check"></i>
-            </button>
+          <div class='col p-0'>
+            <p class='text-center mb-0'><b>50</b></p>
+          </div>
+          <div class='col p-0'>
+            <p class='text-end mb-0'><b>100</b></p>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- Score modal -->
-    <div
-      id="score-modal"
-      class="modal fade"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabindex="-1"
-      aria-labelledby="score-modal-label"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="score-modal-label"></h5>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row align-items-end">
-                <div class="col p-0">
-                  <p class="text-start mb-0">0</p>
-                </div>
-                <div class="col p-0">
-                  <p class="text-center mb-0">50</p>
-                </div>
-                <div class="col p-0">
-                  <p class="text-end mb-0">100</p>
-                </div>
-              </div>
-              <div class="row">
-                <input
-                  id="score-range"
-                  type="range"
-                  class="form-range"
-                  min="0"
-                  max="100"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-primary"
-              v-on:click="onSubmit"
-              data-bs-dismiss="modal"
-            >
-              ok <i class="bi bi-check"></i>
-            </button>
-          </div>
+        <div class='row'>
+          <input id='score-range' type='range' class='form-range' min='0' max='100' value='` + percentageScore + `' disabled />
         </div>
       </div>
-    </div>
+    `" />
   </div>
 </template>
 
@@ -210,6 +149,7 @@ import Square from "./Square.vue";
 import DisplayedHint from "../DisplayedHint.vue";
 import Hint from "../Hint.vue";
 import Button from "../Button.vue";
+import Modal from "../Modal.vue";
 import phases from "../../phases";
 import ArrowKey from "./ArrowKey.vue";
 
@@ -246,8 +186,8 @@ function getDisplayedHint(
 }
 
 export default {
-  components: { Button, Hint, DisplayedHint, Square, ArrowKey },
   name: "ColorsTrial",
+  components: { Button, Modal, Hint, DisplayedHint, Square, ArrowKey },
   props: {
     phaseIndex: Number,
     trialIndex: Number,
@@ -372,7 +312,7 @@ export default {
     },
     onSubmit() {
       if (!this.didDisplayFeedback) {
-        this.showFeedbackModal();
+        this.showModal("modal-score");
         return;
       }
       this.$emit(
@@ -397,21 +337,9 @@ export default {
         })
       );
     },
-    showHintAckModal() {
-      ///new bootstrap.Modal(document.getElementById("hint-ack-modal")).show();
-    },
-    showFeedbackModal() {
-      this.didDisplayFeedback = true;
-      let score = (this.getRelativePos() * 100).toString();
-      // Sometimes, it's still printed as 59.9999999...
-      if (score.indexOf(".") > 0) {
-        score = score.substr(0, score.indexOf("."));
-      }
-      document.getElementById("score-range").value = score;
-      document.getElementById("score-modal-label").innerHTML =
-        "Score: " + score + "%";
-
-      ///new bootstrap.Modal(document.getElementById("score-modal")).show();
+    showModal(modalId) {
+      this.shouldWitholdInput = true;
+      document.getElementById(modalId).style.display = 'block';
     },
     hintCountDownTimer() {
       if (this.hintCountDown > 0) {
@@ -456,7 +384,7 @@ export default {
       if (this.autoHintCounter == 0) {
         this.shouldWitholdInput = true;
         this.onHint();
-        this.showHintAckModal();
+        this.showModal("modal-hint-ack");
       }
     },
     // Returns false if key shouldn't be processed.
@@ -489,6 +417,14 @@ export default {
         return this.overrideMidColor;
       }
       return calcColor(this.color, this.midLight);
+    },
+    percentageScore() {
+      let score = (this.getRelativePos() * 100).toString();
+      // Sometimes, it's still printed as 59.9999999...
+      if (score.indexOf(".") > 0) {
+        score = score.substr(0, score.indexOf("."));
+      }
+      return score;
     },
     tutorialContent() {
       if (!this.isTutorial) return null;

@@ -44,7 +44,7 @@ Execute:
 ```bash
 yarn build
 ./node_modules/.bin/babel --plugins @babel/plugin-proposal-object-rest-spread dist/js/app.*.js -o app.js
-sed -i "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/" app.js
+sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/" dist/js/app.*.js > app.js
 ```
 
 Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/

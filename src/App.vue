@@ -36,14 +36,12 @@ import Instructions from "./components/Instructions.vue";
 import ScatterSurvey from "./components/scattertask/ScatterSurvey.vue";
 import ScatterTrial from "./components/scattertask/ScatterTrial.vue";
 import ColorsTrial from "./components/colorstask/ColorsTrial.vue";
-import Popper from "./components/Popper.vue";
 import phases from "./phases";
 import postResults from "./qualtrics";
 
 export default {
   name: "App",
   components: {
-    Popper,
     Instructions,
     ScatterTrial,
     ColorsTrial,
