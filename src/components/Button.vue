@@ -1,5 +1,9 @@
 <template>
-  <button @click="onClick()" :class="'btn btn-primary' + (isVisible ? '': 'invisible')" :disabled="disabled">
+  <button
+    @click="onClick()"
+    :class="'btn btn-primary' + (isVisible ? '' : 'invisible')"
+    :disabled="disabled"
+  >
     <div class="display-text" style="color: white" v-html="content"></div>
   </button>
 </template>

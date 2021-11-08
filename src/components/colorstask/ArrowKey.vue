@@ -1,6 +1,6 @@
 <template>
   <div :class="'text-' + (side === 'right' ? 'end' : 'start')">
-    <div :class="'d-inline-block' + (isVisible ? '': ' invisible')">
+    <div :class="'d-inline-block' + (isVisible ? '' : ' invisible')">
       <i
         :id="'btn-' + side"
         :class="

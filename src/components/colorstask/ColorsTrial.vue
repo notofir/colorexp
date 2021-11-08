@@ -67,7 +67,7 @@
             <div
               :class="
                 'tooltip2' +
-                (currentTutorialID === leftID? ' visible-tooltip': '')
+                (currentTutorialID === leftID ? ' visible-tooltip' : '')
               "
             >
               <ArrowKey
@@ -84,7 +84,7 @@
             <div
               :class="
                 'tooltip2' +
-                (currentTutorialID === rightID ? ' visible-tooltip': '')
+                (currentTutorialID === rightID ? ' visible-tooltip' : '')
               "
             >
               <ArrowKey
@@ -102,25 +102,46 @@
             <div
               :class="
                 'tooltip2' +
-                (currentTutorialID === submitID || isAlertnessTestOn ? ' visible-tooltip': '')
+                (currentTutorialID === submitID || isAlertnessTestOn
+                  ? ' visible-tooltip'
+                  : '')
               "
             >
               <Button
                 @btn-click="onSubmit"
                 :content="submitID"
-                :isVisible="isTutorial? currentTutorialID === submitID : true"
+                :isVisible="isTutorial ? currentTutorialID === submitID : true"
                 :disabled="shouldWitholdInput"
               />
-              <span v-if="isTutorial" class="tooltiptext">Press the submit button when you believe you're done</span>
-              <span v-else class="tooltiptext">ALERTNESS TEST<br/>for this trial, select the darkest shade</span>
+              <span v-if="isTutorial" class="tooltiptext"
+                >Press the submit button when you believe you're done</span
+              >
+              <span v-else class="tooltiptext"
+                >ALERTNESS TEST<br />for this trial, select the darkest
+                shade</span
+              >
             </div>
           </div>
         </div>
       </div>
       <div class="col"></div>
     </div>
-    <Modal id="modal-hint-ack" @modal-close="shouldWitholdInput = false" header="<h3>Please confirm that you've seen the displayed hint.</h3>" />
-    <Modal v-if="currentPhase.shouldDisplayFeedback" id="modal-score" @modal-close="shouldWitholdInput = false; didDisplayFeedback = true; onSubmit()" :header="`<h4 class='modal-title'>Score: ` + percentageScore + `%</h4>`" :body="`
+    <Modal
+      id="modal-hint-ack"
+      @modal-close="shouldWitholdInput = false"
+      header="<h3>Please confirm that you've seen the displayed hint.</h3>"
+    />
+    <Modal
+      v-if="currentPhase.shouldDisplayFeedback"
+      id="modal-score"
+      @modal-close="
+        shouldWitholdInput = false;
+        didDisplayFeedback = true;
+        onSubmit();
+      "
+      :header="`<h4 class='modal-title'>Score: ` + percentageScore + `%</h4>`"
+      :body="
+        `
       <div class='container-fluid'>
         <div class='row align-items-end'>
           <div class='col p-0'>
@@ -134,10 +155,14 @@
           </div>
         </div>
         <div class='row'>
-          <input id='score-range' type='range' class='form-range' min='0' max='100' value='` + percentageScore + `' disabled />
+          <input id='score-range' type='range' class='form-range' min='0' max='100' value='` +
+        percentageScore +
+        `' disabled />
         </div>
       </div>
-    `" />
+    `
+      "
+    />
   </div>
 </template>
 
@@ -157,8 +182,8 @@ const maxLight = 70;
 const minLight = 20;
 const maxGapForUser = 15;
 const tutorialArrowPresses = 10;
-const firstArrow = "right"
-const secondArrow = "left"
+const firstArrow = "right";
+const secondArrow = "left";
 
 function getDisplayedHint(
   pickedValueRel,
@@ -210,7 +235,8 @@ export default {
     }
     if (isTutorial) {
       midLightDiff =
-        tutorialArrowPresses + rng.getInt(maxMid - minMid - tutorialArrowPresses);
+        tutorialArrowPresses +
+        rng.getInt(maxMid - minMid - tutorialArrowPresses);
     } else {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
@@ -242,7 +268,7 @@ export default {
       tutorialIDs: ["right", "left", "submit"],
       didGiveHint: false,
       tutorialArrowPressesCounter: tutorialArrowPresses,
-      currentTutorialID: isTutorial? firstArrow: null,
+      currentTutorialID: isTutorial ? firstArrow : null,
       currentTutorialIndex: 0,
       isAlertnessTestOn: currentPhase.alertnessTestIndex == this.trialIndex,
       shouldWitholdInput: false,
@@ -339,7 +365,7 @@ export default {
     },
     showModal(modalId) {
       this.shouldWitholdInput = true;
-      document.getElementById(modalId).style.display = 'block';
+      document.getElementById(modalId).style.display = "block";
     },
     hintCountDownTimer() {
       if (this.hintCountDown > 0) {
@@ -359,10 +385,12 @@ export default {
       if (this.shouldWitholdInput) return;
       switch (e.key) {
         case "ArrowLeft":
-          if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1)) return;
+          if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1))
+            return;
           break;
         case "ArrowRight":
-          if (!this.handlePressedKey("right", this.midLight > this.minMid, -1)) return;
+          if (!this.handlePressedKey("right", this.midLight > this.minMid, -1))
+            return;
           break;
         default:
           return;
@@ -428,15 +456,14 @@ export default {
     },
     tutorialContent() {
       if (!this.isTutorial) return null;
-      return "Press the " +
-      this.currentTutorialID.substr(
-        0,
-        this.currentTutorialID.indexOf("-")
-      ) +
-      " arrow key " +
-      this.tutorialArrowPressesCounter.toString() +
-      " more times";
-    }
+      return (
+        "Press the " +
+        this.currentTutorialID.substr(0, this.currentTutorialID.indexOf("-")) +
+        " arrow key " +
+        this.tutorialArrowPressesCounter.toString() +
+        " more times"
+      );
+    },
   },
   created() {
     window.addEventListener("keydown", this.keyboardListener);
