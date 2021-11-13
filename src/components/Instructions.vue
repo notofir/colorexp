@@ -9,9 +9,10 @@
     </div>
     <div class="row pt-5" style="min-height: 50%">
       <div class="col pt-2">
-        <p class="instruction display-text instruction-body">
-          {{ pages[currentPage].text }}
-        </p>
+        <p
+          v-html="pages[currentPage].text"
+          class="instruction display-text instruction-body"
+        ></p>
       </div>
     </div>
     <div class="row pt-4">
@@ -35,6 +36,8 @@
 <script>
 import Button from "./Button.vue";
 import phases from "../phases";
+const icon = require("@/assets/example1.png");
+icon;
 
 export default {
   name: "Instructions",

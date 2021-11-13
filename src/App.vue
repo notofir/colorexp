@@ -2,7 +2,7 @@
   <div class="container text-center main-container">
     <div class="form-check form-switch position-absolute top-0 start-0">
       <input
-        v-if="isExperimental.endsWith('QUALTRICS')"
+        v-if='Boolean("IS DEV PLACEHOLDER FOR QUALTRICS")'
         @click="isExperimental = !isExperimental"
         class="form-check-input"
         type="checkbox"
@@ -59,7 +59,7 @@ export default {
 
     return {
       currentComponentName: Instructions.name,
-      isExperimental: Boolean("CONDITION PLACEHOLDER FOR QUALTRICS"),
+      isExperimental: Boolean("IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS"),
       phaseIndex: 0,
       trialIndex: 0,
       records: records,
@@ -107,10 +107,9 @@ export default {
       this.advance(ScatterTrial);
     },
     advance(nextTrialComponent) {
-      postResults(
-        "PARTICIPANT ID PLACEHOLDER FOR QUALTRICS",
-        [this.records[this.phaseIndex][this.trialIndex]],
-      );
+      postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", [
+        this.records[this.phaseIndex][this.trialIndex],
+      ]);
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;

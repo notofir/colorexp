@@ -359,8 +359,7 @@ export default {
           isDisplayedHintTrue: this.isDisplayedHintTrue,
           didFollowHint: this.didFollowHint,
           hintGroupSize: this.hintGroup.size,
-          trialTimeMs:
-            new Date() - this.trialStartTime,
+          trialTimeMs: new Date() - this.trialStartTime,
           keyPresses: this.keyPresses,
           isExperimental: this.isExperimental,
         })

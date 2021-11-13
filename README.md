@@ -43,9 +43,10 @@ Execute:
 
 ```bash
 yarn build
-sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/" dist/js/app.*.js > dist/js/app.js
-sed "s/\"CONDITION PLACEHOLDER FOR QUALTRICS\"/true/" dist/js/app.js > dist/js/app_experimental.js
-sed "s/\"CONDITION PLACEHOLDER FOR QUALTRICS\"/false/" dist/js/app.js > dist/js/app_control.js
+sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/g" dist/js/app.*.js > dist/js/app.js
+sed -i "s/\"IS DEV PLACEHOLDER FOR QUALTRICS\"/false/g" dist/js/app.js
+sed "s/\"IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS\"/true/g" dist/js/app.js > dist/js/app_experimental.js
+sed "s/\"IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS\"/false/g" dist/js/app.js > dist/js/app_control.js
 ```
 
 Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
