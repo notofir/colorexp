@@ -1,6 +1,6 @@
 <template>
-  <div :id="id" class="w3-modal w3-animate-opacity">
-    <div class="w3-modal-content">
+  <div :id="id" class="w3-modal w3-animate-opacity modal-container">
+    <div class="w3-modal-content modal-content">
       <header
         class="w3-container py-3 text-start modal-header"
         style="color: black"
@@ -38,9 +38,22 @@ export default {
 <style scoped>
 @import "https://www.w3schools.com/w3css/4/w3.css";
 
+.modal-container {
+  width: 100vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-content {
+  max-width: 800px;
+}
+
 .modal-header {
   border-bottom: 1px solid rgba(190, 190, 190, 0.5);
 }
+
 .modal-footer {
   border-top: 1px solid rgba(190, 190, 190, 0.5);
 }

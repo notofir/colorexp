@@ -172,8 +172,8 @@ const phases = [
       },
     ],
     numberOfTrials: 25,
-    hintCreator: function (isConditionA) {
-      if (!isConditionA) {
+    hintCreator: function (isExperimental) {
+      if (isExperimental) {
         return createHint({});
       }
       return createHint({
@@ -194,8 +194,8 @@ const phases = [
       },
     ],
     numberOfTrials: 25,
-    hintCreator: function (isConditionA) {
-      if (!isConditionA) {
+    hintCreator: function (isExperimental) {
+      if (isExperimental) {
         return createHint({});
       }
       return createHint({
@@ -221,6 +221,7 @@ const phases = [
   `,
       },
     ],
+    alertnessTestIndex: 15,
     numberOfTrials: 25,
     hintCreator: function () {
       return createHint({
@@ -240,7 +241,6 @@ const phases = [
         text: "rest.",
       },
     ],
-    alertnessTestIndex: 15,
     numberOfTrials: 25,
     hintCreator: function () {
       return createHint({

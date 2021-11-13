@@ -129,7 +129,7 @@
     <Modal
       id="modal-hint-ack"
       @modal-close="shouldWitholdInput = false"
-      header="<h3>Please confirm that you've seen the displayed hint.</h3>"
+      header="<h3>Hint received</h3>"
     />
     <Modal
       v-if="currentPhase.shouldDisplayFeedback"
@@ -216,7 +216,7 @@ export default {
   props: {
     phaseIndex: Number,
     trialIndex: Number,
-    isConditionA: Boolean,
+    isExperimental: Boolean,
   },
   data() {
     console.log(this.phaseIndex, this.trialIndex);
@@ -241,7 +241,7 @@ export default {
       midLightDiff = rng.getInt(maxMid - minMid);
     }
     const midLight = minMid + midLightDiff;
-    const trialHint = currentPhase.hintCreator(this.isConditionA);
+    const trialHint = currentPhase.hintCreator(this.isExperimental);
     const hintGroup = rng.getElement(trialHint.groups);
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
@@ -353,13 +353,16 @@ export default {
           rightValue: 1,
           pickedValue: this.getRelativePos(),
           didGiveHint: this.didGiveHint,
+          isAutoHint: this.trialHint.autoHintClicks.min > 0,
+          hintDelayS: this.trialHint.delay,
           displayedHintSide: this.hintSide,
           isDisplayedHintTrue: this.isDisplayedHintTrue,
           didFollowHint: this.didFollowHint,
           hintGroupSize: this.hintGroup.size,
           trialTimeMs:
-            new Date() - this.trialStartTime - 1000 * this.trialHint.delay,
+            new Date() - this.trialStartTime,
           keyPresses: this.keyPresses,
+          isExperimental: this.isExperimental,
         })
       );
     },
@@ -376,6 +379,8 @@ export default {
           this.hintCountDownTimer();
         }, 1000);
       } else {
+        // Don't add waiting time to trial time.
+        this.trialStartTime += 1000 * this.trialHint.delay;
         document.getElementById("hint-timer").innerHTML = "&nbsp;";
         this.onHint();
       }
@@ -401,9 +406,17 @@ export default {
       }
       this.displayedHintSide = "";
       console.log(
+        "middle-user",
         this.midLight,
+        "\nmin-user",
         this.minMid,
+        "\nmax-user",
         this.maxMid,
+        "\n\nmin-light",
+        minLight,
+        "\nmax-light",
+        maxLight,
+        "\nrelative-position",
         this.getRelativePos()
       );
       setTimeout(() => {

@@ -43,8 +43,9 @@ Execute:
 
 ```bash
 yarn build
-./node_modules/.bin/babel --plugins @babel/plugin-proposal-object-rest-spread dist/js/app.*.js -o app.js
-sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/" dist/js/app.*.js > app.js
+sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/" dist/js/app.*.js > dist/js/app.js
+sed "s/\"CONDITION PLACEHOLDER FOR QUALTRICS\"/true/" dist/js/app.js > dist/js/app_experimental.js
+sed "s/\"CONDITION PLACEHOLDER FOR QUALTRICS\"/false/" dist/js/app.js > dist/js/app_control.js
 ```
 
 Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/
@@ -62,12 +63,10 @@ Qualtrics.SurveyEngine.addOnload(function()
 
 Qualtrics.SurveyEngine.addOnReady(function()
 {
-	/*Place your JavaScript here to run when the page is fully displayed*/
     var qthis = this;
-	qthis.questionContainer.innerHTML = "<div id=\"app\"></div>";
-    // Hide qualtrics next button.
-    qthis.hideNextButton();
-    // Put app.js here.
+	qthis.hideNextButton();
+	document.body.innerHTML += "<div id=\"app\"></div>";
+    /*** Put app.js here. ***/
 });
 
 Qualtrics.SurveyEngine.addOnUnload(function()

@@ -2,13 +2,14 @@
   <div class="container text-center main-container">
     <div class="form-check form-switch position-absolute top-0 start-0">
       <input
-        @click="isConditionA = !isConditionA"
+        v-if="isExperimental.endsWith('QUALTRICS')"
+        @click="isExperimental = !isExperimental"
         class="form-check-input"
         type="checkbox"
         id="flexSwitchCheckDefault"
       />
       <label class="form-check-label" for="flexSwitchCheckDefault"
-        >Condition {{ isConditionA ? "A" : "B" }}</label
+        >Condition: {{ isExperimental ? "experimental" : "control" }}</label
       >
     </div>
 
@@ -58,7 +59,7 @@ export default {
 
     return {
       currentComponentName: Instructions.name,
-      isConditionA: false,
+      isExperimental: Boolean("CONDITION PLACEHOLDER FOR QUALTRICS"),
       phaseIndex: 0,
       trialIndex: 0,
       records: records,
@@ -76,7 +77,7 @@ export default {
           return {
             phaseIndex: this.phaseIndex,
             trialIndex: this.trialIndex,
-            isConditionA: this.isConditionA,
+            isExperimental: this.isExperimental,
           };
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
@@ -106,9 +107,10 @@ export default {
       this.advance(ScatterTrial);
     },
     advance(nextTrialComponent) {
-      postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", [
-        this.records[this.phaseIndex][this.trialIndex],
-      ]);
+      postResults(
+        "PARTICIPANT ID PLACEHOLDER FOR QUALTRICS",
+        [this.records[this.phaseIndex][this.trialIndex]],
+      );
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
@@ -139,24 +141,16 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css";
 
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-}
-
 .display-text {
   direction: ltr;
 }
 
 .main-container {
-  width: 700px;
+  width: 900px;
   height: 100%;
-}
-
-#app {
-  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
