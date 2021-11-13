@@ -1,20 +1,20 @@
 <template>
   <div class="container" style="height: 100%">
-    <div class="row" style="height: 10%">
+    <div class="row" style="height: 25%">
       <div class="col mt-auto">
         <p class="h1 instruction display-text">
           {{ pages[currentPage].title }}
         </p>
       </div>
     </div>
-    <div class="row" style="height: 80%">
+    <div class="row pt-5" style="min-height: 50%">
       <div class="col pt-2">
-        <p class="instruction display-text">
+        <p class="instruction display-text instruction-body">
           {{ pages[currentPage].text }}
         </p>
       </div>
     </div>
-    <div class="row" style="height: 10%">
+    <div class="row pt-4">
       <div class="col">
         <div v-if="!isDone" class="btn-group" role="group">
           <Button
@@ -78,5 +78,10 @@ export default {
   text-align: center;
   margin: auto;
   color: black;
+}
+
+.instruction-body {
+  font-size: 1.1rem;
+  text-align: justify;
 }
 </style>
