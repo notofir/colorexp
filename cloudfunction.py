@@ -35,13 +35,16 @@ def index(request):
         return _build_cors_preflight_response()
     elif request.method == "POST": # The actual request following the preflight
         data = request.json
-        phaseIndex = int(data["phaseIndex"])
-        _verifyNumber(phaseIndex)
-        trialIndex = int(data["trialIndex"])
-        _verifyNumber(trialIndex)
-        path = "{}.{}".format(phaseIndex, trialIndex)
-        _upload_file(str(data["record"]), path)
-        result = {"status": f"successfully uploaded records to {path}"}
+        paths = []
+        for record in data["records"]:
+            phaseIndex = int(record["phaseIndex"])
+            _verifyNumber(phaseIndex)
+            trialIndex = int(record["trialIndex"])
+            _verifyNumber(trialIndex)
+            path = "{}.{}".format(phaseIndex, trialIndex)
+            _upload_file(str(record), path)
+            paths.append(path)
+        result = {"status": f"successfully uploaded records to {paths}"}
         return _corsify_actual_response(make_response(jsonify(result)))
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
