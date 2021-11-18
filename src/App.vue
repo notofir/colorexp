@@ -156,4 +156,11 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+   width: auto;
+}
 </style>
