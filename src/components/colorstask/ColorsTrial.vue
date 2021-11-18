@@ -242,7 +242,6 @@ export default {
     }
     const midLight = minMid + midLightDiff;
     const trialHint = currentPhase.hintCreator(this.isExperimental);
-    const hintGroup = rng.getElement(trialHint.groups);
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
     return {
@@ -255,7 +254,7 @@ export default {
       minMid: minMid,
       maxMid: maxMid,
       hintSide: "",
-      hintGroup: hintGroup,
+      hintGroup: rng.getElement(trialHint.groups),
       trialHint: trialHint,
       autoHintCounter:
         trialHint.autoHintClicks.min +

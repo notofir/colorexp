@@ -36,8 +36,6 @@
 <script>
 import Button from "./Button.vue";
 import phases from "../phases";
-const icon = require("@/assets/example1.png");
-icon;
 
 export default {
   name: "Instructions",

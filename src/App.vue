@@ -82,7 +82,7 @@ export default {
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterSurvey.name:
-          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
+          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex, isExperimental: this.isExperimental };
         default:
           return {};
       }
