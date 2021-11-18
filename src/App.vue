@@ -2,7 +2,7 @@
   <div class="container text-center main-container">
     <div class="form-check form-switch position-absolute top-0 start-0">
       <input
-        v-if='Boolean("IS DEV PLACEHOLDER FOR QUALTRICS")'
+        v-if="Boolean('IS DEV PLACEHOLDER FOR QUALTRICS')"
         @click="isExperimental = !isExperimental"
         class="form-check-input"
         type="checkbox"
@@ -82,7 +82,11 @@ export default {
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
         case ScatterSurvey.name:
-          return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex, isExperimental: this.isExperimental };
+          return {
+            phaseIndex: this.phaseIndex,
+            trialIndex: this.trialIndex,
+            isExperimental: this.isExperimental,
+          };
         default:
           return {};
       }

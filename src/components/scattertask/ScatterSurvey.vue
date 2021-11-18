@@ -3,16 +3,17 @@
     <div class="row">
       <div class="col"></div>
       <div class="col">
-        <Hint
-          @hint-click="onHint"
-          :hintGroupSize="hintGroup.size"
-        />
+        <Hint @hint-click="onHint" :hintGroupSize="hintGroup.size" />
       </div>
       <div class="col"></div>
     </div>
     <div class="row">
       <div class="col">
-        <DisplayedHint v-if="displayedHintSide === 'left'" :side="hintSide" :size="hintGroup.size" />
+        <DisplayedHint
+          v-if="displayedHintSide === 'left'"
+          :side="hintSide"
+          :size="hintGroup.size"
+        />
       </div>
       <div class="col">
         <div class="btn-group" role="group">
@@ -21,7 +22,11 @@
         </div>
       </div>
       <div class="col">
-        <DisplayedHint v-if="displayedHintSide === 'right'" :side="hintSide" :size="hintGroup.size" />
+        <DisplayedHint
+          v-if="displayedHintSide === 'right'"
+          :side="hintSide"
+          :size="hintGroup.size"
+        />
       </div>
     </div>
   </div>
