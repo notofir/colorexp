@@ -46,7 +46,7 @@ const phases = [
   On every step, you will be presented with three colorful squares, like this:
   
   <br />
-  <img src="https://storage.googleapis.com/colortask-public/squares.PNG" class="center" style="height: 120px;"> #TODO: downsize+center
+  <img src="https://storage.googleapis.com/colortask-public/squares.PNG" class="center" style="height: 180px;"> 
    <br /> <br />
   
   The upper two squares will remain static and will not change during a trial. They represent two ends of a brightness continuum of a specific hue.
@@ -56,7 +56,7 @@ const phases = [
   `,
       },
 	  {
-        
+        title: "The Game Square",
         text: `
   
   In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color of the same hue. The color is situated at a specific point along the continuum, picked at random so that sometimes it will be closer in brightness-level to that
@@ -69,7 +69,7 @@ const phases = [
    <br />
   - Pressing the left arrow key will turn the color in the game square lighter.
    <br /> <br />
-  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 120px;"> #TODO: downsize+center
+  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 200px;"> 
   
   `,
       },
@@ -84,17 +84,15 @@ const phases = [
   Option B:
   When you have settled on a color that you judge to be the exact mid-point of the brightness continuum, press the “submit” button appearing under it.
   <br /><br />
-  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 120px;"> #TODO: downsize+center
+  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 200px;"> 
   `,
       },
       {
-        title: "The Practice Phase",
+        title: "Practice: Step 1",
         text: `
   The following practice will allow you to familiarize yourself with the interface of this task and practice its operation.
-  <br /><br />
   Notice that your performance in the training phase will not be counted towards your final results. You will be notified when the actual experiment begins.
-  <br /><br />
-  Press “start” to start the practice phase.
+  
   `,
       },
     ],
@@ -109,10 +107,19 @@ const phases = [
         title: "Practice: Step 2",
         text: `
   On the next practice phase, you will receive feedback, to help you improve your skill in the game.
-  At the end on every trial, right after you hit the “submit” button, you will be provided with the feedback for you last choice. The feedback will be represented by a number, as well as graphically via an axis.
-  TODO: add png
+  <br /><br />
+  At the end on every trial, right after you hit the “submit” button, you will be provided with the feedback for you last choice. 
+  The feedback will be represented by a number, as well as graphically via an axis.
+  <br />
+ 
   <b>Axis</b>: Your final choice will be marked visibly in the shape of a grey circle.
-  <b>Numeric score</b>: the range of possible scores moves between 0-100, with 50 being the best score possible, representing an accurate identification of the mid-point between the two upper squares. Conversely, the closer your score gets to either 0 (the brightest end) or 100 (darkest), it indicates a worse performance.
+  <br />
+  <b>Numeric score</b>: the range of possible scores moves between 0-100, 
+  with 50 being the best score possible, representing an accurate identification of the mid-point between the two upper squares. 
+  Conversely, the closer your score gets to either 0 (the brightest end) or 100 (darkest), it indicates a worse performance.
+  <br /><br />
+  <img src="https://storage.googleapis.com/colortask-public/feedback_no_okay.PNG" class="center" style="height: 120px;"> 
+  
   `,
       },
     ],
@@ -127,21 +134,58 @@ const phases = [
         title: "Practice: Step 3",
         text: `
   On the next practice phase, you will be able to request hints. The hints will direct you and help you find the correct mid-point.
-  Hints can be asked for by pressing the “Press for hint” button.
-  The hints are based on two previous experiments that utilized the Color Judgement Task. Data for the hints is based on the participants’ choices. The first experiment was a small-scale pilot study, in which only five participants performed the task. After the pilot, a second study was conducted, this time with 107 participants. You will receive hints based on these two studies.
-  Before you begin using hints, it is important that you are familiar with a fundamental statistical principle, stating that information is more likely to be accurate when it is based on larger pools of data. In the context of the Color Judgement Task, it means that hints from the larger sample (of 107 participants) are of higher quality than those relying on the smaller sample (5 participants).
+  
+  <br /><br />
+  The hints are based on two previous experiments that utilized the Color Judgement Task. Data for the hints is based on the participants’ choices.
+  The first experiment was a small-scale pilot study, in which only five participants performed the task. 
+  After the pilot, a second study was conducted, this time with 107 participants. You will receive hints based on these two studies.
+  
+  
+  `,
+      },
+	  {
+        title: "Practice: Step 3",
+        text: `
+ 
+  
+  Before you begin using hints, it is important that you are familiar with a fundamental statistical principle, 
+  stating that information is more likely to be accurate when it is based on larger pools of data. In the context of this game, 
+  it means that hints from the larger sample (of 107 participants) are of higher quality than those relying on the smaller sample (5 participants).
   `,
       },
       {
         title: "The Hints",
         text: `
+  Hints can be asked for by pressing the “Press for hint” button.
   Every time you request a hint, an arrow will be presented on the screen. It will look something like this:
-  TODO: add png
+  <br />
+  <br />
   
-  If the majority of the participants in the previous experiment picked a darker shade than the one currently presented in the square game (aka they continued going rightwards prior to pressing “submit”), a rightward arrow will appear, as in the example above.
+  <img src="https://storage.googleapis.com/colortask-public/hint_right.PNG" class="center" style="height: 240px;">
+  <br />
+  If the majority of the participants in the previous experiment picked a darker shade than the one currently presented in the square game 
+ (aka they continued going rightwards prior to pressing “submit”), a rightward arrow will appear, as in the example above.
+ 
+ `,
+      },
+      {
+        title: "The Hints",
+        text: `
+ 
   Conversely, If the majority of the participants chose a brighter color than the one currently presented, a leftward arrow will appear.
+  
+  <br /><br />
   Finally, if most participants chose the color currently on display as their assumed mid-point, a checkmark would appear onscreen.
-  Notice! The analysis of our past experiments indicated very high accuracy rates, so in most cases the hints presented to you are very reliable. Nevertheless, the performance of past participants was not perfect, so rarely the hints might be misleading.
+  
+  
+  `,
+      },
+      {
+        title: "The Hints",
+        text: `
+  
+  Notice! The analysis of our past experiments indicated very high accuracy rates, so in most cases the hints presented to you are very reliable.
+  Nevertheless, the performance of past participants was not perfect, so rarely the hints might be misleading.
   `,
       },
       {
@@ -186,9 +230,13 @@ const phases = [
         title: "The Experiment",
         text: `
   You have completed the practice phase!
+  <br /><br />
   Now, the real task will begin. As in the practice phase, you are still requested to identify the mid-point brightness continuums of different hues.
   From now on, your performance will be calculated towards your final results.
-  Please notice that there is no time limit for each trial (beyond our general requirement to take all trials in a row, without substantial breaks). Your performance will be evaluated based on accuracy, not on pace.
+<br /><br />
+
+  Please notice that there is no time limit for each trial (beyond our general requirement to take all trials in a row, without substantial breaks).
+  Your performance will be evaluated based on accuracy, not on pace.
   `,
       },
       {
