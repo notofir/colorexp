@@ -42,15 +42,31 @@ const phases = [
         title: "Welcome to the Color Judgement Experiment!",
         text: `
   In this game you will be asked to judge the brightness of different colors.
+  <br /> <br />
   On every step, you will be presented with three colorful squares, like this:
-  TODO: add png
+  
+  <br />
+  <img src="https://storage.googleapis.com/colortask-public/squares.PNG">
+   <br /> <br />
   
   The upper two squares will remain static and will not change during a trial. They represent two ends of a brightness continuum of a specific hue.
   The upper right square represents the darkest point on this spectrum, and the left one represents the brightest point.
-  In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color at a specific point along the continuum, picked at random so that sometimes it will be closer in brightness-level to that
+
+ 
+  `,
+      },
+	  {
+        title: "Welcome to the Color Judgement Experiment!",
+        text: `
+  
+  In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color of the same hue. The color is situated at a specific point along the continuum, picked at random so that sometimes it will be closer in brightness-level to that
   of the bright end and sometimes to the dark end.
+   <br />
+    <br />
   You can change the brightness level of the game square by pressing the arrow keys on your keyboard:
+   <br /><br />
   - Pressing the right arrow key will turn the color in the game square darker.
+   <br />
   - Pressing the left arrow key will turn the color in the game square lighter.
   `,
       },
