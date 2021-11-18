@@ -49,6 +49,7 @@ export default {
     const currentPhase = phases[this.phaseIndex];
     const trialHint = currentPhase.hintCreator(this.isExperimental);
     const hintGroup = rng.getElement(trialHint.groups);
+    let hintSide, isDisplayedHintTrue;
     [hintSide, isDisplayedHintTrue] = this.getDisplayedHint(
       rng.getBool(hintGroup.certainty)
     );
