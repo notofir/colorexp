@@ -42,11 +42,11 @@ const phases = [
         title: "Welcome to the Color Judgement Experiment!",
         text: `
   In this game you will be asked to judge the brightness of different colors.
-  <br /> <br />
+  
   On every step, you will be presented with three colorful squares, like this:
   
   <br />
-  <img src="https://storage.googleapis.com/colortask-public/squares.PNG">
+  <img src="https://storage.googleapis.com/colortask-public/squares.PNG" class="center" style="height: 120px;"> #TODO: downsize+center
    <br /> <br />
   
   The upper two squares will remain static and will not change during a trial. They represent two ends of a brightness continuum of a specific hue.
@@ -56,7 +56,7 @@ const phases = [
   `,
       },
 	  {
-        title: "Welcome to the Color Judgement Experiment!",
+        
         text: `
   
   In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color of the same hue. The color is situated at a specific point along the continuum, picked at random so that sometimes it will be closer in brightness-level to that
@@ -64,27 +64,36 @@ const phases = [
    <br />
     <br />
   You can change the brightness level of the game square by pressing the arrow keys on your keyboard:
-   <br /><br />
+   <br />
   - Pressing the right arrow key will turn the color in the game square darker.
    <br />
   - Pressing the left arrow key will turn the color in the game square lighter.
+   <br /> <br />
+  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 120px;"> #TODO: downsize+center
+  
   `,
       },
       {
         title: "Your Goal",
         text: `
   Your goal in this task is to pin-point the most accurate middle brightness level between the two upper squares.
-  How to achieve this goal? In every trial, you can press the arrow-keys as many times as you like, thus modifying the game square’s brightness. When you feel that the color you’ve settled on represents the exact mid-point, you should press the “submit” button appearing under it.
+  <br /> <br />
+  How to achieve this goal? 
+  In every trial, you can press the arrow-keys as many times as you like, thus modifying the game square’s brightness. 
+  When you feel that the color you’ve settled on represents the exact mid-point, press the “submit” button appearing under it.
   Option B:
   When you have settled on a color that you judge to be the exact mid-point of the brightness continuum, press the “submit” button appearing under it.
+  <br /><br />
+  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 120px;"> #TODO: downsize+center
   `,
       },
       {
         title: "The Practice Phase",
         text: `
   The following practice will allow you to familiarize yourself with the interface of this task and practice its operation.
+  <br /><br />
   Notice that your performance in the training phase will not be counted towards your final results. You will be notified when the actual experiment begins.
-  
+  <br /><br />
   Press “start” to start the practice phase.
   `,
       },
