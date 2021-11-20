@@ -1,6 +1,6 @@
 <template>
   <div class="container" style="height: 100%">
-    <div class="row" style="height: 25%">
+    <div class="row" style="height: 15%">
       <div class="col mt-auto">
         <p class="h1 instruction display-text">
           {{ pages[currentPage].title }}
