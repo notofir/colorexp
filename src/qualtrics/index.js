@@ -11,7 +11,7 @@ function toCSV(records) {
   ].join("\r\n");
 }
 
-function postResults(participantId, records) {
+function postResults(uid, records) {
   const xhr = new XMLHttpRequest();
   xhr.open(
     "POST",
@@ -19,11 +19,13 @@ function postResults(participantId, records) {
     true
   );
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(JSON.stringify({ participantId: participantId, records: records }));
+  xhr.send(JSON.stringify({ uid: uid, records: records }));
 
-  const csv = toCSV(records);
-  console.log(csv);
-  console.log("finished task");
+  if (records.length > 1) {
+    const csv = toCSV(records);
+    xhr.send(JSON.stringify({ uid: uid, csv: csv }));
+    console.log("finished task");
+  }
 }
 
 export default postResults;

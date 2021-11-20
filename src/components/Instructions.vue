@@ -41,12 +41,22 @@ export default {
   name: "Instructions",
   props: {
     phaseIndex: Number,
+    isExperimental: Boolean,
     isDone: Boolean,
   },
   data() {
+    const pages = [];
+    const allPages = phases[this.phaseIndex].instructions;
+    for (let i = 0; i < allPages.length; i++) {
+      if (!this.isExperimental && allPages[i].isExperimental) {
+        continue;
+      }
+
+      pages.push(allPages[i]);
+    }
     return {
       currentPage: 0,
-      pages: phases[this.phaseIndex].instructions,
+      pages: pages,
     };
   },
   components: { Button },
