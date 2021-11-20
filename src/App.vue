@@ -1,16 +1,23 @@
 <template>
   <div class="container text-center main-container">
-    <div class="form-check form-switch position-absolute top-0 start-0">
-      <input
-        v-if="Boolean('IS DEV PLACEHOLDER FOR QUALTRICS')"
-        @click="isExperimental = !isExperimental"
-        class="form-check-input"
-        type="checkbox"
-        id="flexSwitchCheckDefault"
-      />
-      <label class="form-check-label" for="flexSwitchCheckDefault"
-        >Condition: {{ isExperimental ? "experimental" : "control" }}</label
-      >
+    <div
+      v-if="Boolean('IS DEV PLACEHOLDER FOR QUALTRICS')"
+      class="form-check form-switch position-absolute top-0 start-0"
+    >
+      <div>
+        <input
+          @click="isExperimental = !isExperimental"
+          class="form-check-input"
+          type="checkbox"
+          id="flexSwitchCheckDefault"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault"
+          >Condition: {{ isExperimental ? "experimental" : "control" }}</label
+        >
+      </div>
+      <div>
+        <input v-model="uid" class="form-text-input" type="input" />
+      </div>
     </div>
 
     <div
@@ -60,6 +67,7 @@ export default {
     return {
       currentComponentName: Instructions.name,
       isExperimental: Boolean("IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS"),
+      uid: "PARTICIPANT ID PLACEHOLDER FOR QUALTRICS",
       phaseIndex: 0,
       trialIndex: 0,
       records: records,
@@ -72,7 +80,11 @@ export default {
     currentProps() {
       switch (this.currentComponentName) {
         case Instructions.name:
-          return { phaseIndex: this.phaseIndex, isDone: this.isDone() };
+          return {
+            phaseIndex: this.phaseIndex,
+            isDone: this.isDone(),
+            isExperimental: this.isExperimental,
+          };
         case ColorsTrial.name:
           return {
             phaseIndex: this.phaseIndex,
@@ -111,9 +123,7 @@ export default {
       this.advance(ScatterTrial);
     },
     advance(nextTrialComponent) {
-      postResults("PARTICIPANT ID PLACEHOLDER FOR QUALTRICS", [
-        this.records[this.phaseIndex][this.trialIndex],
-      ]);
+      postResults(this.uid, [this.records[this.phaseIndex][this.trialIndex]]);
       if (this.trialIndex + 1 == phases[this.phaseIndex].numberOfTrials) {
         this.trialIndex = 0;
         this.phaseIndex += 1;
@@ -122,10 +132,7 @@ export default {
           for (let i = 0; i < this.records.length; i++) {
             postedResults.push(...this.records[i]);
           }
-          postResults(
-            "PARTICIPANT ID PLACEHOLDER FOR QUALTRICS",
-            postedResults
-          );
+          postResults(this.uid, postedResults);
         }
         this.currentComponentName = Instructions.name;
       } else {
@@ -161,6 +168,6 @@ export default {
   display: block;
   margin-left: auto;
   margin-right: auto;
-   width: auto;
+  width: auto;
 }
 </style>
