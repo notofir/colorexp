@@ -45,8 +45,8 @@ Execute:
 yarn build
 sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/g" dist/js/app.*.js > dist/js/app.js
 sed -i "s/\"IS DEV PLACEHOLDER FOR QUALTRICS\"/false/g" dist/js/app.js
-sed "s/\"IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS\"/true/g" dist/js/app.js > dist/js/app_experimental.js
-sed "s/\"IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS\"/false/g" dist/js/app.js > dist/js/app_control.js
+sed -i "s/\"UID PLACEHOLDER FOR QUALTRICS\"/Number(Qualtrics.SurveyEngine.getEmbeddedData('colortaskUID'))/g" dist/js/app.js
+sed -i "s/\"IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS\"/Math.random() < 0.5/g" dist/js/app.js
 ```
 
 Assign randomized participant id: https://www.qualtrics.com/support/survey-platform/common-use-cases-rc/assigning-randomized-ids-to-respondents/

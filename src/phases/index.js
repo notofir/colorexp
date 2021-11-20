@@ -55,7 +55,7 @@ const phases = [
  
   `,
       },
-	  {
+      {
         title: "The Game Square",
         text: `
   
@@ -143,7 +143,7 @@ const phases = [
   
   `,
       },
-	  {
+      {
         title: "Practice: Step 3",
         text: `
  

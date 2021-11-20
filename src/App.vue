@@ -67,7 +67,7 @@ export default {
     return {
       currentComponentName: Instructions.name,
       isExperimental: Boolean("IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS"),
-      uid: "PARTICIPANT ID PLACEHOLDER FOR QUALTRICS",
+      uid: "UID PLACEHOLDER FOR QUALTRICS",
       phaseIndex: 0,
       trialIndex: 0,
       records: records,
