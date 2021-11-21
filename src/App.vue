@@ -56,7 +56,8 @@ export default {
     ScatterSurvey,
   },
   data() {
-    let records = new Array(phases.length);
+    // Skipping last goodbye phase.
+    let records = new Array(phases.length - 1);
     for (let i = 0; i < records.length; i++) {
       records[i] = new Array(phases[i].numberOfTrials);
       for (let j = 0; j < records[i].length; j++) {
