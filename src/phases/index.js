@@ -231,7 +231,7 @@ const phases = [
         text: `
   You have completed the practice phase!
   <br /><br />
-  Now, the real task will begin. As in the practice phase, you are still requested to identify the mid-point brightness continuums of different hues.
+  Now, the real task will begin. As in the practice phase, you are still requested to identify the mid-point of brightness continuums of different hues.
   From now on, your performance will be calculated towards your final results.
 <br /><br />
 
@@ -241,7 +241,13 @@ const phases = [
       },
       {
         title: "",
-        text: "At the following phase, hints will be provided to you from time to time. The hints will be delivered automatically, without request. Some will be based on the large sample, while others on the small one. Remember: hints from larger sample are of higher quality.",
+        text: `
+		At the following phase, hints will be provided to you from time to time. 
+		The hints will be delivered automatically, without request. Some will be based on the large sample, 
+		while others on the small one. 
+		<br /><br />
+		Remember: hints from larger samples are of higher quality.
+		`,
       },
     ],
     numberOfTrials: 25,
@@ -263,12 +269,12 @@ const phases = [
     instructions: [
       {
         title: "Resting page",
-        text: "rest.",
+        text: "You may rest for a few seconds before continuing.",
       },
     ],
     numberOfTrials: 25,
     hintCreator: function (isExperimental) {
-      if (isExperimental) {
+      if (!isExperimental) {
         return createHint({});
       }
       return createHint({
@@ -287,9 +293,13 @@ const phases = [
         title: "The second experimental phase",
         text: `
   You have completed the first experimental phase!
-  In the following phase, you will be able to request hints by pressing a designated button, like in the practice phase. However, now every time you press the button the screen will freeze, and you will be required to wait 10 seconds before the hint is revealed.
-  On some trials you will be offered hints extracted from the larger sample (107 participants) and in others from the small sample (5 participants). You will know in advance what type of hint is offered to you by the number appearing on the button, and may decide accordingly.
-  TODO: add png
+  <br /><br />
+  In the following phase, you will be able to request hints by pressing a designated button, like in the practice phase. 
+  However, now every time you press the button the screen will freeze, and you will be required to wait 10 seconds before the hint is revealed.
+  <br /><br />
+  On some trials you will be offered hints extracted from the larger sample (107 participants) and in others from the small sample (5 participants).
+  You will know in advance what type of hint is offered to you. The type will be inmiddicted by the number appearing on the button. 
+  <br />
   Notice: Hint usage will not affect your results.
   `,
       },
@@ -311,7 +321,7 @@ const phases = [
     instructions: [
       {
         title: "Resting page",
-        text: "rest.",
+        text: "You may rest for a few seconds before continuing.",
       },
     ],
     numberOfTrials: 25,
