@@ -23,6 +23,13 @@ function postResults(uid, records) {
 
   if (records.length > 1) {
     const csv = toCSV(records);
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "POST",
+      "https://us-central1-ofirarias-com.cloudfunctions.net/colortask",
+      true
+    );
+    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ uid: uid, csv: csv }));
     console.log("finished task");
   }
