@@ -43,7 +43,7 @@ Execute:
 
 ```bash
 yarn build
-sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.showNextButton()/g" dist/js/app.*.js > dist/js/app.js
+sed "s/console.log(\"IS DONE PLACEHOLDER FOR QUALTRICS\")/qthis.clickNextButton();appDiv.remove();/g" dist/js/app.*.js > dist/js/app.js
 sed -i "s/\"IS DEV PLACEHOLDER FOR QUALTRICS\"/false/g" dist/js/app.js
 sed -i "s/\"UID PLACEHOLDER FOR QUALTRICS\"/Number(Qualtrics.SurveyEngine.getEmbeddedData('colortaskUID'))/g" dist/js/app.js
 sed -i "s/\"IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS\"/Math.random() < 0.5/g" dist/js/app.js
@@ -58,21 +58,23 @@ Fixes:
 ```js
 Qualtrics.SurveyEngine.addOnload(function()
 {
-	/*Place your JavaScript here to run when the page loads*/
+    /*Place your JavaScript here to run when the page loads*/
 
 });
 
 Qualtrics.SurveyEngine.addOnReady(function()
 {
     var qthis = this;
-	qthis.hideNextButton();
-	document.body.innerHTML += "<div id=\"app\"></div>";
+    qthis.hideNextButton();
+    var appDiv = document.createElement("div");
+    appDiv.setAttribute("id", "app");
+    document.body.appendChild(appDiv);
     /*** Put app.js here. ***/
 });
 
 Qualtrics.SurveyEngine.addOnUnload(function()
 {
-	/*Place your JavaScript here to run when the page is unloaded*/
+    /*Place your JavaScript here to run when the page is unloaded*/
 
 });
 ```

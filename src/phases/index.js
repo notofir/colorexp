@@ -274,7 +274,7 @@ const phases = [
     ],
     numberOfTrials: 25,
     hintCreator: function (isExperimental) {
-      if (!isExperimental) {
+      if (isExperimental) {
         return createHint({});
       }
       return createHint({

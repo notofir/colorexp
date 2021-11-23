@@ -28,6 +28,7 @@
             :content="currentPage == this.pages.length - 1 ? 'start' : 'next >'"
           />
         </div>
+        <Button v-else @btn-click="onFinishTask()" content="next >" />
       </div>
     </div>
   </div>
@@ -74,11 +75,9 @@ export default {
         this.currentPage -= 1;
       }
     },
-  },
-  mounted() {
-    if (this.isDone) {
+    onFinishTask() {
       console.log("IS DONE PLACEHOLDER FOR QUALTRICS");
-    }
+    },
   },
 };
 </script>
