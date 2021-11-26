@@ -248,20 +248,21 @@ const phases = [
 		<br /><br />
 		Remember: hints from larger samples are of higher quality.
 		`,
+        isExperimental: true,
       },
     ],
     numberOfTrials: 25,
     hintCreator: function (isExperimental) {
       if (isExperimental) {
-        return createHint({});
+        return createHint({
+          autoHintClicks: { min: 3, max: 7 },
+          groups: [
+            { size: 5, certainty: 0.8 },
+            { size: 107, certainty: 1 },
+          ],
+        });
       }
-      return createHint({
-        autoHintClicks: { min: 3, max: 7 },
-        groups: [
-          { size: 5, certainty: 0.8 },
-          { size: 107, certainty: 1 },
-        ],
-      });
+      return createHint({});
     },
   }),
   // Phase 6
@@ -275,15 +276,15 @@ const phases = [
     numberOfTrials: 25,
     hintCreator: function (isExperimental) {
       if (isExperimental) {
-        return createHint({});
+        return createHint({
+          autoHintClicks: { min: 3, max: 7 },
+          groups: [
+            { size: 5, certainty: 0.8 },
+            { size: 107, certainty: 1 },
+          ],
+        });
       }
-      return createHint({
-        autoHintClicks: { min: 3, max: 7 },
-        groups: [
-          { size: 5, certainty: 0.8 },
-          { size: 107, certainty: 1 },
-        ],
-      });
+      return createHint({});
     },
   }),
   // Phase 7
