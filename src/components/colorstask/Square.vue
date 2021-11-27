@@ -16,7 +16,7 @@ export default {
 
 <style scoped>
 .square {
-  height: 7vh;
-  width: 7vh;
+  height: 10vh;
+  width: 10vh;
 }
 </style>

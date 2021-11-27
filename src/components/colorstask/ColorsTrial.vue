@@ -13,10 +13,10 @@
         />
       </div>
     </div>
-    <div class="row" style="height: 10%; justify-content: center">
+    <div class="row" style="height: 6%; justify-content: center">
       <div id="hint-timer">&nbsp;</div>
     </div>
-    <div class="row" style="height: 40%">
+    <div class="row" style="height: 38%">
       <div class="col-left" style="position: relative">
         <div style="height: 25%"></div>
         <DisplayedHint
@@ -46,7 +46,7 @@
             />
           </div>
         </div>
-        <div style="height: 20%">
+        <div style="height: 40%">
           <div style="width: 100%">
             <Square alignment="center" :color="midColor" />
           </div>
@@ -61,7 +61,7 @@
         />
       </div>
     </div>
-    <div class="row" style="height: 30%">
+    <div class="row" style="height: 36%">
       <div class="col-left"></div>
       <div class="col-center">
         <div class="row" style="height: 30%">

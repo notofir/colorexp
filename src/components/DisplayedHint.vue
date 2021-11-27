@@ -23,8 +23,8 @@
     <div style="flex: 50%; justify-content: center; text-align: center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="4vw"
-        height="4vh"
+        width="auto"
+        height="7vh"
         fill="currentColor"
         class="bi bi-people-fill"
         viewBox="0 0 16 16"
@@ -39,16 +39,16 @@
         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
       </svg>
       <br />
-      <h2>
+      <div class="display-text">
         {{ size }}
-      </h2>
+      </div>
     </div>
     <div style="flex: 50%; text-align: left">
       <div style="height: 5%"></div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="3.5vw"
-        height="3.5vh"
+        width="5vw"
+        height="4.5vh"
         fill="currentColor"
         class="bi bi-arrow-right"
         viewBox="0 0 16 16"
@@ -65,8 +65,8 @@
       <div style="height: 5%"></div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="3.5vw"
-        height="3.5vh"
+        width="5vw"
+        height="4.5vh"
         fill="currentColor"
         class="bi bi-arrow-right"
         viewBox="0 0 16 16"
@@ -80,8 +80,8 @@
     <div style="flex: 50%; justify-content: center; text-align: center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="4vw"
-        height="4vh"
+        width="auto"
+        height="7vh"
         fill="currentColor"
         class="bi bi-people-fill"
         viewBox="0 0 16 16"
