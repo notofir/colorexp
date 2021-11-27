@@ -1,14 +1,42 @@
 <template>
-  <div :class="'text-' + (side === 'right' ? 'end' : 'start')">
-    <div :class="'d-inline-block' + (isVisible ? '' : ' invisible')">
-      <i
-        :id="'btn-' + side"
-        :class="
-          'fs-1 bi bi-arrow-' + side + '-square' + (isPressed ? '-fill' : '')
-        "
-        :style="'color: ' + (isDisabled ? 'grey' : 'black')"
-      ></i>
-    </div>
+  <div
+    :class="'text-' + (side === 'right' ? 'end' : 'start')"
+    :style="
+      'display: flex; justify-content: ' +
+      alignment +
+      ';' +
+      (isVisible ? '' : 'visibility: hidden;')
+    "
+  >
+    <svg
+      :id="'btn-' + side"
+      xmlns="http://www.w3.org/2000/svg"
+      width="5vw"
+      height="5vh"
+      :fill="isDisabled ? 'grey' : 'black'"
+      viewBox="0 0 16 16"
+    >
+      <path
+        v-if="side === 'right' && !isPressed"
+        fill-rule="evenodd"
+        d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
+      />
+      <path
+        v-else-if="side === 'right' && isPressed"
+        fill-rule="evenodd"
+        d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"
+      />
+      <path
+        v-else-if="side === 'left' && !isPressed"
+        fill-rule="evenodd"
+        d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+      />
+      <path
+        v-else
+        fill-rule="evenodd"
+        d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"
+      />
+    </svg>
   </div>
 </template>
 
@@ -17,6 +45,7 @@ export default {
   name: "ArrowKey",
   props: {
     side: String,
+    alignment: String,
     initPresses: Number,
     isDisabled: Boolean,
     isVisible: Boolean,
@@ -24,3 +53,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

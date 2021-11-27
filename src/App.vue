@@ -1,7 +1,7 @@
 <template>
   <div class="container text-center main-container">
     <div
-      v-if="Boolean('IS DEV PLACEHOLDER FOR QUALTRICS')"
+      v-if="!Boolean('IS DEV PLACEHOLDER FOR QUALTRICS')"
       class="form-check form-switch position-absolute top-0 start-0"
     >
       <div>
@@ -149,15 +149,13 @@ export default {
 </script>
 
 <style>
-@import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
-@import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css";
-
 .display-text {
   direction: ltr;
+  font-size: 1.4vw;
 }
 
 .main-container {
-  width: 900px;
+  width: 70vw;
   height: 100%;
   position: absolute;
   top: 50%;
@@ -169,6 +167,42 @@ export default {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: auto;
+}
+
+.btn-group button {
+  background-color: #0d6efd;
+  border: 0.1vw solid #0d6efd;
+  color: white;
+  padding: 0.7vh 1vw;
+  cursor: pointer;
+  float: left;
+}
+
+.btn-group button:last-child {
+  border-top-right-radius: 0.2vw;
+  border-bottom-right-radius: 0.2vw;
+}
+
+.btn-group button:first-child {
+  border-right: none;
+  border-top-left-radius: 0.2vw;
+  border-bottom-left-radius: 0.2vw;
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:hover {
+  background-color: #0b4cfd;
+}
+
+.btn-group button:disabled {
+  background-color: rgba(0, 0, 250, 0.4);
+  border: 0.1vw solid transparent;
+  cursor: not-allowed;
 }
 </style>

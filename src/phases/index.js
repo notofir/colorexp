@@ -46,7 +46,7 @@ const phases = [
   On every step, you will be presented with three colorful squares, like this:
   
   <br />
-  <img src="https://storage.googleapis.com/colortask-public/squares.PNG" class="center" style="height: 180px;"> 
+  <img src="https://storage.googleapis.com/colortask-public/squares.PNG" class="center" style="height: 24vh;"> 
    <br /> <br />
   
   The upper two squares will remain static and will not change during a trial. They represent two ends of a brightness continuum of a specific hue.
@@ -69,7 +69,7 @@ const phases = [
    <br />
   - Pressing the left arrow key will turn the color in the game square lighter.
    <br /> <br />
-  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 200px;"> 
+  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 24vh;"> 
   
   `,
       },
@@ -84,7 +84,7 @@ const phases = [
   Option B:
   When you have settled on a color that you judge to be the exact mid-point of the brightness continuum, press the “submit” button appearing under it.
   <br /><br />
-  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 200px;"> 
+  <img src="https://storage.googleapis.com/colortask-public/squares_and_arrows.PNG" class="center" style="height: 24vh;"> 
   `,
       },
       {
@@ -118,7 +118,7 @@ const phases = [
   with 50 being the best score possible, representing an accurate identification of the mid-point between the two upper squares. 
   Conversely, the closer your score gets to either 0 (the brightest end) or 100 (darkest), it indicates a worse performance.
   <br /><br />
-  <img src="https://storage.googleapis.com/colortask-public/feedback_no_okay.PNG" class="center" style="height: 120px;"> 
+  <img src="https://storage.googleapis.com/colortask-public/feedback_no_okay.PNG" class="center" style="width: 90%;"> 
   
   `,
       },
@@ -161,7 +161,7 @@ const phases = [
   <br />
   <br />
   
-  <img src="https://storage.googleapis.com/colortask-public/hint_right.PNG" class="center" style="height: 240px;">
+  <img src="https://storage.googleapis.com/colortask-public/hint_right.PNG" class="center" style="height: 12vh;">
   <br />
   If the majority of the participants in the previous experiment picked a darker shade than the one currently presented in the square game 
  (aka they continued going rightwards prior to pressing “submit”), a rightward arrow will appear, as in the example above.

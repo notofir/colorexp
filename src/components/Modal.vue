@@ -8,7 +8,9 @@
       ></header>
       <div class="w3-container" style="color: black" v-html="body"></div>
       <footer class="w3-container py-3 text-end modal-footer">
-        <Button @btn-click="onClick" content="ok <i class='bi bi-check'></i>" />
+        <div class="btn-group">
+          <Button @btn-click="onClick" content="ok" />
+        </div>
       </footer>
     </div>
   </div>
@@ -47,14 +49,18 @@ export default {
 }
 
 .modal-content {
-  max-width: 800px;
+  width: 60%;
 }
 
 .modal-header {
-  border-bottom: 1px solid rgba(190, 190, 190, 0.5);
+  border-bottom: 0.1vw solid rgba(190, 190, 190, 0.5);
 }
 
 .modal-footer {
-  border-top: 1px solid rgba(190, 190, 190, 0.5);
+  border-top: 0.1vw solid rgba(190, 190, 190, 0.5);
+  display: flex;
+  justify-content: right;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
 }
 </style>

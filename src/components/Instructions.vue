@@ -1,23 +1,19 @@
 <template>
-  <div class="container" style="height: 100%">
-    <div class="row" style="height: 15%">
-      <div class="col mt-auto">
-        <p class="h1 instruction display-text">
-          {{ pages[currentPage].title }}
-        </p>
-      </div>
+  <div style="height: 100%">
+    <div style="height: 15%">
+      <p class="instruction-head instruction display-text">
+        {{ pages[currentPage].title }}
+      </p>
     </div>
-    <div class="row pt-5" style="min-height: 50%">
-      <div class="col pt-2">
-        <p
-          v-html="pages[currentPage].text"
-          class="instruction display-text instruction-body"
-        ></p>
-      </div>
+    <div style="min-height: 70%">
+      <p
+        v-html="pages[currentPage].text"
+        class="body instruction display-text instruction-body"
+      ></p>
     </div>
-    <div class="row pt-4">
-      <div class="col">
-        <div v-if="!isDone" class="btn-group" role="group">
+    <div>
+      <div class="center">
+        <div v-if="!isDone" class="btn-group">
           <Button
             @btn-click="onClickPrev()"
             :disabled="currentPage == 0"
@@ -91,7 +87,17 @@ export default {
 }
 
 .instruction-body {
-  font-size: 1.1rem;
   text-align: justify;
+}
+
+.instruction-head {
+  padding-top: 4vh;
+  font-size: 2vw;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

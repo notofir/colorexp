@@ -1,7 +1,8 @@
 <template>
   <button
     @click="onClick()"
-    :class="'btn btn-primary' + (isVisible ? '' : 'invisible')"
+    class="btn btn-primary"
+    :style="isVisible ? '' : 'visibility: hidden;'"
     :disabled="disabled"
   >
     <div class="display-text" style="color: white" v-html="content"></div>
@@ -29,4 +30,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

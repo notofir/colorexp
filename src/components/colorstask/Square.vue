@@ -1,8 +1,7 @@
 <template>
-  <div
-    :class="'m' + alignment + '-auto square'"
-    :style="'background-color: ' + color"
-  ></div>
+  <div :style="'display: flex; justify-content: ' + alignment + ';'">
+    <div class="square" :style="'background-color: ' + color"></div>
+  </div>
 </template>
 
 <script>
@@ -17,7 +16,7 @@ export default {
 
 <style scoped>
 .square {
-  height: 55px;
-  width: 55px;
+  height: 7vh;
+  width: 7vh;
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
-  <div class="container p-0" style="height: 100%">
-    <div class="row" style="height: 20%">
-      <div class="col mt-auto">
+  <div style="height: 100%">
+    <div
+      class="row"
+      style="height: 20%; position: relative; justify-content: center"
+    >
+      <div class="col mt-auto" style="position: absolute; bottom: 0">
         <Hint
           @hint-click="onHint"
           v-show="trialHint.autoHintClicks.min <= 0 && hintGroup.size != 0"
@@ -10,48 +13,47 @@
         />
       </div>
     </div>
-    <div class="row" style="height: 10%">
-      <div class="col my-auto">
-        <h2 id="hint-timer" class="m-0">&nbsp;</h2>
-      </div>
+    <div class="row" style="height: 10%; justify-content: center">
+      <div id="hint-timer">&nbsp;</div>
     </div>
     <div class="row" style="height: 40%">
-      <div class="col my-auto">
+      <div class="col-left" style="position: relative">
+        <div style="height: 25%"></div>
         <DisplayedHint
           v-if="displayedHintSide === 'left'"
           :side="hintSide"
           :size="hintGroup.size"
         />
       </div>
-      <div class="col-7 my-auto">
-        <div class="container">
-          <div class="row mb-5" style="height: 50%">
-            <div class="col p-0 pt-1">
-              <Square alignment="s" :color="displayedLeftColor" />
-            </div>
-            <div class="col p-0">
-              <DisplayedHint
-                v-if="displayedHintSide === 'correct'"
-                :side="hintSide"
-                :size="hintGroup.size"
-              />
-            </div>
-            <div class="col p-0 pt-1">
-              <Square
-                alignment="e"
-                :color="displayeRightColor"
-                :size="hintGroup.size"
-              />
-            </div>
+      <div class="col-center">
+        <div style="height: 20%"></div>
+        <div class="row" style="height: 40%">
+          <div style="width: 33.3%">
+            <Square alignment="right" :color="displayedLeftColor" />
           </div>
-          <div class="row mb-4" style="height: 50%">
-            <div class="col">
-              <Square alignment="x" :color="midColor" />
-            </div>
+          <div style="width: 33.3%; text-align: center">
+            <DisplayedHint
+              v-if="displayedHintSide === 'correct'"
+              :side="hintSide"
+              :size="hintGroup.size"
+            />
+          </div>
+          <div style="width: 33.3%">
+            <Square
+              alignment="left"
+              :color="displayeRightColor"
+              :size="hintGroup.size"
+            />
+          </div>
+        </div>
+        <div style="height: 20%">
+          <div style="width: 100%">
+            <Square alignment="center" :color="midColor" />
           </div>
         </div>
       </div>
-      <div class="col my-auto">
+      <div class="col-right" style="position: relative">
+        <div style="height: 25%"></div>
         <DisplayedHint
           v-if="displayedHintSide === 'right'"
           :side="hintSide"
@@ -60,71 +62,84 @@
       </div>
     </div>
     <div class="row" style="height: 30%">
-      <div class="col"></div>
-      <div class="col-6">
-        <div class="row">
-          <div class="col">
-            <div
-              :class="
-                'tooltip2' +
-                (currentTutorialID === leftID ? ' visible-tooltip' : '')
-              "
-            >
-              <ArrowKey
-                side="left"
-                :isVisible="!(currentTutorialID === rightID)"
-                :isPressed="pressedKey == 'left'"
-                :isDisabled="isArrowKeyDisabled(maxMid)"
-              />
-              <span class="tooltiptext"> {{ tutorialContent }} </span>
+      <div class="col-left"></div>
+      <div class="col-center">
+        <div class="row" style="height: 30%">
+          <div class="col" style="width: 30%">
+            <div style="display: flex; justify-content: right">
+              <div
+                :class="
+                  'tooltip2' +
+                  (currentTutorialID === leftID ? ' visible-tooltip' : '')
+                "
+              >
+                <ArrowKey
+                  side="left"
+                  alignment="right"
+                  :isVisible="!(currentTutorialID === rightID)"
+                  :isPressed="pressedKey == 'left'"
+                  :isDisabled="isArrowKeyDisabled(maxMid)"
+                />
+                <span class="tooltiptext"
+                  ><div class="display-text">{{ tutorialContent }}</div></span
+                >
+              </div>
             </div>
           </div>
-          <div class="col"></div>
-          <div class="col">
-            <div
-              :class="
-                'tooltip2' +
-                (currentTutorialID === rightID ? ' visible-tooltip' : '')
-              "
-            >
-              <ArrowKey
-                side="right"
-                :isVisible="!(currentTutorialID === leftID)"
-                :isPressed="pressedKey == 'right'"
-                :isDisabled="isArrowKeyDisabled(minMid)"
-              />
-              <span class="tooltiptext"> {{ tutorialContent }} </span>
+          <div class="col" style="width: 40%"></div>
+          <div class="col" style="width: 30%">
+            <div style="display: flex; justify-content: left">
+              <div
+                :class="
+                  'tooltip2' +
+                  (currentTutorialID === rightID ? ' visible-tooltip' : '')
+                "
+              >
+                <ArrowKey
+                  side="right"
+                  alignment="left"
+                  :isVisible="!(currentTutorialID === leftID)"
+                  :isPressed="pressedKey == 'right'"
+                  :isDisabled="isArrowKeyDisabled(minMid)"
+                />
+                <span class="tooltiptext"
+                  ><div class="display-text">{{ tutorialContent }}</div></span
+                >
+              </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col my-auto">
-            <div
-              :class="
-                'tooltip2' +
-                (currentTutorialID === submitID || isAlertnessTestOn
-                  ? ' visible-tooltip'
-                  : '')
-              "
-            >
+        <div class="row" style="justify-content: center">
+          <div
+            :class="
+              'tooltip2' +
+              (currentTutorialID === submitID || isAlertnessTestOn
+                ? ' visible-tooltip'
+                : '')
+            "
+          >
+            <div class="btn-group">
               <Button
                 @btn-click="onSubmit"
                 :content="submitID"
                 :isVisible="isTutorial ? currentTutorialID === submitID : true"
                 :disabled="shouldWitholdInput"
               />
-              <span v-if="isTutorial" class="tooltiptext"
-                >Press the submit button when you believe you're done</span
-              >
-              <span v-else class="tooltiptext"
-                >ALERTNESS TEST<br />for this trial, select the darkest
-                shade</span
-              >
             </div>
+            <span v-if="isTutorial" class="tooltiptext"
+              ><div class="display-text">
+                Press the submit button when you believe you're done
+              </div></span
+            >
+            <span v-else class="tooltiptext"
+              ><div class="display-text">
+                ALERTNESS TEST<br />for this trial, select the darkest shade
+              </div></span
+            >
           </div>
         </div>
       </div>
-      <div class="col"></div>
+      <div class="col-right"></div>
     </div>
     <Modal
       id="modal-hint-ack"
@@ -139,27 +154,29 @@
         didDisplayFeedback = true;
         onSubmit();
       "
-      :header="`<h4 class='modal-title'>Score: ` + percentageScore + `%</h4>`"
+      :header="
+        `<h4 class='modal-title display-text' style='font-size: 2.2vw;'>Score: ` +
+        percentageScore +
+        `%</h4>`
+      "
       :body="
         `
-      <div class='container-fluid'>
-        <div class='row align-items-end'>
-          <div class='col p-0'>
-            <p class='text-start mb-0'><b>0</b></p>
+        <div class='display-text' style='display: flex'>
+          <div style='flex: 33%'>
+            <p style='margin: 1vh 0 0 0'>0</p>
           </div>
-          <div class='col p-0'>
-            <p class='text-center mb-0'><b>50</b></p>
+          <div style='flex: 33%'>
+            <p style='margin: 1vh 0 0 0'>50</p>
           </div>
-          <div class='col p-0'>
-            <p class='text-end mb-0'><b>100</b></p>
+          <div style=''>
+            <p style='margin: 1vh 0 0 0'>100</p>
           </div>
         </div>
-        <div class='row'>
-          <input id='score-range' type='range' class='form-range' min='0' max='100' value='` +
+        <div style='display: flex'>
+          <input id='score-range' style='flex: 100%; margin-bottom: 1vh; margin-top: 1vh; -webkit-appearance: none; height: 0.8vh; background: rgba(220, 220, 220, 0.6); border-radius: 0.5vw;' type='range' class='form-range' min='0' max='100' value='` +
         percentageScore +
         `' disabled />
         </div>
-      </div>
     `
       "
     />
@@ -488,7 +505,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tooltip2 {
   position: relative;
   display: inline-block;
@@ -496,17 +513,17 @@ export default {
 
 .tooltip2 .tooltiptext {
   visibility: hidden;
-  width: 160px;
+  width: 15vw;
   background-color: #555;
   color: #fff;
   text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
+  border-radius: 0.5vw;
+  padding: 1vh 0;
   position: absolute;
   z-index: 1;
   top: 125%;
   left: 50%;
-  margin-left: -80px;
+  margin-left: -7.5vw;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -516,8 +533,8 @@ export default {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
+  margin-left: -1vh;
+  border-width: 1vh;
   border-style: solid;
   border-color: transparent transparent #555 transparent;
 }
@@ -525,5 +542,21 @@ export default {
 .visible-tooltip .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+
+.row {
+  display: flex;
+}
+
+.col-left {
+  flex: 20%;
+}
+
+.col-center {
+  flex: 60%;
+}
+
+.col-right {
+  flex: 20%;
 }
 </style>
