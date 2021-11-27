@@ -48,7 +48,7 @@ const phases = [
   <br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="464px" height="298px" viewBox="0 0 464 298" enable-background="new 0 0 464 298" xml:space="preserve">  <image id="image0" width="464" height="298" x="0" y="0"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="27vh" viewBox="0 0 464 298" enable-background="new 0 0 464 298" xml:space="preserve">  <image id="image0" width="464" height="298" x="0" y="0"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAdAAAAEqAgMAAADYOunsAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAADFBMVEX///+83Yg6UBZojyhX
 16M5AAAAAWJLR0QAiAUdSAAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAAd0SU1FB+ULGwo3JawBMLsA
@@ -74,8 +74,7 @@ sPDWPwAAAABJRU5ErkJggg==" />
   In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color of the same hue. The color is situated at a specific point along the continuum, picked at random so that sometimes it will be closer in brightness-level to that
   of the bright end and sometimes to the dark end.
    <br />
-    <br />
-  You can change the brightness level of the game square by pressing the arrow keys on your keyboard:
+    You can change the brightness level of the game square by pressing the arrow keys on your keyboard:
    <br />
   - Pressing the right arrow key will turn the color in the game square darker.
    <br />
@@ -83,7 +82,7 @@ sPDWPwAAAABJRU5ErkJggg==" />
    <br /> <br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="536px" height="448px" viewBox="0 0 536 448" enable-background="new 0 0 536 448" xml:space="preserve">  <image id="image0" width="536" height="448" x="0" y="0"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="35vh" viewBox="0 0 536 448" enable-background="new 0 0 536 448" xml:space="preserve">  <image id="image0" width="536" height="448" x="0" y="0"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhgAAAHACAMAAADX3+H9AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACvlBMVEX////e7sS83Yjd7sOe
 qYw6UBabpom1yJVojyiyxpLq6uqHh4cxMTEAAAANDQ1ISEiqqqr29vb+/v63t7cnJydRUVHg4ODA
@@ -152,7 +151,7 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
   <br /><br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="536px" height="448px" viewBox="0 0 536 448" enable-background="new 0 0 536 448" xml:space="preserve">  <image id="image0" width="536" height="448" x="0" y="0"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="35vh" viewBox="0 0 536 448" enable-background="new 0 0 536 448" xml:space="preserve">  <image id="image0" width="536" height="448" x="0" y="0"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhgAAAHACAMAAADX3+H9AAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACvlBMVEX////e7sS83Yjd7sOe
 qYw6UBabpom1yJVojyiyxpLq6uqHh4cxMTEAAAANDQ1ISEiqqqr29vb+/v63t7cnJydRUVHg4ODA
@@ -210,6 +209,7 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
       {
         title: "Practice: Step 1",
         text: `
+  <br />
   The following practice will allow you to familiarize yourself with the interface of this task and practice its operation.
   Notice that your performance in the training phase will not be counted towards your final results. You will be notified when the actual experiment begins.
   
@@ -240,7 +240,7 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
   <br /><br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1194px" height="181px" viewBox="0 0 1194 181" enable-background="new 0 0 1194 181" xml:space="preserve">  <image id="image0" width="1194" height="181" x="0" y="0"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="20vh" viewBox="0 0 1194 181" enable-background="new 0 0 1194 181" xml:space="preserve">  <image id="image0" width="1194" height="181" x="0" y="0"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABKoAAAC1CAYAAAB/LxdOAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAA
 CXBIWXMAABYlAAAWJQFJUiTwAAAenklEQVR42u3df2hbZ57v8Y9u3dTZSafqTKZzPHSWKOvsrr0t
@@ -399,6 +399,7 @@ WHRkYXRlOm1vZGlmeQAyMDIxLTExLTI3VDEwOjQ4OjE5KzAwOjAwlpr+bwAAAABJRU5ErkJggg==" />
       {
         title: "Practice: Step 3",
         text: `
+  <br />
   On the next practice phase, you will be able to request hints. The hints will direct you and help you find the correct mid-point.
   
   <br /><br />
@@ -413,7 +414,7 @@ WHRkYXRlOm1vZGlmeQAyMDIxLTExLTI3VDEwOjQ4OjE5KzAwOjAwlpr+bwAAAABJRU5ErkJggg==" />
         title: "Practice: Step 3",
         text: `
  
-  
+  <br />
   Before you begin using hints, it is important that you are familiar with a fundamental statistical principle, 
   stating that information is more likely to be accurate when it is based on larger pools of data. In the context of this game, 
   it means that hints from the larger sample (of 107 participants) are of higher quality than those relying on the smaller sample (5 participants).
@@ -429,7 +430,7 @@ WHRkYXRlOm1vZGlmeQAyMDIxLTExLTI3VDEwOjQ4OjE5KzAwOjAwlpr+bwAAAABJRU5ErkJggg==" />
   
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1031px" height="717px" viewBox="0 0 1031 717" enable-background="new 0 0 1031 717" xml:space="preserve">  <image id="image0" width="1031" height="717" x="0" y="0"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="30vh" viewBox="0 0 1031 717" enable-background="new 0 0 1031 717" xml:space="preserve">  <image id="image0" width="1031" height="717" x="0" y="0"
     href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAcAAALNCAYAAABTZwiqAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAA
 CXBIWXMAABYlAAAWJQFJUiTwAAA/nElEQVR42u3deZhedX3//9eZmexkhZCwhoQdQRaVsMguKlVc
@@ -733,6 +734,7 @@ SUVORK5CYII=" />
         title: "The Hints",
         text: `
  
+  <br />
   Conversely, If the majority of the participants chose a brighter color than the one currently presented, a leftward arrow will appear.
   
   <br /><br />
@@ -745,6 +747,7 @@ SUVORK5CYII=" />
         title: "The Hints",
         text: `
   
+  <br />
   Notice! The analysis of our past experiments indicated very high accuracy rates, so in most cases the hints presented to you are very reliable.
   Nevertheless, the performance of past participants was not perfect, so rarely the hints might be misleading.
   `,
@@ -752,6 +755,7 @@ SUVORK5CYII=" />
       {
         title: "",
         text: `
+  <br />
   Now, a short practice will begin. All hints at this stage will be based on the results of our preliminary study, aka the smaller sample comprised of five participants.
   To help you familiarize yourself with the interface of the hint, please press the “Press for hint” button on every trial. Try pressing it in different situations and notice the different results.
   `,
@@ -772,6 +776,7 @@ SUVORK5CYII=" />
       {
         title: "Practice: Step 4",
         text: `
+  <br />
   Now, the final training phase will begin. It will be similar to the previous one, only with hints from the 107-participant study.
   `,
       },
@@ -831,7 +836,10 @@ SUVORK5CYII=" />
     instructions: [
       {
         title: "Resting page",
-        text: "You may rest for a few seconds before proceeding.",
+        text: `
+		<br />
+		You may rest for a few seconds before proceeding.
+		`,
       },
     ],
     numberOfTrials: 25,
@@ -852,10 +860,10 @@ SUVORK5CYII=" />
   createPhase({
     instructions: [
       {
-        title: "The second experimental phase",
+        title: "Hint Phase",
         text: `
-  You have completed the first experimental phase!
-  <br /><br />
+  
+  <br />
   In the following phase, you will be able to request hints by pressing a designated button, like in the practice phase. 
   However, now every time you press the button the screen will freeze, and you will be required to wait 10 seconds before the hint is revealed.
   <br /><br />
@@ -883,7 +891,10 @@ SUVORK5CYII=" />
     instructions: [
       {
         title: "Resting page",
-        text: "You may rest for a few seconds before proceeding.",
+        text: `
+		<br />
+		You may rest for a few seconds before proceeding.
+		`,
       },
     ],
     numberOfTrials: 25,
@@ -902,7 +913,9 @@ SUVORK5CYII=" />
     instructions: [
       {
         title: "Task has ended",
-        text: "Thank you for participating. Bye.",
+        text: `
+		Thank you for participating. Bye.
+		`,
       },
     ],
   }),
