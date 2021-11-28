@@ -43,7 +43,7 @@ const phases = [
         text: `
   In this game you will be asked to judge the brightness of different colors.
   
-  On every step, you will be presented with three colorful squares, like this:
+  At every step, you will be presented with three colorful squares, like these:
   
   <br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -61,8 +61,9 @@ sPDWPwAAAABJRU5ErkJggg==" />
 </svg>
    <br /> <br />
   
-  The upper two squares will remain static and will not change during a trial. They represent two ends of a brightness continuum of a specific hue.
-  The upper right square represents the darkest point on this spectrum, and the left one represents the brightest point.
+  The upper two squares will remain static and will not change during the trial. They represent two ends of a brightness continuum of a specific hue,
+  from brightest (left) to darkest (right).
+  
 
  
   `,
@@ -71,14 +72,14 @@ sPDWPwAAAABJRU5ErkJggg==" />
         title: "The Game Square",
         text: `
   
-  In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color of the same hue. The color is situated at a specific point along the continuum, picked at random so that sometimes it will be closer in brightness-level to that
-  of the bright end and sometimes to the dark end.
+  In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color that is somewhere between the two
+  ends of the spectrum. Its exact shade is picked at random.
    <br />
-    You can change the brightness level of the game square by pressing the arrow keys on your keyboard:
+    You can change the brightness level of the game square by pressing the arrow keys on your keyboard (not your mouse!):
    <br />
-  - Pressing the right arrow key will turn the color in the game square darker.
+  - Press right to turn it darker.
    <br />
-  - Pressing the left arrow key will turn the color in the game square lighter.
+  - Press left to turn it lighter.
    <br /> <br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -141,14 +142,14 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
       {
         title: "Your Goal",
         text: `
-  Your goal in this task is to pin-point the most accurate middle brightness level between the two upper squares.
+  Your goal in this task is to pin-point the most accurate average brightness level between the two upper squares.
   <br /> <br />
-  How to achieve this goal? 
+  
+   
   In every trial, you can press the arrow-keys as many times as you like, thus modifying the game square’s brightness. 
   When you feel that the color you’ve settled on represents the exact mid-point, press the “submit” button appearing under it.
-  Option B:
-  When you have settled on a color that you judge to be the exact mid-point of the brightness continuum, press the “submit” button appearing under it.
-  <br /><br />
+  <br /> <br />
+  
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="35vh" viewBox="0 0 536 448" enable-background="new 0 0 536 448" xml:space="preserve">  <image id="image0" width="536" height="448" x="0" y="0"
@@ -763,7 +764,7 @@ SUVORK5CYII=" />
     ],
     isPractice: true,
     alertnessTestIndex: 3,
-    numberOfTrials: 5,
+    numberOfTrials: 3,
     hintCreator: function () {
       return createHint({
         groups: [{ size: 5, certainty: 0.8 }],
@@ -782,7 +783,7 @@ SUVORK5CYII=" />
       },
     ],
     isPractice: true,
-    numberOfTrials: 5,
+    numberOfTrials: 3,
     hintCreator: function () {
       return createHint({
         groups: [{ size: 107, certainty: 1 }],
@@ -817,7 +818,7 @@ SUVORK5CYII=" />
         isExperimental: true,
       },
     ],
-    numberOfTrials: 25,
+    numberOfTrials: 20,
     hintCreator: function (isExperimental) {
       if (isExperimental) {
         return createHint({
@@ -842,7 +843,7 @@ SUVORK5CYII=" />
 		`,
       },
     ],
-    numberOfTrials: 25,
+    numberOfTrials: 20,
     hintCreator: function (isExperimental) {
       if (isExperimental) {
         return createHint({
@@ -875,7 +876,7 @@ SUVORK5CYII=" />
       },
     ],
     alertnessTestIndex: 15,
-    numberOfTrials: 25,
+    numberOfTrials: 20,
     hintCreator: function () {
       return createHint({
         delay: 10,
@@ -897,7 +898,7 @@ SUVORK5CYII=" />
 		`,
       },
     ],
-    numberOfTrials: 25,
+    numberOfTrials: 20,
     hintCreator: function () {
       return createHint({
         delay: 10,
