@@ -31,7 +31,15 @@ function postResults(uid, records) {
     );
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ uid: uid, csv: csv }));
-    console.log("finished task");
+
+    const xhr2 = new XMLHttpRequest();
+    xhr2.open(
+      "POST",
+      "https://us-central1-ofirarias-com.cloudfunctions.net/colortask2",
+      true
+    );
+    xhr2.setRequestHeader("Content-Type", "application/json");
+    xhr2.send(JSON.stringify({ uid: uid, csv: csv }));
   }
 }
 

@@ -229,7 +229,7 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
         text: `
   On the next practice phase, you will receive feedback, to help you improve your skill in the game.
   <br /><br />
-  At the end on every trial, right after you hit the “submit” button, you will be provided with the feedback for you last choice. 
+  At the end of every trial, right after you hit the “submit” button, you will be provided with the feedback for your last choice. 
   The feedback will be represented by a number, as well as graphically via an axis.
   <br />
  
@@ -869,7 +869,7 @@ SUVORK5CYII=" />
   However, now every time you press the button the screen will freeze, and you will be required to wait 10 seconds before the hint is revealed.
   <br /><br />
   On some trials you will be offered hints extracted from the larger sample (107 participants) and in others from the small sample (5 participants).
-  You will know in advance what type of hint is offered to you. The type will be inmiddicted by the number appearing on the button. 
+  You will know in advance what type of hint is offered to you. The type will be indicated by the number appearing on the button. 
   <br />
   Notice: Hint usage will not affect your results.
   `,
