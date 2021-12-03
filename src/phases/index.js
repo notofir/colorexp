@@ -11,7 +11,7 @@ function createHint({
 }
 
 function createPhase({
-  taskName = "ColorsTrial",
+  taskName = "coloursTrial",
   instructions,
   numberOfTrials,
   hintCreator = function () {
@@ -39,11 +39,11 @@ const phases = [
   createPhase({
     instructions: [
       {
-        title: "Welcome to the Color Judgement Experiment!",
+        title: "Welcome to the colour Judgement Experiment",
         text: `
-  In this game you will be asked to judge the brightness of different colors.
+  In this game you will be asked to judge the brightness of different colours.
   
-  At every step, you will be presented with three colorful squares, like these:
+  At every step, you will be presented with three coloured squares, like these:
   
   <br />
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -61,7 +61,7 @@ sPDWPwAAAABJRU5ErkJggg==" />
 </svg>
    <br /> <br />
   
-  The upper two squares will remain static and will not change during the trial. They represent two ends of a brightness continuum of a specific hue,
+  The upper two squares will remain static and will not change during the trial. They represent two ends of a brightness continuum of a specific colour,
   from brightest (left) to darkest (right).
   
 
@@ -72,10 +72,10 @@ sPDWPwAAAABJRU5ErkJggg==" />
         title: "The Game Square",
         text: `
   
-  In the beginning of every trial, the square in the middle (hereafter: the game square) will present a color that is somewhere between the two
+  In the beginning of every trial, the square in the middle (hereafter: the game square) will present a colour that is somewhere between the two
   ends of the spectrum. Its exact shade is picked at random.
    <br />
-    You can change the brightness level of the game square by pressing the arrow keys on your keyboard (not your mouse!):
+    During the game, you can change the brightness level of the game square by pressing the arrow keys on your keyboard (not your mouse):
    <br />
   - Press right to turn it darker.
    <br />
@@ -142,13 +142,18 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
       {
         title: "Your Goal",
         text: `
-  Your goal in this task is to pin-point the most accurate average brightness level between the two upper squares.
+  Your goal in this task is to detect the most accurate average brightness level between the two upper squares.
   <br /> <br />
   
    
-  In every trial, you can press the arrow-keys as many times as you like, thus modifying the game square’s brightness. 
-  When you feel that the color you’ve settled on represents the exact mid-point, press the “submit” button appearing under it.
+  In every trial, you can press the arrow-keys as many times as you like, thus modifying the brightness of the game square. 
+  When you feel that the colour you’ve settled on represents the exact mid-point, press the “submit” button appearing under it.
   <br /> <br />
+  
+   The range of the game square's brightness is limited and a-symetrical, so  
+  you can't find the mid-point by counting your steps. You have to rely on your subjective judgment.
+  
+   <br /> <br />
   
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -213,13 +218,13 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
   <br />
   The following practice will allow you to familiarize yourself with the interface of this task and practice its operation.
   Notice that your performance in the training phase will not be counted towards your final results. You will be notified when the actual experiment begins.
-  
+  "Now try to find the mid-point"
   `,
       },
     ],
     isPractice: true,
     isTutorial: true,
-    numberOfTrials: 5,
+    numberOfTrials: 3,
   }),
   // Phase 2
   createPhase({
@@ -229,13 +234,12 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
         text: `
   On the next practice phase, you will receive feedback, to help you improve your skill in the game.
   <br /><br />
-  At the end of every trial, right after you hit the “submit” button, you will be provided with the feedback for your last choice. 
-  The feedback will be represented by a number, as well as graphically via an axis.
+  At the end of every trial, right after you hit the “submit” button, you will be provided with feedback for your last choice. 
+  The feedback will be represented by a number, as well as graphically..
   <br />
  
-  <b>Axis</b>: Your final choice will be marked visibly in the shape of a grey circle.
   <br />
-  <b>Numeric score</b>: the range of possible scores moves between 0-100, 
+  <b>Numeric score</b>: the range of possible scores is between 0-100, 
   with 50 being the best score possible, representing an accurate identification of the mid-point between the two upper squares. 
   Conversely, the closer your score gets to either 0 (the brightest end) or 100 (darkest), it indicates a worse performance.
   <br /><br />
@@ -404,9 +408,9 @@ WHRkYXRlOm1vZGlmeQAyMDIxLTExLTI3VDEwOjQ4OjE5KzAwOjAwlpr+bwAAAABJRU5ErkJggg==" />
   On the next practice phase, you will be able to request hints. The hints will direct you and help you find the correct mid-point.
   
   <br /><br />
-  The hints are based on two previous experiments that utilized the Color Judgement Task. Data for the hints is based on the participants’ choices.
-  The first experiment was a small-scale pilot study, in which only five participants performed the task. 
-  After the pilot, a second study was conducted, this time with 107 participants. You will receive hints based on these two studies.
+  The hints are based on participants' choices in two previous experiments that utilized the colour Judgement Task. 
+  The first experiment was a small-scale pilot study, with five participants only. 
+  Following the pilot, a second study was conducted, this time with 107 participants. You will receive hints based on these two studies.
   
   
   `,
@@ -417,14 +421,14 @@ WHRkYXRlOm1vZGlmeQAyMDIxLTExLTI3VDEwOjQ4OjE5KzAwOjAwlpr+bwAAAABJRU5ErkJggg==" />
  
   <br />
   Before you begin using hints, it is important that you are familiar with a fundamental statistical principle, 
-  stating that information is more likely to be accurate when it is based on larger pools of data. In the context of this game, 
+  stating that information is more likely to be accurate when it is based on larger sets of data. In the context of this game, 
   it means that hints from the larger sample (of 107 participants) are of higher quality than those relying on the smaller sample (5 participants).
   `,
       },
       {
         title: "The Hints",
         text: `
-  Hints can be asked for by pressing the “Press for hint” button, only once every trial.
+  Hints can be requested by pressing the “Press for hint” button, only once every trial.
   Every time you request a hint, an arrow will be presented on the screen. It will look something like this:
   <br />
   <br />
@@ -726,8 +730,8 @@ SUVORK5CYII=" />
 </svg>
 
   <br />
-  If the majority of the participants in the previous experiment picked a darker shade than the one currently presented in the square game 
- (aka they continued going rightwards prior to pressing “submit”), a rightward arrow will appear, as in the example above.
+  If the majority of the participants in the previous experiment picked a darker shade than the one currently presented in the square game,
+  a rightward arrow will appear, as in the example above.
  
  `,
       },
@@ -736,10 +740,10 @@ SUVORK5CYII=" />
         text: `
  
   <br />
-  Conversely, If the majority of the participants chose a brighter color than the one currently presented, a leftward arrow will appear.
+  Conversely, If the majority of the participants chose a brighter colour than the one currently presented, a leftward arrow will appear.
   
   <br /><br />
-  Finally, if most participants chose the color currently on display as their assumed mid-point, a checkmark would appear onscreen.
+  Finally, if most participants chose the colour currently on display as their chosen mid-point, a checkmark would appear onscreen.
   
   
   `,
@@ -749,16 +753,17 @@ SUVORK5CYII=" />
         text: `
   
   <br />
-  Notice! The analysis of our past experiments indicated very high accuracy rates, so in most cases the hints presented to you are very reliable.
-  Nevertheless, the performance of past participants was not perfect, so rarely the hints might be misleading.
+  Notice! The analysis of our past experiments indicated very high accuracy rates, so in most cases the hints presented to you are very.
+  Nevertheless, the performance of past participants was not perfect, so in some cases the hints might be misleading.
   `,
       },
       {
         title: "",
         text: `
   <br />
-  Now, a short practice will begin. All hints at this stage will be based on the results of our preliminary study, aka the smaller sample comprised of five participants.
-  To help you familiarize yourself with the interface of the hint, please press the “Press for hint” button on every trial. Try pressing it in different situations and notice the different results.
+  Now, a short practice will begin. All hints at this stage will be based on the results of our preliminary study - the smaller sample of five participants.
+  To help you familiarize yourself with the interface of the hint, please press the “Press for hint” button on every trial. 
+  Try pressing it in different time points and notice the different results.
   `,
       },
     ],
@@ -798,12 +803,12 @@ SUVORK5CYII=" />
         text: `
   You have completed the practice phase!
   <br /><br />
-  Now, the real task will begin. As in the practice phase, you are still requested to identify the mid-point of brightness continuums of different hues.
+  Now, the real task will begin. As in the practice phase, you are still requested to identify the mid-point of brightness continuums of different colours.
   From now on, your performance will be calculated towards your final results.
 <br /><br />
 
   Please notice that there is no time limit for each trial (beyond our general requirement to take all trials in a row, without substantial breaks).
-  Your performance will be evaluated based on accuracy, not on pace.
+  Your performance will be evaluated based on accuracy, not on speed.
   `,
       },
       {
@@ -861,7 +866,7 @@ SUVORK5CYII=" />
   createPhase({
     instructions: [
       {
-        title: "Hint Phase",
+        title: "Hint Requesting Phase",
         text: `
   
   <br />
@@ -915,7 +920,14 @@ SUVORK5CYII=" />
       {
         title: "Task has ended",
         text: `
-		Thank you for participating. Bye.
+		You have completed the Colour Judgement Task.
+		<br /><br />
+		Now you will be presented with a short series of questions regarding your feelings, thoughts and habits. 
+		Please read them carefully and attentively, and answer sincerely. 
+				<br /><br />
+
+		Press "Next" to continue. 
+		
 		`,
       },
     ],
@@ -923,3 +935,8 @@ SUVORK5CYII=" />
 ];
 
 export default phases;
+
+
+
+
+
