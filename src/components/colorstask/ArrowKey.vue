@@ -11,8 +11,8 @@
     <svg
       :id="'btn-' + side"
       xmlns="http://www.w3.org/2000/svg"
-      width="5vw"
-      height="5vh"
+      width="7vw"
+      height="7vh"
       :fill="isDisabled ? 'grey' : 'black'"
       viewBox="0 0 16 16"
     >
