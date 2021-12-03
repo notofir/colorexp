@@ -487,7 +487,7 @@ export default {
       return (
         "Press the " +
         this.currentTutorialID.substr(0, this.currentTutorialID.indexOf("-")) +
-        " arrow key " +
+        " arrow key on your keyboard " +
         this.tutorialArrowPressesCounter.toString() +
         " more times"
       );
