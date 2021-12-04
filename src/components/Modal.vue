@@ -1,5 +1,9 @@
 <template>
-  <div :id="id" class="w3-modal w3-animate-opacity modal-container" style="display: block">
+  <div
+    :id="id"
+    class="w3-modal w3-animate-opacity modal-container"
+    style="display: block"
+  >
     <div class="w3-modal-content modal-content">
       <header
         class="w3-container py-3 text-start modal-header"

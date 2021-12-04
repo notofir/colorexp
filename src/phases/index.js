@@ -1,12 +1,12 @@
 function createHint({
   groups = [{ size: 0, certainty: 0 }],
   delay = 0,
-  autoHintClicks = { min: -1, max: -1 },
+  isHintEnforced: isHintEnforced = false,
 }) {
   return {
     groups: groups,
     delay: delay,
-    autoHintClicks: autoHintClicks,
+    isHintEnforced: isHintEnforced,
   };
 }
 
@@ -219,7 +219,7 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
     ],
     isPractice: true,
     isTutorial: true,
-    numberOfTrials: 5,
+    numberOfTrials: 3,
   }),
   // Phase 2
   createPhase({
@@ -822,7 +822,7 @@ SUVORK5CYII=" />
     hintCreator: function (isExperimental) {
       if (isExperimental) {
         return createHint({
-          autoHintClicks: { min: 3, max: 7 },
+          isHintEnforced: true,
           groups: [
             { size: 5, certainty: 0.8 },
             { size: 107, certainty: 1 },
@@ -847,7 +847,7 @@ SUVORK5CYII=" />
     hintCreator: function (isExperimental) {
       if (isExperimental) {
         return createHint({
-          autoHintClicks: { min: 3, max: 7 },
+          isHintEnforced: true,
           groups: [
             { size: 5, certainty: 0.8 },
             { size: 107, certainty: 1 },

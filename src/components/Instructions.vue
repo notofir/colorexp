@@ -12,8 +12,8 @@
       ></p>
     </div>
     <div>
-      <div class="center">
-        <div v-if="!isDone" class="btn-group">
+      <div class="center btn-group">
+        <div v-if="!isDone">
           <Button
             @btn-click="onClickPrev()"
             :disabled="currentPage == 0"
@@ -24,7 +24,9 @@
             :content="currentPage == this.pages.length - 1 ? 'start' : 'next >'"
           />
         </div>
-        <Button v-else @btn-click="onFinishTask()" content="next >" />
+        <div v-else>
+          <Button @btn-click="onFinishTask()" content="next >" />
+        </div>
       </div>
     </div>
   </div>
@@ -74,6 +76,28 @@ export default {
     onFinishTask() {
       console.log("IS DONE PLACEHOLDER FOR QUALTRICS");
     },
+    keyboardListener(e) {
+      if (e.repeat) return;
+      switch (e.key) {
+        case "ArrowLeft":
+          if (this.currentPage == 0) {
+            return;
+          }
+          this.onClickPrev();
+          break;
+        case "ArrowRight":
+          this.onClickNext();
+          break;
+        default:
+          break;
+      }
+    },
+  },
+  created() {
+    window.addEventListener("keydown", this.keyboardListener);
+  },
+  unmounted() {
+    window.removeEventListener("keydown", this.keyboardListener);
   },
 };
 </script>

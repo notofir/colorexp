@@ -1,10 +1,6 @@
 <template>
   <div class="btn-group">
-    <Button
-      @btn-click="onClick"
-      :content="hintContent"
-      :disabled="isClicked || isDisabled"
-    />
+    <Button @btn-click="onClick" v-if="!isClicked" :content="hintContent" />
   </div>
 </template>
 
@@ -16,10 +12,6 @@ export default {
   components: { Button },
   props: {
     hintGroupSize: Number,
-    isDisabled: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {

@@ -7,14 +7,15 @@
       <div class="col mt-auto" style="position: absolute; bottom: 0">
         <Hint
           @hint-click="onHint"
-          v-show="trialHint.autoHintClicks.min <= 0 && hintGroup.size != 0"
+          v-if="
+            !trialHint.isHintEnforced && hintGroup.size != 0 && hintSide === ''
+          "
           :hintGroupSize="hintGroup.size"
-          :isDisabled="hintSide != ''"
         />
       </div>
     </div>
     <div class="row" style="height: 6%; justify-content: center">
-      <div id="hint-timer">&nbsp;</div>
+      <div id="hint-timer" class="large-text">&nbsp;</div>
     </div>
     <div class="row" style="height: 38%">
       <div class="col-left" style="position: relative">
@@ -121,7 +122,7 @@
             <div class="btn-group">
               <Button
                 @btn-click="onSubmit"
-                :content="submitID"
+                :content="enforceHint ? 'hint' : submitID"
                 :isVisible="submitVisible"
                 :disabled="shouldWitholdInput"
               />
@@ -144,7 +145,10 @@
     <Modal
       v-if="modals['modal-hint-ack']"
       id="modal-hint-ack"
-      @modal-close="modals['modal-hint-ack'] = false; shouldWitholdInput = false"
+      @modal-close="
+        modals['modal-hint-ack'] = false;
+        shouldWitholdInput = false;
+      "
       header="<h3>Hint received</h3>"
     />
     <Modal
@@ -278,11 +282,6 @@ export default {
       hintSide: "",
       hintGroup: rng.getElement(trialHint.groups),
       trialHint: trialHint,
-      autoHintCounter:
-        trialHint.autoHintClicks.min +
-        rng.getInt(
-          trialHint.autoHintClicks.max + 1 - trialHint.autoHintClicks.min
-        ),
       leftID: "left",
       rightID: "right",
       submitID: "submit",
@@ -363,13 +362,12 @@ export default {
         this.didDisplayFeedback = true;
         return;
       }
+      if (this.enforceHint) {
+        this.onHint();
+        this.showModal("modal-hint-ack");
+        return;
+      }
       if (!this.submitVisible || this.shouldWitholdInput) {
-        ///if (this.modals["modal-hint-ack"]) {
-        ///  this.modals["modal-hint-ack"] = false;
-        ///  return;
-        ///} else {
-        ///  return;
-        ///}
         return;
       }
       this.$emit(
@@ -384,7 +382,7 @@ export default {
           rightValue: 1,
           pickedValue: this.getRelativePos(),
           didGiveHint: this.didGiveHint,
-          isAutoHint: this.trialHint.autoHintClicks.min > 0,
+          isHintEnforced: this.trialHint.isHintEnforced,
           hintDelayS: this.trialHint.delay,
           displayedHintSide: this.hintSide,
           isDisplayedHintTrue: this.isDisplayedHintTrue,
@@ -456,11 +454,6 @@ export default {
       setTimeout(() => {
         this.pressedKey = "";
       }, 100);
-      if (this.autoHintCounter == 0) {
-        this.shouldWitholdInput = true;
-        this.onHint();
-        this.showModal("modal-hint-ack");
-      }
     },
     // Returns false if key shouldn't be processed.
     handlePressedKey(side, isEnabled, diff) {
@@ -477,7 +470,6 @@ export default {
         this.pressedKey = side;
         this.midLight += diff;
         this.keyPresses += 1;
-        this.autoHintCounter -= 1;
         return true;
       }
       return false;
@@ -496,6 +488,9 @@ export default {
     submitVisible() {
       return this.isTutorial ? this.currentTutorialID === this.submitID : true;
     },
+    enforceHint() {
+      return this.trialHint.isHintEnforced && this.hintSide === "";
+    },
     percentageScore() {
       let score = (this.getRelativePos() * 100).toString();
       // Sometimes, it's still printed as 59.9999999...
@@ -506,13 +501,11 @@ export default {
     },
     tutorialContent() {
       if (!this.isTutorial) return null;
-      return (
-        "Press the " +
-        this.currentTutorialID.substr(0, this.currentTutorialID.indexOf("-")) +
-        " arrow key on your keyboard " +
-        this.tutorialArrowPressesCounter.toString() +
-        " more times"
-      );
+      if (this.currentTutorialID === "right") {
+        return `Press right on your keyboard ${this.tutorialArrowPressesCounter.toString()} more times and notice how the color darkens`;
+      } else {
+        return `Press left on your keyboard ${this.tutorialArrowPressesCounter.toString()} more times and notice how the color brightens`;
+      }
     },
   },
   created() {
