@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" class="w3-modal w3-animate-opacity modal-container">
+  <div :id="id" class="w3-modal w3-animate-opacity modal-container" style="display: block">
     <div class="w3-modal-content modal-content">
       <header
         class="w3-container py-3 text-start modal-header"
@@ -29,9 +29,24 @@ export default {
   },
   methods: {
     onClick() {
-      document.getElementById(this.id).style.display = "none";
-      this.$emit("modal-close");
+      this.$emit("modal-close", this.id);
     },
+    keyboardListener(e) {
+      if (e.repeat) return;
+      switch (e.key) {
+        case "Enter":
+          this.$emit("modal-close", this.id);
+          return;
+        default:
+          return;
+      }
+    },
+  },
+  created() {
+    window.addEventListener("keydown", this.keyboardListener);
+  },
+  unmounted() {
+    window.removeEventListener("keydown", this.keyboardListener);
   },
   emits: ["modal-close"],
 };

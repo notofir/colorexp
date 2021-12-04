@@ -39,7 +39,7 @@
         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
       </svg>
       <br />
-      <div class="display-text">
+      <div class="large-text">
         {{ size }}
       </div>
     </div>
@@ -96,7 +96,7 @@
         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
       </svg>
       <br />
-      <div class="display-text">
+      <div class="large-text">
         {{ size }}
       </div>
     </div>

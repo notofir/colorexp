@@ -122,7 +122,7 @@
               <Button
                 @btn-click="onSubmit"
                 :content="submitID"
-                :isVisible="isTutorial ? currentTutorialID === submitID : true"
+                :isVisible="submitVisible"
                 :disabled="shouldWitholdInput"
               />
             </div>
@@ -142,16 +142,17 @@
       <div class="col-right"></div>
     </div>
     <Modal
+      v-if="modals['modal-hint-ack']"
       id="modal-hint-ack"
-      @modal-close="shouldWitholdInput = false"
+      @modal-close="modals['modal-hint-ack'] = false; shouldWitholdInput = false"
       header="<h3>Hint received</h3>"
     />
     <Modal
-      v-if="currentPhase.shouldDisplayFeedback"
+      v-if="currentPhase.shouldDisplayFeedback && modals['modal-score']"
       id="modal-score"
       @modal-close="
+        modals['modal-score'] = false;
         shouldWitholdInput = false;
-        didDisplayFeedback = true;
         onSubmit();
       "
       :header="
@@ -262,6 +263,10 @@ export default {
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
     return {
+      modals: {
+        "modal-hint-ack": false,
+        "modal-score": false,
+      },
       rng: rng,
       isDisplayedHintTrue: false,
       hintCountDown: trialHint.delay,
@@ -355,6 +360,16 @@ export default {
     onSubmit() {
       if (!this.didDisplayFeedback) {
         this.showModal("modal-score");
+        this.didDisplayFeedback = true;
+        return;
+      }
+      if (!this.submitVisible || this.shouldWitholdInput) {
+        ///if (this.modals["modal-hint-ack"]) {
+        ///  this.modals["modal-hint-ack"] = false;
+        ///  return;
+        ///} else {
+        ///  return;
+        ///}
         return;
       }
       this.$emit(
@@ -381,9 +396,9 @@ export default {
         })
       );
     },
-    showModal(modalId) {
+    showModal(modalID) {
       this.shouldWitholdInput = true;
-      document.getElementById(modalId).style.display = "block";
+      this.modals[modalID] = true;
     },
     hintCountDownTimer() {
       if (this.hintCountDown > 0) {
@@ -402,16 +417,20 @@ export default {
     },
     keyboardListener(e) {
       if (e.repeat) return;
-      if (this.shouldWitholdInput) return;
       switch (e.key) {
         case "ArrowLeft":
+          if (this.shouldWitholdInput) return;
           if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1))
             return;
           break;
         case "ArrowRight":
+          if (this.shouldWitholdInput) return;
           if (!this.handlePressedKey("right", this.midLight > this.minMid, -1))
             return;
           break;
+        case "Enter":
+          this.onSubmit();
+          return;
         default:
           return;
       }
@@ -473,6 +492,9 @@ export default {
         return this.overrideMidColor;
       }
       return calcColor(this.color, this.midLight);
+    },
+    submitVisible() {
+      return this.isTutorial ? this.currentTutorialID === this.submitID : true;
     },
     percentageScore() {
       let score = (this.getRelativePos() * 100).toString();

@@ -154,6 +154,11 @@ export default {
   font-size: 1.4vw;
 }
 
+.large-text {
+  direction: ltr;
+  font-size: 2vw;
+}
+
 .main-container {
   width: 70vw;
   height: 100%;

@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100%">
     <div style="height: 15%">
-      <p class="instruction-head instruction display-text">
+      <p class="instruction-head instruction large-text">
         {{ pages[currentPage].title }}
       </p>
     </div>
@@ -92,7 +92,6 @@ export default {
 
 .instruction-head {
   padding-top: 4vh;
-  font-size: 2vw;
 }
 
 .center {
