@@ -3983,9 +3983,10 @@ TkSuQmCC" />
       {
         title: "",
         text: `
-		At the following phase, hints will be provided to you from time to time. 
-		The hints will be delivered automatically, without request. Some will be based on the large sample, 
-		while others on the small one. 
+		At the following phase, hints will be delivered automatically, without request, upon pressing "Enter". Some hints will be based on the 
+		large sample, 
+		while others on the small one. After recieving the hints, you will be given the oppurtinity to revise your answer, before clicking "submit"
+		to finalize your choice. 		
 		<br /><br />
 		Remember: hints from larger samples are of higher quality.
 		`,
