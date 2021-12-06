@@ -3983,9 +3983,13 @@ TkSuQmCC" />
       {
         title: "",
         text: `
-		At the following phase, hints will be provided to you from time to time. 
-		The hints will be delivered automatically, without request. Some will be based on the large sample, 
-		while others on the small one. 
+		At the following phase, hints will be provided to you automatically, without request. Some hints will be based on the 
+		large sample, 
+		while others on the small one.
+		<br /><br />
+		Press Enter when you believe you found the mid-point, and a hint will appear.
+		After recieving the hints, you will be given the oppurtinity to revise your answer. Clicking "submit"
+		will finalize your choice. 		
 		<br /><br />
 		Remember: hints from larger samples are of higher quality.
 		`,
