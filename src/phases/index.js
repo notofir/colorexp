@@ -11,7 +11,7 @@ function createHint({
 }
 
 function createPhase({
-  taskName = "coloursTrial",
+  taskName = "ColorsTrial",
   instructions,
   numberOfTrials,
   hintCreator = function () {

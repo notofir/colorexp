@@ -129,7 +129,7 @@
             </div>
             <span v-if="isTutorial" class="tooltiptext"
               ><div class="display-text">
-                Press the submit button when you believe you're done
+                Now, try to find the mid-point and press submit.
               </div></span
             >
             <span v-else class="tooltiptext"
@@ -228,7 +228,6 @@ function getDisplayedHint(
   if (pickedValueAbs <= minAbs || pickedValueAbs >= maxAbs) {
     return [actualDirection, true];
   }
-  console.log(isDefaultTrue, actualDirection, misdirection);
   return [isDefaultTrue ? actualDirection : misdirection, isDefaultTrue];
 }
 
@@ -239,9 +238,12 @@ export default {
     phaseIndex: Number,
     trialIndex: Number,
     isExperimental: Boolean,
+    isDev: Boolean,
   },
   data() {
-    console.log(this.phaseIndex, this.trialIndex);
+    if (this.isDev) {
+      console.log(this.phaseIndex, this.trialIndex);
+    }
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
     const minGap = 5;
@@ -437,20 +439,22 @@ export default {
         this.didFollowHint = false;
       }
       this.displayedHintSide = "";
-      console.log(
-        "middle-user",
-        this.midLight,
-        "\nmin-user",
-        this.minMid,
-        "\nmax-user",
-        this.maxMid,
-        "\n\nmin-light",
-        minLight,
-        "\nmax-light",
-        maxLight,
-        "\nrelative-position",
-        this.getRelativePos()
-      );
+      if (this.isDev) {
+        console.log(
+          "middle-user",
+          this.midLight,
+          "\nmin-user",
+          this.minMid,
+          "\nmax-user",
+          this.maxMid,
+          "\n\nmin-light",
+          minLight,
+          "\nmax-light",
+          maxLight,
+          "\nrelative-position",
+          this.getRelativePos()
+        );
+      }
       setTimeout(() => {
         this.pressedKey = "";
       }, 100);
@@ -502,9 +506,9 @@ export default {
     tutorialContent() {
       if (!this.isTutorial) return null;
       if (this.currentTutorialID === "right") {
-        return `Press right on your keyboard ${this.tutorialArrowPressesCounter.toString()} more times and notice how the color darkens`;
+        return `Press right on your keyboard ${this.tutorialArrowPressesCounter.toString()} more times and notice how the colour darkens`;
       } else {
-        return `Press left on your keyboard ${this.tutorialArrowPressesCounter.toString()} more times and notice how the color brightens`;
+        return `Press left on your keyboard ${this.tutorialArrowPressesCounter.toString()} more times and notice how the colour brightens`;
       }
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="container text-center main-container">
     <div
-      v-if="!Boolean('IS DEV PLACEHOLDER FOR QUALTRICS')"
+      v-if="isDev"
       class="form-check form-switch position-absolute top-0 start-0"
     >
       <div>
@@ -67,6 +67,7 @@ export default {
 
     return {
       currentComponentName: Instructions.name,
+      isDev: Boolean("IS DEV PLACEHOLDER FOR QUALTRICS"),
       isExperimental: Boolean("IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS"),
       uid: "UID PLACEHOLDER FOR QUALTRICS",
       phaseIndex: 0,
@@ -91,6 +92,7 @@ export default {
             phaseIndex: this.phaseIndex,
             trialIndex: this.trialIndex,
             isExperimental: this.isExperimental,
+            isDev: this.isDev,
           };
         case ScatterTrial.name:
           return { phaseIndex: this.phaseIndex, trialIndex: this.trialIndex };
