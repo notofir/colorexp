@@ -25,7 +25,7 @@
           />
         </div>
         <div v-else>
-          <Button @btn-click="onFinishTask()" content="next >" />
+          <Button @btn-click="onClickNext()" content="next >" />
         </div>
       </div>
     </div>
@@ -62,6 +62,10 @@ export default {
   emits: ["instructions-finish"],
   methods: {
     onClickNext() {
+      if (this.isDone) {
+        this.onFinish();
+        return;
+      }
       if (this.currentPage < this.pages.length - 1) {
         this.currentPage += 1;
       } else {
@@ -73,7 +77,7 @@ export default {
         this.currentPage -= 1;
       }
     },
-    onFinishTask() {
+    onFinish() {
       console.log("IS DONE PLACEHOLDER FOR QUALTRICS");
     },
     keyboardListener(e) {
