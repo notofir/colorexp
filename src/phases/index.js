@@ -3912,6 +3912,114 @@ TkSuQmCC" />
         text: `
 		<br />
 		Finally, if most participants chose the colour currently on display as their chosen mid-point, a checkmark would appear onscreen.
+		
+		<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="auto" height="40vh" viewBox="0 0 523 565" enable-background="new 0 0 523 565" xml:space="preserve">  <image id="image0" width="523" height="565" x="0" y="0"
+    href="data:image/png;base64,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" />
+</svg>
+
 
   
   
@@ -3983,13 +4091,12 @@ TkSuQmCC" />
       {
         title: "",
         text: `
-		At the following phase, hints will be provided to you automatically, without request. Some hints will be based on the 
-		large sample, 
-		while others on the small one.
+		At the following phase, hints will be provided to you on every trial, after you press "Enter". Some hints will be based on the 
+		large sample, while others on the small one.
 		<br /><br />
 		Press Enter when you believe you found the mid-point, and a hint will appear.
-		After recieving the hints, you will be given the oppurtinity to revise your answer. Clicking "submit"
-		will finalize your choice. 		
+		After recieving the hint, you will be given the oppurtinity to revise your choice. Then, clicking "submit"
+		will finalize your response. 		
 		<br /><br />
 		Remember: hints from larger samples are of higher quality.
 		`,
