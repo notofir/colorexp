@@ -4045,7 +4045,7 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
       },
     ],
     isPractice: true,
-    alertnessTestIndex: 3,
+	alertnessTestIndex: 1,
     numberOfTrials: 3,
     hintCreator: function () {
       return createHint({
@@ -4104,6 +4104,7 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
       },
     ],
     numberOfTrials: 20,
+	alertnessTestIndex: 7,
     hintCreator: function (isExperimental) {
       if (isExperimental) {
         return createHint({
