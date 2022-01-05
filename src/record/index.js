@@ -27,7 +27,7 @@ function createRecord({
     fixedTrialIndex += phases[i].numberOfTrials;
   }
 
-  const isHintAvailable = hintGroupSize == 0;
+  const isHintAvailable = hintGroupSize != 0;
 
   return {
     phaseIndex: fixedPhaseIndex,
@@ -39,13 +39,13 @@ function createRecord({
     rightValue: rightValue,
     pickedValue: pickedValue,
     isHintAvailable: isHintAvailable,
-    isAutoHint: isHintAvailable ? null : isAutoHint,
-    hintDelayS: isHintAvailable ? null : hintDelayS,
-    didGiveHint: isHintAvailable ? null : didGiveHint,
-    displayedHintSide: isHintAvailable ? null : displayedHintSide,
-    isDisplayedHintTrue: isHintAvailable ? null : isDisplayedHintTrue,
-    didFollowHint: isHintAvailable ? null : didFollowHint,
-    hintGroupSize: isHintAvailable ? null : hintGroupSize,
+    isAutoHint: isHintAvailable ? isAutoHint : null,
+    hintDelayS: isHintAvailable ? hintDelayS : null,
+    didGiveHint: isHintAvailable ? didGiveHint : null,
+    displayedHintSide: isHintAvailable ? displayedHintSide : null,
+    isDisplayedHintTrue: isHintAvailable ? isDisplayedHintTrue : null,
+    didFollowHint: isHintAvailable ? didFollowHint : null,
+    hintGroupSize: isHintAvailable ? hintGroupSize : null,
     trialTimeMs: trialTimeMs,
     keyPresses: keyPresses,
     isExperimental: isExperimental,
