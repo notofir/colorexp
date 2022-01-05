@@ -4152,7 +4152,7 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
   
   <br />
   In the following phase, you will be able to request hints by pressing a designated button, like in the practice phase. 
-  However, now every time you press the button the screen will freeze, and you will be required to wait 10 seconds before the hint is revealed.
+  However, now every time you press the button the screen will freeze, and you will be required to wait 5 seconds before the hint is revealed.
   <br /><br />
   On some trials you will be offered hints extracted from the larger sample (107 participants) and in others from the small sample (5 participants).
   You will know in advance what type of hint is offered to you. The type will be indicated by the number appearing on the button. 
@@ -4165,7 +4165,7 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
     numberOfTrials: 20,
     hintCreator: function () {
       return createHint({
-        delay: 10,
+        delay: 5,
         groups: [
           { size: 5, certainty: 1 },
           { size: 107, certainty: 1 },
