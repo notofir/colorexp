@@ -390,7 +390,7 @@ export default {
           isDisplayedHintTrue: this.isDisplayedHintTrue,
           didFollowHint: this.didFollowHint,
           hintGroupSize: this.hintGroup.size,
-          trialTimeMs: new Date() - this.trialStartTime,
+          trialTimeMs: Date.now() - this.trialStartTime,
           keyPresses: this.keyPresses,
           isExperimental: this.isExperimental,
         })
@@ -519,7 +519,7 @@ export default {
     window.removeEventListener("keydown", this.keyboardListener);
   },
   mounted() {
-    this.trialStartTime = new Date();
+    this.trialStartTime = Date.now();
   },
 };
 </script>
