@@ -4187,7 +4187,7 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
     numberOfTrials: 20,
     hintCreator: function () {
       return createHint({
-        delay: 10,
+        delay: 5,
         groups: [
           { size: 5, certainty: 1 },
           { size: 107, certainty: 1 },
