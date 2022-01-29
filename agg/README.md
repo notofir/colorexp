@@ -12,3 +12,19 @@ python agg.py -t records -p "prolific demographic data complete 39 ppl.csv" --qu
 gcloud init # pick ofirarias-com
 gsutil rsync -d -r gs://colortask/records records
 ```
+
+__SHACHAR__
+
+*Get files*
+Open Google Cloud SDK Shell and run:
+alway run:
+cd c:\users\shach\code\colorexp\agg
+run only to download and sync:
+gsutil rsync -d -r gs://colortask/records records
+
+*Aggregate*
+Files should be in C:\Users\shach\Code\colorexp\agg
+docker run --rm -it -v C:\Users\shach\Code\colorexp\agg:/app agg python agg.py ^
+    --task "records" ^
+	--prol "prolific_pilot_1.csv" ^
+	--qual "qual_pilot_1.csv"

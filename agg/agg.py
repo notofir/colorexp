@@ -21,7 +21,7 @@ class Main:
 
     def get_prolific_to_task(self):
         result = {}
-        with open("Shachar+Ruppin+Thesis_January+10,+2022_17.28.csv", "r") as f:
+        with open(self.args.qual, "r") as f:
             reader = csv.DictReader(f)
             next(reader)
             next(reader)
@@ -29,8 +29,9 @@ class Main:
                 if line["Q1"] == "":
                     continue
 
-                result[line["Q1"]] = line["colortaskUID"]
-                #result[line["colortaskUID"]] = line["Q1"]
+                if os.path.isfile("{}/{}.csv".format(self.args.task, line["colortaskUID"])):
+                    result[line["Q1"]] = line["colortaskUID"]
+                    #result[line["colortaskUID"]] = line["Q1"]
 
         return result
 
@@ -87,6 +88,7 @@ class Main:
                 "sex",
                 "student_status",
                 # Qualtrics
+                "duration_total_s",
                 "anxiety",
                 "depression",
                 "OCI-R_sum",
@@ -142,6 +144,7 @@ class Main:
             }
 
         return {
+            "duration_total_s": df["Duration (in seconds)"].values[0],
             "anxiety": sum([int(df["DASSQ13#1_{}".format(i)].values[0]) for i in [1, 3, 5, 6, 9, 12, 13]]),
             "depression": sum([int(df["DASSQ13#1_{}".format(i)].values[0]) for i in [2, 4, 7, 8, 10, 11, 14]]),
             "OCI-R_sum": sum([int(df["OCI-R_{}".format(i)].values[0]) for i in range(1, 19)]),
@@ -149,7 +152,7 @@ class Main:
             "entry_test": df["Q15"].values[0],
             "step_counting": df["Q18_1"].values[0],
             "difficulty": df["Q19_1"].values[0],
-            "comments": df["Q16"].values[0],
+            "comments": df["Q16"].values[0] if not pd.isnull(df["Q16"].values[0]) else "",
         }
 
     def _prolific_values(self, prolific_id):
