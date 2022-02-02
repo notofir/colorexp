@@ -79,7 +79,7 @@
                   alignment="right"
                   :isVisible="!(currentTutorialID === rightID)"
                   :isPressed="pressedKey == 'left'"
-                  :isDisabled="isArrowKeyDisabled(maxMid)"
+                  :isDisabled="isArrowKeyDisabled(maxUser)"
                 />
                 <span class="tooltiptext"
                   ><div class="display-text">{{ tutorialContent }}</div></span
@@ -101,7 +101,7 @@
                   alignment="left"
                   :isVisible="!(currentTutorialID === leftID)"
                   :isPressed="pressedKey == 'right'"
-                  :isDisabled="isArrowKeyDisabled(minMid)"
+                  :isDisabled="isArrowKeyDisabled(minUser)"
                 />
                 <span class="tooltiptext"
                   ><div class="display-text">{{ tutorialContent }}</div></span
@@ -246,25 +246,21 @@ export default {
     }
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
-    const minGap = 5;
+    const userRange = 10;
+    const minUser =
+      (maxLight - minLight) / 2 + minLight - rng.getInt(userRange);
     const currentPhase = phases[this.phaseIndex];
     const isTutorial = currentPhase.isTutorial && this.trialIndex == 0;
-    let midLightDiff;
-    // Not allowing to get too close to the ends, nor calculating the middle.
-    const maxMid = maxLight - (minGap + rng.getInt(maxGapForUser - minGap));
-    let minMid = minLight + (minGap + rng.getInt(maxGapForUser - minGap));
-    // We need to enforce absolute middle.
-    if ((maxMid - minMid) % 2 != 0) {
-      minMid -= 1;
-    }
+    let userStartingPointDiff;
+    const maxUser = minUser + userRange - 1;
     if (isTutorial) {
-      midLightDiff =
+      userStartingPointDiff =
         tutorialArrowPresses +
-        rng.getInt(maxMid - minMid - tutorialArrowPresses);
+        rng.getInt(maxUser - minUser - tutorialArrowPresses);
     } else {
-      midLightDiff = rng.getInt(maxMid - minMid);
+      userStartingPointDiff = rng.getInt(maxUser - minUser);
     }
-    const midLight = minMid + midLightDiff;
+    const userStartingPoint = minUser + userStartingPointDiff;
     const trialHint = currentPhase.hintCreator(this.isExperimental);
     const displayedLeftColor = calcColor(color, maxLight); // Bright.
     const displayeRightColor = calcColor(color, minLight); // Dark.
@@ -279,8 +275,8 @@ export default {
       isTutorial: isTutorial,
       currentPhase: currentPhase,
       pressedKey: "",
-      minMid: minMid,
-      maxMid: maxMid,
+      minUser: minUser,
+      maxUser: maxUser,
       hintSide: "",
       hintGroup: rng.getElement(trialHint.groups),
       trialHint: trialHint,
@@ -300,7 +296,7 @@ export default {
       displayedHintSide: "",
       didDisplayFeedback: !currentPhase.shouldDisplayFeedback,
       color: color,
-      midLight: midLight,
+      userInput: userStartingPoint,
       displayedLeftColor: displayedLeftColor,
       displayeRightColor: displayeRightColor,
       overrideMidColor: null,
@@ -315,7 +311,7 @@ export default {
       return this.isTutorial && this.currentTutorialID === btn;
     },
     getRelativePos() {
-      const score = 1 - (this.midLight - minLight) / (maxLight - minLight);
+      const score = 1 - (this.userInput - minLight) / (maxLight - minLight);
       const rounded = Math.round(score * 100);
       return Number("0." + rounded);
     },
@@ -335,7 +331,7 @@ export default {
       }
       [this.hintSide, this.isDisplayedHintTrue] = getDisplayedHint(
         this.getRelativePos(),
-        this.midLight,
+        this.userInput,
         minLight + maxGapForUser,
         maxLight - maxGapForUser,
         this.rng.getBool(this.hintGroup.certainty)
@@ -420,12 +416,16 @@ export default {
       switch (e.key) {
         case "ArrowLeft":
           if (this.shouldWitholdInput) return;
-          if (!this.handlePressedKey("left", this.midLight < this.maxMid, +1))
+          if (
+            !this.handlePressedKey("left", this.userInput < this.maxUser, +0.5)
+          )
             return;
           break;
         case "ArrowRight":
           if (this.shouldWitholdInput) return;
-          if (!this.handlePressedKey("right", this.midLight > this.minMid, -1))
+          if (
+            !this.handlePressedKey("right", this.userInput > this.minUser, -0.5)
+          )
             return;
           break;
         case "Enter":
@@ -442,11 +442,11 @@ export default {
       if (this.isDev) {
         console.log(
           "middle-user",
-          this.midLight,
+          this.userInput,
           "\nmin-user",
-          this.minMid,
+          this.minUser,
           "\nmax-user",
-          this.maxMid,
+          this.maxUser,
           "\n\nmin-light",
           minLight,
           "\nmax-light",
@@ -472,14 +472,14 @@ export default {
       }
       if (isEnabled) {
         this.pressedKey = side;
-        this.midLight += diff;
+        this.userInput += diff;
         this.keyPresses += 1;
         return true;
       }
       return false;
     },
     isArrowKeyDisabled(edge) {
-      return this.midLight == edge || this.shouldWitholdInput;
+      return this.userInput == edge || this.shouldWitholdInput;
     },
   },
   computed: {
@@ -487,7 +487,7 @@ export default {
       if (this.overrideMidColor != null) {
         return this.overrideMidColor;
       }
-      return calcColor(this.color, this.midLight);
+      return calcColor(this.color, this.userInput);
     },
     submitVisible() {
       return this.isTutorial ? this.currentTutorialID === this.submitID : true;

@@ -27,6 +27,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ```bash
 docker build . -t colorexp
 docker run -it --rm --name ce -p 8080:8080 -v $PWD:/app colorexp bash
+docker run -it --name ce --rm -v C:\Users\ofira\Code\colorexp:/app -p 8080:8080 colorexp bash
 ```
 
 First run from docker:
