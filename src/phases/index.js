@@ -148,13 +148,15 @@ LTExLTI3VDEwOjU1OjM3KzAwOjAwsPDWPwAAAABJRU5ErkJggg==" />
    
   In every trial, you can press the arrow-keys as many times as you like, thus modifying the brightness of the game square.  
   When you feel that the colour you’ve settled on represents the exact mid-point, press "Enter" on your keyboard or click on the “submit” button with you mouse or ENTER key. 
-  <br /> <br />
-  
-   Tip: The range of the game square's brightness is only a small sub-section of the full spectrum
-   between the upper squares. It is picked randomly, and designed to be limited and a-symetrical. As a result, the actual mid-point of the brightness
-   spectrum can be anywhere in this limited sub-range, even on its edges.
+  `,
+      },
+      {
+        text: `
+   Tip: the range of the game square's brightness is only a small sub-section of the full spectrum
+   between the upper squares. It is picked randomly, and designed to be limited and a-symetrical. As a result, the actual mid-point between the two 
+   upper squares can be anywhere in this limited sub-range, even on the first or last step.
    <br /> <br />
-   Due to this design, you can't find the mid-point by counting your steps. and you have to rely on your subjective judgment. 
+   Due to this design, you can't find the mid-point by counting your steps, and you have to rely on your subjective judgment. 
    The preliminary study's results indicated that counting steps actually impaired participants' accuracy, and took up more of their time. 
    
   
@@ -4042,7 +4044,7 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
     numberOfTrials: 5,
     hintCreator: function () {
       return createHint({
-        groups: [{ size: 100, certainty: 1 }],
+        groups: [{ size: 107, certainty: 1 }],
       });
     },
   }),
@@ -4061,6 +4063,8 @@ LTA3VDE1OjM2OjA5KzAwOjAwB4d+vAAAAABJRU5ErkJggg==" />
 
   Please notice that there is no time limit for each trial (beyond our general requirement to take all trials in a row, without substantial breaks).
   Your performance will be evaluated based on accuracy, not on speed.
+  <br />
+  REMINDER: counting steps will only prolong the experiment. 
   `,
       },
       {

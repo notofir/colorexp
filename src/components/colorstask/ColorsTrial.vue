@@ -202,6 +202,7 @@ import ArrowKey from "./ArrowKey.vue";
 
 const maxLight = 70;
 const minLight = 20;
+const userRange = 10;
 const maxGapForUser = 15;
 const tutorialArrowPresses = 10;
 const firstArrow = "right";
@@ -246,13 +247,12 @@ export default {
     }
     const rng = getRNG("colors", this.phaseIndex, this.trialIndex);
     const color = getRandomColor(rng);
-    const userRange = 10;
     const minUser =
       (maxLight - minLight) / 2 + minLight - rng.getInt(userRange);
     const currentPhase = phases[this.phaseIndex];
     const isTutorial = currentPhase.isTutorial && this.trialIndex == 0;
     let userStartingPointDiff;
-    const maxUser = minUser + userRange - 1;
+    const maxUser = minUser + userRange;
     if (isTutorial) {
       userStartingPointDiff =
         tutorialArrowPresses +
@@ -309,6 +309,15 @@ export default {
   methods: {
     isCurrentTutorial(btn) {
       return this.isTutorial && this.currentTutorialID === btn;
+    },
+    getScore() {
+      const distanceFromMiddle = Math.abs(this.userInput - minLight - ((maxLight - minLight) / 2));
+      const score = 1 - (distanceFromMiddle / userRange);
+      const rounded = Math.round(score * 100);
+      if (rounded > 99.5) {
+        return 1;
+      }
+      return Number("0." + rounded);
     },
     getRelativePos() {
       const score = 1 - (this.userInput - minLight) / (maxLight - minLight);
@@ -376,9 +385,9 @@ export default {
           isTutorial: this.isTutorial,
           isPractice: this.currentPhase.isPractice,
           isAlertTest: this.currentPhase.alertnessTestIndex == this.trialIndex,
-          leftValue: 0,
-          rightValue: 1,
-          pickedValue: this.getRelativePos(),
+          leftValue: this.minUser,
+          rightValue: this.maxUser,
+          pickedValue: this.getScore(),
           didGiveHint: this.didGiveHint,
           isHintEnforced: this.trialHint.isHintEnforced,
           hintDelayS: this.trialHint.delay,
@@ -452,7 +461,9 @@ export default {
           "\nmax-light",
           maxLight,
           "\nrelative-position",
-          this.getRelativePos()
+          this.getRelativePos(),
+          "\nscore",
+          this.getScore(),
         );
       }
       setTimeout(() => {
