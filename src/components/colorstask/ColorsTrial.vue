@@ -203,8 +203,7 @@ import ArrowKey from "./ArrowKey.vue";
 const maxLight = 70;
 const minLight = 20;
 const userRange = 10;
-const maxGapForUser = 15;
-const tutorialArrowPresses = 10;
+const tutorialArrowPresses = 15;
 const firstArrow = "right";
 const secondArrow = "left";
 
@@ -254,9 +253,7 @@ export default {
     let userStartingPointDiff;
     const maxUser = minUser + userRange;
     if (isTutorial) {
-      userStartingPointDiff =
-        tutorialArrowPresses +
-        rng.getInt(maxUser - minUser - tutorialArrowPresses);
+      userStartingPointDiff = (tutorialArrowPresses / 2) + rng.getInt(maxUser - minUser - (tutorialArrowPresses / 2));
     } else {
       userStartingPointDiff = rng.getInt(maxUser - minUser);
     }
@@ -341,8 +338,8 @@ export default {
       [this.hintSide, this.isDisplayedHintTrue] = getDisplayedHint(
         this.getRelativePos(),
         this.userInput,
-        minLight + maxGapForUser,
-        maxLight - maxGapForUser,
+        minLight,
+        maxLight,
         this.rng.getBool(this.hintGroup.certainty)
       );
 
@@ -377,29 +374,30 @@ export default {
       if (!this.submitVisible || this.shouldWitholdInput) {
         return;
       }
-      this.$emit(
-        "colors-finish",
-        createRecord({
-          phaseIndex: this.phaseIndex,
-          trialIndex: this.trialIndex,
-          isTutorial: this.isTutorial,
-          isPractice: this.currentPhase.isPractice,
-          isAlertTest: this.currentPhase.alertnessTestIndex == this.trialIndex,
-          leftValue: this.minUser,
-          rightValue: this.maxUser,
-          pickedValue: this.getScore(),
-          didGiveHint: this.didGiveHint,
-          isHintEnforced: this.trialHint.isHintEnforced,
-          hintDelayS: this.trialHint.delay,
-          displayedHintSide: this.hintSide,
-          isDisplayedHintTrue: this.isDisplayedHintTrue,
-          didFollowHint: this.didFollowHint,
-          hintGroupSize: this.hintGroup.size,
-          trialTimeMs: Date.now() - this.trialStartTime,
-          keyPresses: this.keyPresses,
-          isExperimental: this.isExperimental,
-        })
-      );
+      const record = createRecord({
+        phaseIndex: this.phaseIndex,
+        trialIndex: this.trialIndex,
+        isTutorial: this.isTutorial,
+        isPractice: this.currentPhase.isPractice,
+        isAlertTest: this.currentPhase.alertnessTestIndex == this.trialIndex,
+        leftValue: this.minUser,
+        rightValue: this.maxUser,
+        pickedValue: this.getScore(),
+        didGiveHint: this.didGiveHint,
+        isHintEnforced: this.trialHint.isHintEnforced,
+        hintDelayS: this.trialHint.delay,
+        displayedHintSide: this.hintSide,
+        isDisplayedHintTrue: this.isDisplayedHintTrue,
+        didFollowHint: this.didFollowHint,
+        hintGroupSize: this.hintGroup.size,
+        trialTimeMs: Date.now() - this.trialStartTime,
+        keyPresses: this.keyPresses,
+        isExperimental: this.isExperimental,
+      });
+      if (this.isDev) {
+        console.log(record);
+      }
+      this.$emit("colors-finish", record);
     },
     showModal(modalID) {
       this.shouldWitholdInput = true;
