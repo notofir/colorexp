@@ -50,8 +50,8 @@ class Main:
                         "task_id": task_id,
                     })
 
-    def get_true_hint_phase_7_8(self, df):
-        return df[(df["phaseIndex"].isin([7, 8])) & (df["didGiveHint"] == True)]
+    def get_true_hint_phase_6_7(self, df):
+        return df[(df["phaseIndex"].isin([6, 7])) & (df["didGiveHint"] == True)]
 
     def aggregate(self, prolific_to_task):
         with open("aggregated.csv", "w") as dest:
@@ -59,9 +59,9 @@ class Main:
                 "prolific_id",
                 "task_id",
                 "is_experimental",
-                "total_proxy_usage_7-8",
-                "poor_proxy_usage_7-8",
-                "good_proxy_usage_7-8",
+                "total_proxy_usage_6-7",
+                "poor_proxy_usage_6-7",
+                "good_proxy_usage_6-7",
                 "performance_1",
                 "performance_2",
                 "performance_3",
@@ -69,15 +69,14 @@ class Main:
                 "performance_5",
                 "performance_6",
                 "performance_7",
-                "performance_8",
-                "performance_practice_1-4",
-                "performance_manipulation_5-6",
-                "performance_voluntary_7-8",
+                "performance_practice_1-3",
+                "performance_manipulation_4-5",
+                "performance_voluntary_6-7",
                 "performance_overall",
                 "presses_mean",
-                "presses_mean_7-8",
+                "presses_mean_6-7",
                 "time_ms_mean",
-                "time_ms_mean_7-8",
+                "time_ms_mean_6-7",
                 "hint_followed_percentage",
                 # Prolific
                 "status",
@@ -96,6 +95,10 @@ class Main:
                 "entry_test",
                 "step_counting",
                 "difficulty",
+                "reasons_hints",
+                "reasons_not_hints",
+                "explanation_reasons_hints",
+                "explanation_reasons_not_hints",
                 "comments",
             ])
             writer.writeheader()
@@ -106,14 +109,14 @@ class Main:
         with open("{}/{}.csv".format(self.args.task, task_id), "r") as src:
             df = pd.read_csv(src)
         
-        true_hint_phase_7_8_ = self.get_true_hint_phase_7_8(df)
+        true_hint_phase_6_7_ = self.get_true_hint_phase_6_7(df)
         df_hints_given = df[df["didGiveHint"] == True]
         return {
             "task_id": task_id,
             "is_experimental": df["isExperimental"][0],
-            "total_proxy_usage_7-8": true_hint_phase_7_8_["didGiveHint"].count(),
-            "poor_proxy_usage_7-8": true_hint_phase_7_8_[df["hintGroupSize"] == 5]["didGiveHint"].count(),
-            "good_proxy_usage_7-8": true_hint_phase_7_8_[df["hintGroupSize"] == 107]["didGiveHint"].count(),
+            "total_proxy_usage_6-7": true_hint_phase_6_7_["didGiveHint"].count(),
+            "poor_proxy_usage_6-7": true_hint_phase_6_7_[df["hintGroupSize"] == 5]["didGiveHint"].count(),
+            "good_proxy_usage_6-7": true_hint_phase_6_7_[df["hintGroupSize"] == 107]["didGiveHint"].count(),
             "performance_1": self.phase_performance(df, [1]),
             "performance_2": self.phase_performance(df, [2]),
             "performance_3": self.phase_performance(df, [3]),
@@ -121,15 +124,14 @@ class Main:
             "performance_5": self.phase_performance(df, [5]),
             "performance_6": self.phase_performance(df, [6]),
             "performance_7": self.phase_performance(df, [7]),
-            "performance_8": self.phase_performance(df, [8]),
-            "performance_practice_1-4": self.phase_performance(df, list(range(1, 5))),
-            "performance_manipulation_5-6": self.phase_performance(df, list(range(5, 7))),
-            "performance_voluntary_7-8": self.phase_performance(df, list(range(7, 9))),
-            "performance_overall": self.phase_performance(df, list(range(1, 9))),
+            "performance_practice_1-3": self.phase_performance(df, [1, 2, 3]),
+            "performance_manipulation_4-5": self.phase_performance(df, [4, 5]),
+            "performance_voluntary_6-7": self.phase_performance(df, [6, 7]),
+            "performance_overall": self.phase_performance(df, list(range(1, 8))),
             "presses_mean": df["keyPresses"].mean(),
-            "presses_mean_7-8": df[df["phaseIndex"].isin([7, 8])]["keyPresses"].mean(),
+            "presses_mean_6-7": df[df["phaseIndex"].isin([6, 7])]["keyPresses"].mean(),
             "time_ms_mean": df[df["trialTimeMs"].notnull()]["trialTimeMs"].mean(),
-            "time_ms_mean_7-8": df[df["trialTimeMs"].notnull()]["trialTimeMs"].mean(),
+            "time_ms_mean_6-7": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([6, 7])]["trialTimeMs"].mean(),
             "hint_followed_percentage": 100 * df_hints_given[df_hints_given["didFollowHint"] == True]["didFollowHint"].count() / df_hints_given["didFollowHint"].count()
                 if not df_hints_given.empty else 0,
         }
@@ -151,7 +153,11 @@ class Main:
             "SPISI_sum": sum([int(df["SPISI_{}".format(i)].values[0]) for i in range(1, 16)]),
             "entry_test": df["Q15"].values[0],
             "step_counting": df["Q18_1"].values[0],
-            "difficulty": df["Q19_1"].values[0],
+            "difficulty": df["Q18_2"].values[0],
+            "reasons_hints": df["Q19"].values[0],
+            "reasons_not_hints": df["Q22"].values[0],
+            "explanation_reasons_hints": df["Q23"].values[0],
+            "explanation_reasons_not_hints": df["Q24"].values[0],
             "comments": df["Q16"].values[0] if not pd.isnull(df["Q16"].values[0]) else "",
         }
 
@@ -183,7 +189,8 @@ class Main:
         return result
 
     def phase_performance(self, df, phases):
-        return 1 - df["pickedValue"].apply(lambda x: abs(x - 0.5))[df["phaseIndex"].isin(phases)].mean()
+        #return 1 - df["pickedValue"].apply(lambda x: abs(x - 0.5))[df["phaseIndex"].isin(phases)].mean()
+        return df[df["phaseIndex"].isin(phases)]["pickedValue"].mean()
 
 
 def main():
