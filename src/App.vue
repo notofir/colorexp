@@ -68,7 +68,7 @@ export default {
     return {
       currentComponentName: Instructions.name,
       isDev: Boolean("IS DEV PLACEHOLDER FOR QUALTRICS"),
-      isExperimental: Boolean("IS EXPERIMENTAL PLACEHOLDER FOR QUALTRICS"),
+      isExperimental: false,
       uid: "UID PLACEHOLDER FOR QUALTRICS",
       phaseIndex: 0,
       trialIndex: 0,
