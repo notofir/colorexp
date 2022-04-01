@@ -6,6 +6,7 @@ import csv
 
 import pandas as pd
 
+
 class Main:
     def __init__(self, args):
         self.args = args
@@ -37,7 +38,8 @@ class Main:
 
     def aggregate2(self, prolific_to_task):
         with open("aggregated.csv", "w") as dest:
-            writer = csv.DictWriter(dest, fieldnames=["prolific_id", "task_id"])
+            writer = csv.DictWriter(
+                dest, fieldnames=["prolific_id", "task_id"])
             writer.writeheader()
             for prolific_id, task_id in prolific_to_task.items():
                 with open("records/{}.csv".format(task_id), "r") as src:
@@ -49,9 +51,6 @@ class Main:
                         "prolific_id": prolific_id,
                         "task_id": task_id,
                     })
-
-    def get_true_hint_phase_6_7(self, df):
-        return df[(df["phaseIndex"].isin([6, 7])) & (df["didGiveHint"] == True)]
 
     def aggregate(self, prolific_to_task):
         with open("aggregated.csv", "w") as dest:
@@ -77,6 +76,10 @@ class Main:
                 "presses_mean_6-7",
                 "time_ms_mean",
                 "time_ms_mean_6-7",
+                "time_ms_sum_1-3",
+                "time_ms_sum_4-5",
+                "time_ms_sum_6-7",
+                "hint_followed_percentage_6-7",
                 "hint_followed_percentage",
                 # Prolific
                 "status",
@@ -108,15 +111,17 @@ class Main:
     def _task_values(self, task_id):
         with open("{}/{}.csv".format(self.args.task, task_id), "r") as src:
             df = pd.read_csv(src)
-        
-        true_hint_phase_6_7_ = self.get_true_hint_phase_6_7(df)
+
         df_hints_given = df[df["didGiveHint"] == True]
+        df_hints_given_6_7 = df_hints_given[
+            df_hints_given["phaseIndex"].isin([6, 7])
+        ]
         return {
             "task_id": task_id,
             "is_experimental": df["isExperimental"][0],
-            "total_proxy_usage_6-7": true_hint_phase_6_7_["didGiveHint"].count(),
-            "poor_proxy_usage_6-7": true_hint_phase_6_7_[df["hintGroupSize"] == 5]["didGiveHint"].count(),
-            "good_proxy_usage_6-7": true_hint_phase_6_7_[df["hintGroupSize"] == 107]["didGiveHint"].count(),
+            "total_proxy_usage_6-7": df_hints_given_6_7["didGiveHint"].count(),
+            "poor_proxy_usage_6-7": df_hints_given_6_7[df["hintGroupSize"] == 5]["didGiveHint"].count(),
+            "good_proxy_usage_6-7": df_hints_given_6_7[df["hintGroupSize"] == 107]["didGiveHint"].count(),
             "performance_1": self.phase_performance(df, [1]),
             "performance_2": self.phase_performance(df, [2]),
             "performance_3": self.phase_performance(df, [3]),
@@ -132,8 +137,13 @@ class Main:
             "presses_mean_6-7": df[df["phaseIndex"].isin([6, 7])]["keyPresses"].mean(),
             "time_ms_mean": df[df["trialTimeMs"].notnull()]["trialTimeMs"].mean(),
             "time_ms_mean_6-7": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([6, 7])]["trialTimeMs"].mean(),
+            "time_ms_sum_1-3": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([1, 2, 3])]["trialTimeMs"].sum(),
+            "time_ms_sum_4-5": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([4, 5])]["trialTimeMs"].sum(),
+            "time_ms_sum_6-7": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([6, 7])]["trialTimeMs"].sum(),
+            "hint_followed_percentage_6-7": 100 * df_hints_given_6_7[df_hints_given_6_7["didFollowHint"] == True]["didFollowHint"].count() / df_hints_given_6_7["didFollowHint"].count()
+            if not df_hints_given_6_7.empty else 0,
             "hint_followed_percentage": 100 * df_hints_given[df_hints_given["didFollowHint"] == True]["didFollowHint"].count() / df_hints_given["didFollowHint"].count()
-                if not df_hints_given.empty else 0,
+            if not df_hints_given.empty else 0,
         }
 
     def _qualtrics_values(self, task_id):
@@ -189,7 +199,7 @@ class Main:
         return result
 
     def phase_performance(self, df, phases):
-        #return 1 - df["pickedValue"].apply(lambda x: abs(x - 0.5))[df["phaseIndex"].isin(phases)].mean()
+        # return 1 - df["pickedValue"].apply(lambda x: abs(x - 0.5))[df["phaseIndex"].isin(phases)].mean()
         return df[df["phaseIndex"].isin(phases)]["pickedValue"].mean()
 
 
@@ -200,10 +210,12 @@ def main():
     parser.add_argument("--qual", "-q", required=True)
     args = parser.parse_args()
     if not os.path.isfile(args.qual):
-        raise ValueError("qualtrics file '{}' couldn't be found".format(args.qual))
+        raise ValueError(
+            "qualtrics file '{}' couldn't be found".format(args.qual))
 
     if not os.path.isfile(args.prol):
-        raise ValueError("prolific file '{}' couldn't be found".format(args.prol))
+        raise ValueError(
+            "prolific file '{}' couldn't be found".format(args.prol))
 
     if not os.path.isdir(args.task):
         raise ValueError("input dir '{}' couldn't be found".format(args.task))
