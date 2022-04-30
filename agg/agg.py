@@ -4,7 +4,11 @@ import os
 import math
 import csv
 
+import numpy as np
 import pandas as pd
+
+
+class SkipException(Exception): pass
 
 
 class Main:
@@ -21,7 +25,7 @@ class Main:
         return result
 
     def get_prolific_to_task(self):
-        result = {}
+        result = []
         with open(self.args.qual, "r") as f:
             reader = csv.DictReader(f)
             next(reader)
@@ -31,26 +35,9 @@ class Main:
                     continue
 
                 if os.path.isfile("{}/{}.csv".format(self.args.task, line["colortaskUID"])):
-                    result[line["Q1"]] = line["colortaskUID"]
-                    #result[line["colortaskUID"]] = line["Q1"]
+                    result.append((line["Q1"], line["colortaskUID"]))
 
         return result
-
-    def aggregate2(self, prolific_to_task):
-        with open("aggregated.csv", "w") as dest:
-            writer = csv.DictWriter(
-                dest, fieldnames=["prolific_id", "task_id"])
-            writer.writeheader()
-            for prolific_id, task_id in prolific_to_task.items():
-                with open("records/{}.csv".format(task_id), "r") as src:
-                    reader = csv.DictReader(src)
-                    for line in reader:
-                        pass
-
-                    writer.writerow({
-                        "prolific_id": prolific_id,
-                        "task_id": task_id,
-                    })
 
     def aggregate(self, prolific_to_task):
         with open("aggregated.csv", "w") as dest:
@@ -98,15 +85,29 @@ class Main:
                 "entry_test",
                 "step_counting",
                 "difficulty",
-                "reasons_hints",
-                "reasons_not_hints",
+                "reasons_hints_helpful",
+                "reasons_hints_reassured",
+                "reasons_hints_external",
+                "reasons_hints_confident",
+                "reasons_not_hints_not_helpful",
+                "reasons_not_hints_confident",
+                "reasons_not_hints_important",
+                "reasons_not_hints_quickly",
+                "reasons_not_hints_misleading",
+                "reasons_not_hints_count",
+                "reasons_not_hints_strategy",
+                "reasons_not_hints_believe",
                 "explanation_reasons_hints",
                 "explanation_reasons_not_hints",
+                "practice",
                 "comments",
             ])
             writer.writeheader()
-            for prolific_id, task_id in prolific_to_task.items():
-                writer.writerow(self.get_row(prolific_id, task_id))
+            for prolific_id, task_id in prolific_to_task:
+                try:
+                    writer.writerow(self.get_row(prolific_id, task_id))
+                except SkipException:
+                    print(f"skipping {prolific_id} {task_id}")
 
     def _task_values(self, task_id):
         with open("{}/{}.csv".format(self.args.task, task_id), "r") as src:
@@ -116,12 +117,15 @@ class Main:
         df_hints_given_6_7 = df_hints_given[
             df_hints_given["phaseIndex"].isin([6, 7])
         ]
+        df_hints_given_6_7_poor = df_hints_given_6_7[df_hints_given_6_7["hintGroupSize"] == 5]
+        df_hints_given_6_7_good = df_hints_given_6_7[df_hints_given_6_7["hintGroupSize"] == 107]
+        df_time_exists = df[df["trialTimeMs"].notnull()]
         return {
             "task_id": task_id,
             "is_experimental": df["isExperimental"][0],
             "total_proxy_usage_6-7": df_hints_given_6_7["didGiveHint"].count(),
-            "poor_proxy_usage_6-7": df_hints_given_6_7[df["hintGroupSize"] == 5]["didGiveHint"].count(),
-            "good_proxy_usage_6-7": df_hints_given_6_7[df["hintGroupSize"] == 107]["didGiveHint"].count(),
+            "poor_proxy_usage_6-7": df_hints_given_6_7_poor["didGiveHint"].count(),
+            "good_proxy_usage_6-7": df_hints_given_6_7_good["didGiveHint"].count(),
             "performance_1": self.phase_performance(df, [1]),
             "performance_2": self.phase_performance(df, [2]),
             "performance_3": self.phase_performance(df, [3]),
@@ -135,11 +139,11 @@ class Main:
             "performance_overall": self.phase_performance(df, list(range(1, 8))),
             "presses_mean": df["keyPresses"].mean(),
             "presses_mean_6-7": df[df["phaseIndex"].isin([6, 7])]["keyPresses"].mean(),
-            "time_ms_mean": df[df["trialTimeMs"].notnull()]["trialTimeMs"].mean(),
-            "time_ms_mean_6-7": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([6, 7])]["trialTimeMs"].mean(),
-            "time_ms_sum_1-3": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([1, 2, 3])]["trialTimeMs"].sum(),
-            "time_ms_sum_4-5": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([4, 5])]["trialTimeMs"].sum(),
-            "time_ms_sum_6-7": df[df["trialTimeMs"].notnull()][df["phaseIndex"].isin([6, 7])]["trialTimeMs"].sum(),
+            "time_ms_mean":     df_time_exists["trialTimeMs"].mean(),
+            "time_ms_mean_6-7": df_time_exists[df["phaseIndex"].isin([6, 7])]["trialTimeMs"].mean(),
+            "time_ms_sum_1-3":  df_time_exists[df["phaseIndex"].isin([1, 2, 3])]["trialTimeMs"].sum(),
+            "time_ms_sum_4-5":  df_time_exists[df["phaseIndex"].isin([4, 5])]["trialTimeMs"].sum(),
+            "time_ms_sum_6-7":  df_time_exists[df["phaseIndex"].isin([6, 7])]["trialTimeMs"].sum(),
             "hint_followed_percentage_6-7": 100 * df_hints_given_6_7[df_hints_given_6_7["didFollowHint"] == True]["didFollowHint"].count() / df_hints_given_6_7["didFollowHint"].count()
             if not df_hints_given_6_7.empty else 0,
             "hint_followed_percentage": 100 * df_hints_given[df_hints_given["didFollowHint"] == True]["didFollowHint"].count() / df_hints_given["didFollowHint"].count()
@@ -148,26 +152,48 @@ class Main:
 
     def _qualtrics_values(self, task_id):
         with open("{}".format(self.args.qual), "r") as src:
-            df = pd.read_csv(src)
+            df = pd.read_csv(src).drop([0, 1])
 
-        df = df.drop([0, 1])[df["colortaskUID"] == task_id]
+        df = df[df["colortaskUID"] == task_id]
         if df.empty:
             return {
             }
 
+        try:
+            anxiety = sum([int(df["DASSQ13#1_{}".format(i)].values[0]) for i in [1, 3, 5, 6, 9, 12, 13]])
+        except ValueError:
+            raise SkipException()
+        ###anxiety = 0
+        ###for i in [1, 3, 5, 6, 9, 12, 13]:
+        ###    print(df["DASSQ13#1_{}".format(i)].values[0], type(df["DASSQ13#1_{}".format(i)].values[0]))
+        ###    #if np.isnan(df["DASSQ13#1_{}".format(i)].values[0]):
+        ###    #    raise SkipException()
+        ###    anxiety += int(df["DASSQ13#1_{}".format(i)].values[0])
+
         return {
             "duration_total_s": df["Duration (in seconds)"].values[0],
-            "anxiety": sum([int(df["DASSQ13#1_{}".format(i)].values[0]) for i in [1, 3, 5, 6, 9, 12, 13]]),
+            "anxiety": anxiety,
             "depression": sum([int(df["DASSQ13#1_{}".format(i)].values[0]) for i in [2, 4, 7, 8, 10, 11, 14]]),
             "OCI-R_sum": sum([int(df["OCI-R_{}".format(i)].values[0]) for i in range(1, 19)]),
             "SPISI_sum": sum([int(df["SPISI_{}".format(i)].values[0]) for i in range(1, 16)]),
             "entry_test": df["Q15"].values[0],
             "step_counting": df["Q18_1"].values[0],
             "difficulty": df["Q18_2"].values[0],
-            "reasons_hints": df["Q19"].values[0],
-            "reasons_not_hints": df["Q22"].values[0],
+            "reasons_hints_helpful": df["Q19_1"].values[0],
+            "reasons_hints_reassured": df["Q19_6"].values[0],
+            "reasons_hints_external": df["Q19_7"].values[0],
+            "reasons_hints_confident": df["Q19_8"].values[0],
+            "reasons_not_hints_not_helpful": df["Q22_1"].values[0],
+            "reasons_not_hints_confident": df["Q22_5"].values[0],
+            "reasons_not_hints_important": df["Q22_6"].values[0],
+            "reasons_not_hints_quickly": df["Q22_8"].values[0],
+            "reasons_not_hints_misleading": df["Q22_10"].values[0],
+            "reasons_not_hints_count": df["Q22_11"].values[0],
+            "reasons_not_hints_strategy": df["Q22_12"].values[0],
+            "reasons_not_hints_believe": df["Q22_13"].values[0],
             "explanation_reasons_hints": df["Q23"].values[0],
             "explanation_reasons_not_hints": df["Q24"].values[0],
+            "practice": df["Q26_1"].values[0],
             "comments": df["Q16"].values[0] if not pd.isnull(df["Q16"].values[0]) else "",
         }
 
@@ -195,7 +221,13 @@ class Main:
     def get_row(self, prolific_id, task_id):
         result = self._task_values(task_id)
         result.update(self._prolific_values(prolific_id))
-        result.update(self._qualtrics_values(task_id))
+        try:
+            result.update(self._qualtrics_values(task_id))
+        except SkipException as exc:
+            raise
+        except Exception as exc:
+            print("Exception", task_id, prolific_id)
+            raise
         return result
 
     def phase_performance(self, df, phases):

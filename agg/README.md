@@ -5,13 +5,13 @@ docker run -it --rm -v $PWD:/app agg bash
 
 docker run -it -v C:\Users\ofira\Code\colorexp\agg:/app agg bash
 
-python agg.py -t records -p "prolific demographic data complete 39 ppl.csv" --qual "Shachar+Ruppin+Thesis_January+10,+2022_17.28.csv"
+python agg.py -t records -p prolific.csv --qual qual.csv
 ```
 
 ```
 gcloud init # pick ofirarias-com
 gcloud auth login
-gsutil rsync -d -r gs://colortask/records records
+gsutil -m rsync -d -r gs://colortask/records records
 ```
 
 __SHACHAR__
