@@ -5,7 +5,7 @@ docker run -it --rm -v $PWD:/app agg bash
 
 docker run -it -v C:\Users\ofira\Code\colorexp\agg:/app agg bash
 
-python agg.py -t records -p prolific.csv --qual qual.csv
+python agg.py -t records -p prol.csv --qual qual.csv
 ```
 
 ```

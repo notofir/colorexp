@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 
 
-class SkipException(Exception): pass
+class SkipException(Exception):
+    pass
 
 
 class Main:
@@ -45,6 +46,8 @@ class Main:
                 "prolific_id",
                 "task_id",
                 "is_experimental",
+                "total_proxy_usage_6",
+                "total_proxy_usage_7",
                 "total_proxy_usage_6-7",
                 "poor_proxy_usage_6-7",
                 "good_proxy_usage_6-7",
@@ -60,9 +63,15 @@ class Main:
                 "performance_voluntary_6-7",
                 "performance_overall",
                 "presses_mean",
+                "presses_mean_4-5",
                 "presses_mean_6-7",
+                "presses_mean_6-7_hint",
+                "presses_mean_6-7_no_hint",
                 "time_ms_mean",
+                "time_ms_mean_4-5",
                 "time_ms_mean_6-7",
+                "time_ms_mean_6-7_hint",
+                "time_ms_mean_6-7_no_hint",
                 "time_ms_sum_1-3",
                 "time_ms_sum_4-5",
                 "time_ms_sum_6-7",
@@ -120,9 +129,14 @@ class Main:
         df_hints_given_6_7_poor = df_hints_given_6_7[df_hints_given_6_7["hintGroupSize"] == 5]
         df_hints_given_6_7_good = df_hints_given_6_7[df_hints_given_6_7["hintGroupSize"] == 107]
         df_time_exists = df[df["trialTimeMs"].notnull()]
+        df_time_exists_6_7 = df_time_exists[
+            df_time_exists["phaseIndex"].isin([6, 7])
+        ]
         return {
             "task_id": task_id,
             "is_experimental": df["isExperimental"][0],
+            "total_proxy_usage_6": df_hints_given[df_hints_given["phaseIndex"] == 6]["didGiveHint"].count(),
+            "total_proxy_usage_7": df_hints_given[df_hints_given["phaseIndex"] == 7]["didGiveHint"].count(),
             "total_proxy_usage_6-7": df_hints_given_6_7["didGiveHint"].count(),
             "poor_proxy_usage_6-7": df_hints_given_6_7_poor["didGiveHint"].count(),
             "good_proxy_usage_6-7": df_hints_given_6_7_good["didGiveHint"].count(),
@@ -138,9 +152,15 @@ class Main:
             "performance_voluntary_6-7": self.phase_performance(df, [6, 7]),
             "performance_overall": self.phase_performance(df, list(range(1, 8))),
             "presses_mean": df["keyPresses"].mean(),
+            "presses_mean_4-5": df[df["phaseIndex"].isin([4, 5])]["keyPresses"].mean(),
             "presses_mean_6-7": df[df["phaseIndex"].isin([6, 7])]["keyPresses"].mean(),
+            "presses_mean_6-7_hint": df_hints_given_6_7["keyPresses"].mean(),
+            "presses_mean_6-7_no_hint": df[df["phaseIndex"].isin([6, 7]) & df["didGiveHint"] == False]["keyPresses"].mean(),
             "time_ms_mean":     df_time_exists["trialTimeMs"].mean(),
+            "time_ms_mean_4-5": df_time_exists[df_time_exists["phaseIndex"].isin([4, 5])]["trialTimeMs"].mean(),
             "time_ms_mean_6-7": df_time_exists[df["phaseIndex"].isin([6, 7])]["trialTimeMs"].mean(),
+            "time_ms_mean_6-7_hint": df_time_exists_6_7[df_time_exists_6_7["didGiveHint"] == True]["trialTimeMs"].mean(),
+            "time_ms_mean_6-7_no_hint": df_time_exists_6_7[df_time_exists_6_7["didGiveHint"] == False]["trialTimeMs"].mean(),
             "time_ms_sum_1-3":  df_time_exists[df["phaseIndex"].isin([1, 2, 3])]["trialTimeMs"].sum(),
             "time_ms_sum_4-5":  df_time_exists[df["phaseIndex"].isin([4, 5])]["trialTimeMs"].sum(),
             "time_ms_sum_6-7":  df_time_exists[df["phaseIndex"].isin([6, 7])]["trialTimeMs"].sum(),
@@ -160,15 +180,16 @@ class Main:
             }
 
         try:
-            anxiety = sum([int(df["DASSQ13#1_{}".format(i)].values[0]) for i in [1, 3, 5, 6, 9, 12, 13]])
+            anxiety = sum([int(df["DASSQ13#1_{}".format(i)].values[0])
+                           for i in [1, 3, 5, 6, 9, 12, 13]])
         except ValueError:
             raise SkipException()
         ###anxiety = 0
-        ###for i in [1, 3, 5, 6, 9, 12, 13]:
-        ###    print(df["DASSQ13#1_{}".format(i)].values[0], type(df["DASSQ13#1_{}".format(i)].values[0]))
-        ###    #if np.isnan(df["DASSQ13#1_{}".format(i)].values[0]):
-        ###    #    raise SkipException()
-        ###    anxiety += int(df["DASSQ13#1_{}".format(i)].values[0])
+        # for i in [1, 3, 5, 6, 9, 12, 13]:
+        # print(df["DASSQ13#1_{}".format(i)].values[0], type(df["DASSQ13#1_{}".format(i)].values[0]))
+        # if np.isnan(df["DASSQ13#1_{}".format(i)].values[0]):
+        # raise SkipException()
+        # anxiety += int(df["DASSQ13#1_{}".format(i)].values[0])
 
         return {
             "duration_total_s": df["Duration (in seconds)"].values[0],
