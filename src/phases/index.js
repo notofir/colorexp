@@ -3737,7 +3737,7 @@ TkSuQmCC" />
     },
   }),
 
-  // Phase 5
+  // Phase 4
   createPhase({
     instructions: [
       {
@@ -3784,7 +3784,7 @@ TkSuQmCC" />
       return createHint({});
     },
   }),
-  // Phase 6
+  // Phase 5
   createPhase({
     instructions: [
       {
@@ -3808,7 +3808,7 @@ TkSuQmCC" />
       return createHint({});
     },
   }),
-  // Phase 7
+  // Phase 6
   createPhase({
     instructions: [
       {
@@ -3834,7 +3834,7 @@ TkSuQmCC" />
       });
     },
   }),
-  // Phase 8
+  // Phase 7
   createPhase({
     instructions: [
       {
